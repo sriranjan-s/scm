@@ -1,4 +1,4 @@
-# im Service
+# IM Service
 The objective of this service is to provide a functionality to raise a complaint/grievance by citizen in the system. The progress of complaint/grievance can be tracked by
 the citizen and will be updated by notifications whenever the status of the complaint progresses further.
 ### DB UML Diagram
@@ -19,7 +19,7 @@ the citizen and will be updated by notifications whenever the status of the comp
 
 
 ### Swagger API Contract
-- Please refer to the [Swagger API contarct](https://raw.githubusercontent.com/egovernments/municipal-services/master/docs/im-services.yml) for im service to understand the structure of APIs and to have visualization of all internal APIs.
+- Please refer to the [Swagger API contarct](https://raw.githubusercontent.com/egovernments/municipal-services/master/docs/im-services.yml) for IM service to understand the structure of APIs and to have visualization of all internal APIs.
 
 
 ## Service Details
