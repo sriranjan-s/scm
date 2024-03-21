@@ -4,14 +4,15 @@ package org.egov.im.service;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.User;
-import org.egov.im.config.PGRConfiguration;
+import org.egov.im.config.IMConfiguration;
 import org.egov.im.producer.Producer;
 import org.egov.im.util.MigrationUtils;
 import org.egov.im.web.models.*;
-import org.egov.im.web.models.pgrV1.*;
-import org.egov.im.web.models.pgrV1.Address;
-import org.egov.im.web.models.pgrV1.Service;
-import org.egov.im.web.models.pgrV1.ServiceResponse;
+import org.egov.im.web.models.AuditDetails;
+import org.egov.im.web.models.imV1.*;
+import org.egov.im.web.models.imV1.Address;
+import org.egov.im.web.models.imV1.Service;
+import org.egov.im.web.models.imV1.ServiceResponse;
 import org.egov.im.web.models.workflow.*;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,9 @@ import org.springframework.util.ObjectUtils;
 import javax.annotation.PostConstruct;
 import java.util.*;
 
-import static org.egov.im.util.PGRConstants.IMAGE_DOCUMENT_TYPE;
-import static org.egov.im.util.PGRConstants.PGR_BUSINESSSERVICE;
-import static org.egov.im.util.PGRConstants.PGR_MODULENAME;
+import static org.egov.im.util.IMConstants.IMAGE_DOCUMENT_TYPE;
+import static org.egov.im.util.IMConstants.PGR_BUSINESSSERVICE;
+import static org.egov.im.util.IMConstants.PGR_MODULENAME;
 
 @ConditionalOnProperty(
         value="migration.enabled",
@@ -47,7 +48,7 @@ public class MigrationService {
     private Producer producer;
 
     @Autowired
-    private PGRConfiguration config;
+    private IMConfiguration config;
 
     private Map<String,String> statusToUUIDMap;
 
@@ -196,7 +197,7 @@ public class MigrationService {
 
             List<ActionInfo> actionInfos = idToActionMap.get(serviceV1.getServiceRequestId());
 
-            Map<String, Long> actionUuidToSlaMap = getActionUUidToSLAMap(actionInfos, serviceV1.getServiceCode());
+            Map<String, Long> actionUuidToSlaMap = getActionUUidToSLAMap(actionInfos, serviceV1.getIssueType());
 
             List<ProcessInstance> workflows = new LinkedList<>();
 
@@ -235,10 +236,9 @@ public class MigrationService {
     private org.egov.im.web.models.Service transformService(Service serviceV1, Map<Long, String> idToUuidMap) {
 
         String tenantId = serviceV1.getTenantId();
-        String serviceCode = serviceV1.getServiceCode();
+        String incidentType = serviceV1.getIssueType();
         String serviceRequestId = serviceV1.getServiceRequestId();
         String description = serviceV1.getDescription();
-        String source = (!ObjectUtils.isEmpty(serviceV1.getSource())) ? serviceV1.getSource().toString() : null;
         String rating = serviceV1.getRating();
 
         String feedback = serviceV1.getFeedback();
@@ -296,10 +296,9 @@ public class MigrationService {
                 .tenantId(tenantId)
                 .accountId(accountId)
                 .additionalDetail(attributes)
-                .serviceCode(serviceCode)
+                .incidentType(incidentType)
                 .serviceRequestId(serviceRequestId)
                 .description(description)
-                .source(source)
                 .address(address)
                 .active(active)
                 .auditDetails(auditDetails)

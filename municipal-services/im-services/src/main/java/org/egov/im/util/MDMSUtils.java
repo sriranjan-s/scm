@@ -5,7 +5,7 @@ import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.mdms.model.ModuleDetail;
-import org.egov.im.config.PGRConfiguration;
+import org.egov.im.config.IMConfiguration;
 import org.egov.im.repository.ServiceRequestRepository;
 import org.egov.im.web.models.ServiceRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,20 +13,20 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
-import static org.egov.im.util.PGRConstants.MDMS_MODULE_NAME;
-import static org.egov.im.util.PGRConstants.MDMS_SERVICEDEF;
+import static org.egov.im.util.IMConstants.MDMS_MODULE_NAME;
+import static org.egov.im.util.IMConstants.MDMS_SERVICEDEF;
 
 @Component
 public class MDMSUtils {
 
 
 
-    private PGRConfiguration config;
+    private IMConfiguration config;
 
     private ServiceRequestRepository serviceRequestRepository;
 
     @Autowired
-    public MDMSUtils(PGRConfiguration config, ServiceRequestRepository serviceRequestRepository) {
+    public MDMSUtils(IMConfiguration config, ServiceRequestRepository serviceRequestRepository) {
         this.config = config;
         this.serviceRequestRepository = serviceRequestRepository;
     }

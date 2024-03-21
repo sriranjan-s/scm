@@ -7,16 +7,16 @@ import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import static org.egov.im.util.PGRConstants.SCHEMA_REPLACE_STRING;
+import static org.egov.im.util.IMConstants.SCHEMA_REPLACE_STRING;
 
 @Component
-public class PGRUtils {
+public class IMUtils {
 
 
     private MultiStateInstanceUtil multiStateInstanceUtil;
 
     @Autowired
-    public PGRUtils(MultiStateInstanceUtil multiStateInstanceUtil) {
+    public IMUtils(MultiStateInstanceUtil multiStateInstanceUtil) {
         this.multiStateInstanceUtil = multiStateInstanceUtil;
     }
 

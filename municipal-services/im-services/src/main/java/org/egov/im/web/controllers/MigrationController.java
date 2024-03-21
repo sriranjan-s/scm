@@ -2,7 +2,7 @@ package org.egov.im.web.controllers;
 
 import lombok.extern.slf4j.Slf4j;
 import org.egov.im.service.MigrationService;
-import org.egov.im.web.models.pgrV1.ServiceResponse;
+import org.egov.im.web.models.imV1.ServiceResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;

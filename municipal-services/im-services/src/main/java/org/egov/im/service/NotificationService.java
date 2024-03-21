@@ -7,7 +7,7 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.common.contract.request.User;
 import org.egov.common.utils.MultiStateInstanceUtil;
-import org.egov.im.config.PGRConfiguration;
+import org.egov.im.config.IMConfiguration;
 import org.egov.im.repository.ServiceRequestRepository;
 import org.egov.im.util.HRMSUtil;
 import org.egov.im.util.MDMSUtils;
@@ -32,14 +32,14 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static org.egov.im.util.PGRConstants.*;
+import static org.egov.im.util.IMConstants.*;
 
 @Service
 @Slf4j
 public class NotificationService {
 
     @Autowired
-    private PGRConfiguration config;
+    private IMConfiguration config;
 
     @Autowired
     private NotificationUtil notificationUtil;
@@ -494,7 +494,7 @@ public class NotificationService {
         }
 
 
-        String localisedComplaint = notificationUtil.getCustomizedMsgForPlaceholder(localizationMessage,"im.complaint.category."+request.getService().getServiceCode());
+        String localisedComplaint = notificationUtil.getCustomizedMsgForPlaceholder(localizationMessage,"im.complaint.category."+request.getService().getIncidentType());
 
         Long createdTime = serviceWrapper.getService().getAuditDetails().getCreatedTime();
         LocalDate date = Instant.ofEpochMilli(createdTime > 10 ? createdTime : createdTime * 1000)
@@ -634,7 +634,7 @@ public class NotificationService {
 
     public String getDepartment(ServiceRequest request){
         Object mdmsData = mdmsUtils.mDMSCall(request);
-        String serviceCode = request.getService().getServiceCode();
+        String serviceCode = request.getService().getIncidentType();
         String jsonPath = MDMS_SERVICEDEF_SEARCH.replace("{SERVICEDEF}",serviceCode);
 
         List<Object> res = null;
@@ -669,7 +669,7 @@ public class NotificationService {
 
         //MDMS CALL
         Object mdmsData = mdmsUtils.mDMSCall(request);
-        String jsonPath = MDMS_DEPARTMENT_SEARCH.replace("{SERVICEDEF}",request.getService().getServiceCode());
+        String jsonPath = MDMS_DEPARTMENT_SEARCH.replace("{SERVICEDEF}",request.getService().getIncidentType());
 
         try{
             mdmsDepartmentList = JsonPath.read(mdmsData,jsonPath);
@@ -680,7 +680,7 @@ public class NotificationService {
         }
 
         if(CollectionUtils.isEmpty(mdmsDepartmentList))
-            throw new CustomException("PARSING_ERROR","Failed to fetch department from mdms data for serviceCode: "+request.getService().getServiceCode());
+            throw new CustomException("PARSING_ERROR","Failed to fetch department from mdms data for serviceCode: "+request.getService().getIncidentType());
         else departmentFromMDMS = mdmsDepartmentList.get(0);
 
         if(hrmsDepartmentList.contains(departmentFromMDMS)){

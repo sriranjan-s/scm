@@ -1,8 +1,9 @@
-package org.egov.im.web.models;
+package org.egov.im.web.models.imV1;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import org.egov.im.annotation.CharacterConstraint;
+import org.egov.im.web.models.User;
 import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.validation.annotation.Validated;
 import lombok.AllArgsConstructor;
@@ -28,52 +29,45 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Service   {
+public class Incident   {
 
-        @JsonProperty("active")
-        private boolean active = true;
+    	@NotNull
+    	@SafeHtml
+    	@JsonProperty("IncidentType")
+    	private String incidentType = null;
+    
+    	@SafeHtml
+    	@JsonProperty("RequestType")
+    	private String requestType = null;
 
-        @JsonProperty("citizen")
-        private User citizen = null;
-
-        @SafeHtml
-        @JsonProperty("id")
-        private String id = null;
+    	@SafeHtml
+    	@JsonProperty("IncidentId")
+    	private String incidentId = null;
+        
 
         @NotNull
         @SafeHtml
         @JsonProperty("tenantId")
         private String tenantId = null;
 
-        @NotNull
-        @SafeHtml
-        @JsonProperty("incidentType")
-        private String incidentType = null;
 
         @SafeHtml
-        @JsonProperty("serviceRequestId")
-        private String serviceRequestId = null;
+        @JsonProperty("summary")
+        private String summary = null;
+        
 
         @SafeHtml
         @JsonProperty("description")
         private String description = null;
+        
+        @JsonProperty("citizen")
+        private User citizen = null;
 
-        @SafeHtml
-        @JsonProperty("accountId")
-        private String accountId = null;
-
-        @Max(5)
-        @Min(1)
-        @JsonProperty("rating")
-        private Integer rating ;
 
         @CharacterConstraint(size = 600)
         @JsonProperty("additionalDetail")
         private Object additionalDetail = null;
 
-        @SafeHtml
-        @JsonProperty("applicationStatus")
-        private String applicationStatus = null;
 
         @Valid
         @NotNull
@@ -82,6 +76,14 @@ public class Service   {
 
         @JsonProperty("auditDetails")
         private AuditDetails auditDetails = null;
+        
+        @SafeHtml
+        @JsonProperty("accountId")
+        private String accountId = null;
 
 
+        @NotNull
+        @JsonProperty("priority")
+        private Priority priority = Priority.LOW;
 }
+

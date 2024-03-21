@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class PGRRowMapper implements ResultSetExtractor<List<Service>> {
+public class IMRowMapper implements ResultSetExtractor<List<Service>> {
 
 
     @Autowired
@@ -41,12 +41,11 @@ public class PGRRowMapper implements ResultSetExtractor<List<Service>> {
             if(currentService == null){
 
                 id = rs.getString("ser_id");
-                String serviceCode = rs.getString("serviceCode");
+                String IncidentType = rs.getString("IncidentType");
                 String serviceRequestId = rs.getString("serviceRequestId");
                 String description = rs.getString("description");
                 String accountId = rs.getString("accountId");
                 String applicationStatus = rs.getString("applicationStatus");
-                String source = rs.getString("source");
                 String createdby = rs.getString("ser_createdby");
                 Long createdtime = rs.getLong("ser_createdtime");
                 String lastmodifiedby = rs.getString("ser_lastmodifiedby");
@@ -58,12 +57,11 @@ public class PGRRowMapper implements ResultSetExtractor<List<Service>> {
                                                 .lastModifiedBy(lastmodifiedby).lastModifiedTime(lastmodifiedtime).build();
 
                 currentService = Service.builder().id(id).active(active)
-                        .serviceCode(serviceCode)
+                        .incidentType(IncidentType)
                         .serviceRequestId(serviceRequestId)
                         .description(description)
                         .accountId(accountId)
                         .applicationStatus(applicationStatus)
-                        .source(source)
                         .tenantId(tenantId)
                         .rating(rating)
                         .auditDetails(auditDetails)

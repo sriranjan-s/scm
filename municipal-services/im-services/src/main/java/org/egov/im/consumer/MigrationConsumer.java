@@ -3,8 +3,8 @@ package org.egov.im.consumer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.im.service.MigrationService;
-import org.egov.im.util.PGRConstants;
-import org.egov.im.web.models.pgrV1.ServiceResponse;
+import org.egov.im.util.IMConstants;
+import org.egov.im.web.models.imV1.ServiceResponse;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -39,7 +39,7 @@ public class MigrationConsumer {
             ServiceResponse serviceResponse = mapper.convertValue(record,ServiceResponse.class);
             
          // Adding in MDC so that tracer can add it in header
-            MDC.put(PGRConstants.TENANTID_MDC_STRING, serviceResponse.getServices().get(0).getTenantId());
+            MDC.put(IMConstants.TENANTID_MDC_STRING, serviceResponse.getServices().get(0).getTenantId());
             
             migrationService.migrate(serviceResponse);
         }

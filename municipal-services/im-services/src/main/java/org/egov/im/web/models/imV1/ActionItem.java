@@ -1,4 +1,4 @@
-package org.egov.im.web.models.pgrV1;
+package org.egov.im.web.models.imV1;
 
 import lombok.*;
 import org.springframework.validation.annotation.Validated;

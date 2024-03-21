@@ -1,9 +1,9 @@
 package org.egov.im.service;
 
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.im.config.PGRConfiguration;
+import org.egov.im.config.IMConfiguration;
 import org.egov.im.repository.IdGenRepository;
-import org.egov.im.util.PGRUtils;
+import org.egov.im.util.IMUtils;
 import org.egov.im.web.models.*;
 import org.egov.im.web.models.Idgen.IdResponse;
 import org.egov.tracer.model.CustomException;
@@ -16,22 +16,22 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static org.egov.im.util.PGRConstants.USERTYPE_CITIZEN;
+import static org.egov.im.util.IMConstants.USERTYPE_CITIZEN;
 
 @org.springframework.stereotype.Service
 public class EnrichmentService {
 
 
-    private PGRUtils utils;
+    private IMUtils utils;
 
     private IdGenRepository idGenRepository;
 
-    private PGRConfiguration config;
+    private IMConfiguration config;
 
     private UserService userService;
 
     @Autowired
-    public EnrichmentService(PGRUtils utils, IdGenRepository idGenRepository, PGRConfiguration config, UserService userService) {
+    public EnrichmentService(IMUtils utils, IdGenRepository idGenRepository, IMConfiguration config, UserService userService) {
         this.utils = utils;
         this.idGenRepository = idGenRepository;
         this.config = config;

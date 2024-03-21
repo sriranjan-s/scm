@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.utils.MultiStateInstanceUtil;
-import org.egov.im.config.PGRConfiguration;
+import org.egov.im.config.IMConfiguration;
 import org.egov.im.producer.Producer;
 import org.egov.im.repository.ServiceRequestRepository;
 import org.egov.im.web.models.Notification.EventRequest;
@@ -18,7 +18,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
-import static org.egov.im.util.PGRConstants.*;
+import static org.egov.im.util.IMConstants.*;
 
 @Component
 @Slf4j
@@ -28,7 +28,7 @@ public class NotificationUtil {
     private ServiceRequestRepository serviceRequestRepository;
 
     @Autowired
-    private PGRConfiguration config;
+    private IMConfiguration config;
 
     @Autowired
     private Producer producer;

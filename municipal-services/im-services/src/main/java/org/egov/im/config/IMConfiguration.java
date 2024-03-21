@@ -23,7 +23,7 @@ import java.util.TimeZone;
 @Import({TracerConfiguration.class})
 @NoArgsConstructor
 @AllArgsConstructor
-public class PGRConfiguration {
+public class IMConfiguration {
 
 
 

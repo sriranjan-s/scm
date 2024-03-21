@@ -2,7 +2,7 @@ package org.egov.im.repository;
 
 
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.im.config.PGRConfiguration;
+import org.egov.im.config.IMConfiguration;
 import org.egov.im.web.models.Idgen.IdGenerationRequest;
 import org.egov.im.web.models.Idgen.IdGenerationResponse;
 import org.egov.im.web.models.Idgen.IdRequest;
@@ -25,10 +25,10 @@ public class IdGenRepository {
 
     private RestTemplate restTemplate;
 
-    private PGRConfiguration config;
+    private IMConfiguration config;
 
     @Autowired
-    public IdGenRepository(RestTemplate restTemplate, PGRConfiguration config) {
+    public IdGenRepository(RestTemplate restTemplate, IMConfiguration config) {
         this.restTemplate = restTemplate;
         this.config = config;
     }
