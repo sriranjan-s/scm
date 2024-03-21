@@ -43,12 +43,12 @@ package org.egov.im.web.models.imV1;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum Status {
-	ACTIVE("ACTIVE"), INACTIVE("INACTIVE"), CANCELLED("CANCELLED");
+public enum Priority {
+	LOW("LOW"), MEDIUM("MEDIUM"), HIGH("HIGH");
 
 	private String value;
 
-	Status(String value) {
+	Priority(String value) {
 		this.value = value;
 	}
 
@@ -59,8 +59,8 @@ public enum Status {
     }
 
 	@JsonCreator
-	public static Status fromValue(String passedValue) {
-		for (Status obj : Status.values()) {
+	public static Priority fromValue(String passedValue) {
+		for (Priority obj : Priority.values()) {
 			if (String.valueOf(obj.value).equals(passedValue.toUpperCase())) {
 				return obj;
 			}
@@ -68,3 +68,4 @@ public enum Status {
 		return null;
 	}
 }
+

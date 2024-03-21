@@ -2,7 +2,7 @@ package org.egov.im.service;
 
 
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.im.config.PGRConfiguration;
+import org.egov.im.config.IMConfiguration;
 import org.egov.im.util.UserUtils;
 import org.egov.im.web.models.*;
 import org.egov.im.web.models.user.CreateUserRequest;
@@ -17,7 +17,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static org.egov.im.util.PGRConstants.USERTYPE_CITIZEN;
+import static org.egov.im.util.IMConstants.USERTYPE_CITIZEN;
 
 @org.springframework.stereotype.Service
 public class UserService {
@@ -25,10 +25,10 @@ public class UserService {
 
     private UserUtils userUtils;
 
-    private PGRConfiguration config;
+    private IMConfiguration config;
 
     @Autowired
-    public UserService(UserUtils userUtils, PGRConfiguration config) {
+    public UserService(UserUtils userUtils,IMConfiguration config) {
         this.userUtils = userUtils;
         this.config = config;
     }

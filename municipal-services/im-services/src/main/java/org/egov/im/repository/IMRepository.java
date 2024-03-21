@@ -1,10 +1,10 @@
 package org.egov.im.repository;
 
 import lombok.extern.slf4j.Slf4j;
-import org.egov.im.repository.rowmapper.PGRQueryBuilder;
-import org.egov.im.repository.rowmapper.PGRRowMapper;
-import org.egov.im.util.PGRUtils;
-import org.egov.im.util.PGRConstants;
+import org.egov.im.repository.rowmapper.IMQueryBuilder;
+import org.egov.im.repository.rowmapper.IMRowMapper;
+import org.egov.im.util.IMUtils;
+import org.egov.im.util.IMConstants;
 import org.egov.im.web.models.ServiceWrapper;
 import org.egov.im.web.models.RequestSearchCriteria;
 import org.egov.im.web.models.Service;
@@ -23,20 +23,20 @@ import java.util.stream.Collectors;
 
 @Repository
 @Slf4j
-public class PGRRepository {
+public class IMRepository {
 
 
-    private PGRQueryBuilder queryBuilder;
+    private IMQueryBuilder queryBuilder;
 
-    private PGRRowMapper rowMapper;
+    private IMRowMapper rowMapper;
 
     private JdbcTemplate jdbcTemplate;
 
-    private PGRUtils utils;
+    private IMUtils utils;
 
 
     @Autowired
-    public PGRRepository(PGRQueryBuilder queryBuilder, PGRRowMapper rowMapper, JdbcTemplate jdbcTemplate, PGRUtils utils) {
+    public IMRepository(IMQueryBuilder queryBuilder, IMRowMapper rowMapper, JdbcTemplate jdbcTemplate, IMUtils utils) {
         this.queryBuilder = queryBuilder;
         this.rowMapper = rowMapper;
         this.jdbcTemplate = jdbcTemplate;
@@ -127,8 +127,8 @@ public class PGRRepository {
 		int averageResolutionTime = jdbcTemplate.queryForObject(query, preparedStmtListAverageResolutionTime.toArray(),Integer.class);
 
 		Map<String, Integer> dynamicData = new HashMap<String,Integer>();
-		dynamicData.put(PGRConstants.COMPLAINTS_RESOLVED, complaintsResolved);
-		dynamicData.put(PGRConstants.AVERAGE_RESOLUTION_TIME, averageResolutionTime);
+		dynamicData.put(IMConstants.COMPLAINTS_RESOLVED, complaintsResolved);
+		dynamicData.put(IMConstants.AVERAGE_RESOLUTION_TIME, averageResolutionTime);
 
 		return dynamicData;
 	}

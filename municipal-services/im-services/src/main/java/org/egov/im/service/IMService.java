@@ -2,9 +2,9 @@ package org.egov.im.service;
 
 
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.im.config.PGRConfiguration;
+import org.egov.im.config.IMConfiguration;
 import org.egov.im.producer.Producer;
-import org.egov.im.repository.PGRRepository;
+import org.egov.im.repository.IMRepository;
 import org.egov.im.util.MDMSUtils;
 import org.egov.im.validator.ServiceRequestValidator;
 import org.egov.im.web.models.ServiceWrapper;
@@ -16,7 +16,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.*;
 
 @org.springframework.stereotype.Service
-public class PGRService {
+public class IMService {
 
 
 
@@ -32,17 +32,17 @@ public class PGRService {
 
     private Producer producer;
 
-    private PGRConfiguration config;
+    private IMConfiguration config;
 
-    private PGRRepository repository;
+    private IMRepository repository;
 
     private MDMSUtils mdmsUtils;
 
 
     @Autowired
-    public PGRService(EnrichmentService enrichmentService, UserService userService, WorkflowService workflowService,
+    public IMService(EnrichmentService enrichmentService, UserService userService, WorkflowService workflowService,
                       ServiceRequestValidator serviceRequestValidator, ServiceRequestValidator validator, Producer producer,
-                      PGRConfiguration config, PGRRepository repository, MDMSUtils mdmsUtils) {
+                      IMConfiguration config, IMRepository repository, MDMSUtils mdmsUtils) {
         this.enrichmentService = enrichmentService;
         this.userService = userService;
         this.workflowService = workflowService;

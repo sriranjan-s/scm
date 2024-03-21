@@ -1,4 +1,4 @@
-package org.egov.im.web.models.pgrV1;
+package org.egov.im.web.models.imV1;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,10 +37,16 @@ public class Service   {
   private String tenantId;
 
   @NotNull
-  @JsonProperty("serviceCode")
+  @JsonProperty("issueType")
   @Size(min=2,max=50)
   @Pattern(regexp="^[a-zA-Z0-9._]*$")
-  private String serviceCode;
+  private String issueType;
+  
+  @NotNull
+  @JsonProperty("requestType")
+  @Size(min=2,max=50)
+  @Pattern(regexp="^[a-zA-Z0-9._]*$")
+  private String requestType;
 
   @JsonProperty("serviceRequestId")
   private String serviceRequestId;
@@ -49,9 +55,22 @@ public class Service   {
   @Pattern(regexp = "^[a-zA-Z0-9!@#.,/: ()&']*$")
   @Size(max=256)
   private String description;
+  
+  @JsonProperty("summary")
+  @Pattern(regexp = "^[a-zA-Z0-9!@#.,/: ()&']*$")
+  @Size(max=256)
+  private String summary;
+  
+  @JsonProperty("impact")
+  @Pattern(regexp = "^[a-zA-Z0-9!@#.,/: ()&']*$")
+  @Size(max=256)
+  private String impact;
 
   @JsonProperty("lat")
   private Double lat;
+  
+  @JsonProperty("urgency")
+  private String urgency;
 
   @JsonProperty("long")
   private Double longitutde;
@@ -64,14 +83,6 @@ public class Service   {
   @Size(max=160)
   private String address;
 
-  @JsonProperty("email")
-  @Email
-  private String email;
-
-  @JsonProperty("deviceId")
-  @Pattern(regexp = "^[a-zA-Z0-9!@#.,/: ()&']*$")
-  @Size(max=160)
-  private String deviceId;
 
   @JsonProperty("accountId")
   private String accountId;
@@ -148,46 +159,44 @@ public class Service   {
   /**
    * source of the complaint - Text, Mobile app, Phone, CSC, WhatsApp
    */
-  public enum SourceEnum {
-    SMS("sms"),
-    
-    EMAIL("email"),
-    
-    IVR("ivr"),
-    
-    MOBILEAPP("mobileapp"),
-    
-    WHATSAPP("whatsapp"),
-    
-    CSC("csc"),
-    
-    WEB("web");
+//  public enum SourceEnum {
+//    SMS("sms"),
+//    
+//    EMAIL("email"),
+//    
+//    IVR("ivr"),
+//    
+//    MOBILEAPP("mobileapp"),
+//    
+//    WHATSAPP("whatsapp"),
+//    
+//    CSC("csc"),
+//    
+//    WEB("web");
+//
+//    private String value;
+//
+//    SourceEnum(String value) {
+//      this.value = value;
+//    }
+//
+//    @Override
+//    @JsonValue
+//    public String toString() {
+//      return String.valueOf(value);
+//    }
+//
+//    @JsonCreator
+//    public static SourceEnum fromValue(String text) {
+//      for (SourceEnum b : SourceEnum.values()) {
+//        if (String.valueOf(b.value).equals(text)) {
+//          return b;
+//        }
+//      }
+//      return null;
+//    }
+//  }
 
-    private String value;
-
-    SourceEnum(String value) {
-      this.value = value;
-    }
-
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static SourceEnum fromValue(String text) {
-      for (SourceEnum b : SourceEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
-
-  @JsonProperty("source")
-  private SourceEnum source;
 
   @JsonProperty("expectedTime")
   private Long expectedTime;

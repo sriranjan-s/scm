@@ -9,7 +9,7 @@ import java.util.List;
 
 @Component
 @NoArgsConstructor
-public class PGRConstants {
+public class IMConstants {
 
 
     public static final String PGR_BUSINESSSERVICE = "im";

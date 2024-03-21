@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.im.config.PGRConfiguration;
+import org.egov.im.config.IMConfiguration;
 import org.egov.im.repository.ServiceRequestRepository;
 import org.egov.im.web.models.RequestInfoWrapper;
 import org.egov.tracer.model.CustomException;
@@ -14,7 +14,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
-import static org.egov.im.util.PGRConstants.HRMS_DEPARTMENT_JSONPATH;
+import static org.egov.im.util.IMConstants.HRMS_DEPARTMENT_JSONPATH;
 
 @Component
 public class HRMSUtil {
@@ -22,11 +22,11 @@ public class HRMSUtil {
 
     private ServiceRequestRepository serviceRequestRepository;
 
-    private PGRConfiguration config;
+    private IMConfiguration config;
 
 
     @Autowired
-    public HRMSUtil(ServiceRequestRepository serviceRequestRepository, PGRConfiguration config) {
+    public HRMSUtil(ServiceRequestRepository serviceRequestRepository, IMConfiguration config) {
         this.serviceRequestRepository = serviceRequestRepository;
         this.config = config;
     }

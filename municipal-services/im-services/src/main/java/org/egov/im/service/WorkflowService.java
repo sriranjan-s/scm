@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.User;
-import org.egov.im.config.PGRConfiguration;
+import org.egov.im.config.IMConfiguration;
 import org.egov.im.repository.ServiceRequestRepository;
 import org.egov.im.web.models.*;
 import org.egov.im.web.models.workflow.*;
@@ -15,12 +15,12 @@ import org.springframework.util.CollectionUtils;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.egov.im.util.PGRConstants.*;
+import static org.egov.im.util.IMConstants.*;
 
 @org.springframework.stereotype.Service
 public class WorkflowService {
 
-    private PGRConfiguration pgrConfiguration;
+    private IMConfiguration pgrConfiguration;
 
     private ServiceRequestRepository repository;
 
@@ -28,7 +28,7 @@ public class WorkflowService {
 
 
     @Autowired
-    public WorkflowService(PGRConfiguration pgrConfiguration, ServiceRequestRepository repository, ObjectMapper mapper) {
+    public WorkflowService(IMConfiguration pgrConfiguration, ServiceRequestRepository repository, ObjectMapper mapper) {
         this.pgrConfiguration = pgrConfiguration;
         this.repository = repository;
         this.mapper = mapper;

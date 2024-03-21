@@ -38,7 +38,7 @@
  *  In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
  */
 
-package org.egov.im.web.models.pgrV1;
+package org.egov.im.web.models.imV1;
 
 public enum UserType {
     CITIZEN, EMPLOYEE, SYSTEM, BUSINESS;

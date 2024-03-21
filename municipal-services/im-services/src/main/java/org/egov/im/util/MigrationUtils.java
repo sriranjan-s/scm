@@ -6,7 +6,7 @@ import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.mdms.model.MdmsCriteriaReq;
-import org.egov.im.config.PGRConfiguration;
+import org.egov.im.config.IMConfiguration;
 import org.egov.im.repository.ServiceRequestRepository;
 import org.egov.im.web.models.RequestInfoWrapper;
 import org.egov.im.web.models.User;
@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static org.egov.im.util.PGRConstants.*;
+import static org.egov.im.util.IMConstants.*;
 
 @Slf4j
 @Component
@@ -33,7 +33,7 @@ public class MigrationUtils {
 
     private UserUtils userUtils;
 
-    private PGRConfiguration config;
+    private IMConfiguration config;
 
     private ObjectMapper mapper;
 
@@ -42,7 +42,7 @@ public class MigrationUtils {
     private MDMSUtils mdmsUtils;
 
     @Autowired
-    public MigrationUtils(UserUtils userUtils, PGRConfiguration config, ObjectMapper mapper, ServiceRequestRepository repository, MDMSUtils mdmsUtils) {
+    public MigrationUtils(UserUtils userUtils, IMConfiguration config, ObjectMapper mapper, ServiceRequestRepository repository, MDMSUtils mdmsUtils) {
         this.userUtils = userUtils;
         this.config = config;
         this.mapper = mapper;

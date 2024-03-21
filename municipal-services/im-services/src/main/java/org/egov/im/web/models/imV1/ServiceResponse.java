@@ -1,4 +1,4 @@
-package org.egov.im.web.models.pgrV1;
+package org.egov.im.web.models.imV1;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

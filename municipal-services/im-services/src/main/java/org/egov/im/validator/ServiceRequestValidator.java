@@ -2,8 +2,8 @@ package org.egov.im.validator;
 
 import com.jayway.jsonpath.JsonPath;
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.im.config.PGRConfiguration;
-import org.egov.im.repository.PGRRepository;
+import org.egov.im.config.IMConfiguration;
+import org.egov.im.repository.IMRepository;
 import org.egov.im.util.HRMSUtil;
 import org.egov.im.web.models.*;
 import org.egov.tracer.model.CustomException;
@@ -14,20 +14,20 @@ import org.springframework.util.StringUtils;
 
 import java.util.*;
 
-import static org.egov.im.util.PGRConstants.*;
+import static org.egov.im.util.IMConstants.*;
 
 @Component
 public class ServiceRequestValidator {
 
 
-    private PGRConfiguration config;
+    private IMConfiguration config;
 
-    private PGRRepository repository;
+    private IMRepository repository;
 
     private HRMSUtil hrmsUtil;
 
     @Autowired
-    public ServiceRequestValidator(PGRConfiguration config, PGRRepository repository, HRMSUtil hrmsUtil) {
+    public ServiceRequestValidator(IMConfiguration config, IMRepository repository, HRMSUtil hrmsUtil) {
         this.config = config;
         this.repository = repository;
         this.hrmsUtil = hrmsUtil;
@@ -42,9 +42,9 @@ public class ServiceRequestValidator {
     public void validateCreate(ServiceRequest request, Object mdmsData){
         Map<String,String> errorMap = new HashMap<>();
         validateUserData(request,errorMap);
-        validateSource(request.getService().getSource());
-        validateMDMS(request, mdmsData);
-        validateDepartment(request, mdmsData);
+        //validateSource(request.getService().getSource());
+        //validateMDMS(request, mdmsData);
+        //validateDepartment(request, mdmsData);
         if(!errorMap.isEmpty())
             throw new CustomException(errorMap);
     }
@@ -59,7 +59,7 @@ public class ServiceRequestValidator {
 
         String id = request.getService().getId();
         String tenantId = request.getService().getTenantId();
-        validateSource(request.getService().getSource());
+        //validateSource(request.getService().getSource());
         validateMDMS(request, mdmsData);
         validateDepartment(request, mdmsData);
         validateReOpen(request);
@@ -112,7 +112,7 @@ public class ServiceRequestValidator {
      */
     private void validateMDMS(ServiceRequest request, Object mdmsData){
 
-        String serviceCode = request.getService().getServiceCode();
+        String serviceCode = request.getService().getIncidentType();
         String jsonPath = MDMS_SERVICEDEF_SEARCH.replace("{SERVICEDEF}",serviceCode);
 
         List<Object> res = null;
@@ -138,7 +138,7 @@ public class ServiceRequestValidator {
      */
     private void validateDepartment(ServiceRequest request, Object mdmsData){
 
-        String serviceCode = request.getService().getServiceCode();
+        String serviceCode = request.getService().getIncidentType();
         List<String> assignes = request.getWorkflow().getAssignes();
 
         if(CollectionUtils.isEmpty(assignes))
@@ -265,14 +265,14 @@ public class ServiceRequestValidator {
      * Validates if the source is in the given list configures in application properties
      * @param source
      */
-    private void validateSource(String source){
-
-        List<String> allowedSourceStr = Arrays.asList(config.getAllowedSource().split(","));
-
-        if(!allowedSourceStr.contains(source))
-            throw new CustomException("INVALID_SOURCE","The source: "+source+" is not valid");
-
-    }
+//    private void validateSource(String source){
+//
+//        List<String> allowedSourceStr = Arrays.asList(config.getAllowedSource().split(","));
+//
+//        if(!allowedSourceStr.contains(source))
+//            throw new CustomException("INVALID_SOURCE","The source: "+source+" is not valid");
+//
+//    }
 
 
     public void validatePlainSearch(RequestSearchCriteria criteria) {
