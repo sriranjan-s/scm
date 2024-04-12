@@ -21,7 +21,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ServiceRequest   {
+public class IncidentRequest   {
 
         @NotNull
         @JsonProperty("RequestInfo")
@@ -29,8 +29,8 @@ public class ServiceRequest   {
 
         @Valid
         @NonNull
-        @JsonProperty("service")
-        private Service service = null;
+        @JsonProperty("incident")
+        private Incident incident = null;
 
         @Valid
         @JsonProperty("workflow")

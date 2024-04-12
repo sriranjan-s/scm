@@ -28,13 +28,63 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Service   {
+public class Incident   {
+	
+	    @NotNull
+        @SafeHtml
+        @JsonProperty("incidentType")
+        private String incidentType = null;
+		
+		@NotNull
+        @SafeHtml
+        @JsonProperty("requestType")
+        private String requestType = null;
+		
+		@NotNull
+        @SafeHtml
+        @JsonProperty("environment")
+        private String environment = null;
+		
+		@CharacterConstraint(size = 600)
+        @JsonProperty("summary")
+        private String summary = null;
 
+        @SafeHtml
+        @JsonProperty("description")
+        private String description = null;
+        
+        @SafeHtml
+        @JsonProperty("pendingreason")
+        private String pendingreason = null;
+		
+        @JsonProperty("reporter")
+        private User reporter = null;		
+
+        @SafeHtml
+        @JsonProperty("linkedIssue")
+        private String linkedIssue = null;
+		
+        @JsonProperty("assignee")
+        private String assignee = null;	
+		
+        @NotNull
+        @JsonProperty("priority")
+        private Priority priority = Priority.LOW;
+		
+		@SafeHtml
+        @JsonProperty("impact")
+        private String impact = null;
+		
+		@SafeHtml
+        @JsonProperty("urgency")
+        private String urgency = null;
+		
+		@SafeHtml
+        @JsonProperty("affectedServices")
+        private String affectedServices = null;
+		
         @JsonProperty("active")
         private boolean active = true;
-
-        @JsonProperty("citizen")
-        private User citizen = null;
 
         @SafeHtml
         @JsonProperty("id")
@@ -45,18 +95,11 @@ public class Service   {
         @JsonProperty("tenantId")
         private String tenantId = null;
 
-        @NotNull
-        @SafeHtml
-        @JsonProperty("incidentType")
-        private String incidentType = null;
 
         @SafeHtml
-        @JsonProperty("serviceRequestId")
-        private String serviceRequestId = null;
+        @JsonProperty("incidentId")
+        private String incidentId = null;
 
-        @SafeHtml
-        @JsonProperty("description")
-        private String description = null;
 
         @SafeHtml
         @JsonProperty("accountId")
@@ -82,6 +125,5 @@ public class Service   {
 
         @JsonProperty("auditDetails")
         private AuditDetails auditDetails = null;
-
 
 }

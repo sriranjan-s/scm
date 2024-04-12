@@ -13,9 +13,9 @@ import lombok.Builder;
 import java.util.List;
 
 /**
- * Response to the service request
+ * Response to the incident request
  */
-@ApiModel(description = "Response to the service request")
+@ApiModel(description = "Response to the incident request")
 @Validated
 @javax.annotation.Generated(value = "org.egov.codegen.SpringBootCodegen", date = "2020-07-15T11:35:33.568+05:30")
 
@@ -24,21 +24,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ServiceResponse   {
+public class IncidentResponse   {
         @JsonProperty("responseInfo")
         private ResponseInfo responseInfo = null;
 
-        @JsonProperty("ServiceWrappers")
-        private List<ServiceWrapper> serviceWrappers = null;
-        
-        @JsonProperty("complaintsResolved")
-        private int complaintsResolved;
-
-        @JsonProperty("averageResolutionTime")
-        private int averageResolutionTime;
-
-        @JsonProperty("complaintTypes")
-        private int complaintTypes;
+        @JsonProperty("IncidentWrappers")
+        private List<IncidentWrapper> IncidentWrappers = null;
 
 
 }
