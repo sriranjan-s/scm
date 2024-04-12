@@ -9,13 +9,13 @@ import javax.validation.Valid;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ServiceWrapper {
+public class IncidentWrapper {
 
 
     @Valid
     @NonNull
-    @JsonProperty("service")
-    private Service service = null;
+    @JsonProperty("incident")
+    private Incident incident = null;
 
     @Valid
     @JsonProperty("workflow")
