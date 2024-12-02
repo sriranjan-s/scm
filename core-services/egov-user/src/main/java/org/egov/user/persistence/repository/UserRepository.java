@@ -591,5 +591,17 @@ public class UserRepository {
 		auditRepository.auditUser(oldUser,userId,uuid);
 		
 	}
+	
+	public boolean isUserPresent(User user) {
+		String query = userTypeQueryBuilder.getUserPresentByMobileOrEmail();
+        final Map<String, Object> parametersMap = new HashMap<String, Object>();
+        parametersMap.put("emailid", user.getEmailId());
+        parametersMap.put("mobilenumber", user.getMobileNumber());
+        parametersMap.put("tenantId", user.getTenantId());
+        parametersMap.put("userType", user.getType().toString());
+        int count = namedParameterJdbcTemplate.queryForObject(query, parametersMap, Integer.class);
+        return count > 0;
+		
+	}
 
 }

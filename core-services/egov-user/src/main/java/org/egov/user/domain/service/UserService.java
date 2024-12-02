@@ -127,13 +127,27 @@ public class UserService {
      * @param tenantId
      * @return
      */
-    public User getUniqueUser(String userName, String tenantId, UserType userType) {
+    public User getUniqueUser(String userName, String tenantId, boolean otpLogin, UserType userType) {
 
-        UserSearchCriteria userSearchCriteria = UserSearchCriteria.builder()
-                .userName(userName)
-                .tenantId(getStateLevelTenantForCitizen(tenantId, userType))
-                .type(userType)
-                .build();
+//        UserSearchCriteria userSearchCriteria = UserSearchCriteria.builder()
+//                .userName(userName)
+//                .tenantId(getStateLevelTenantForCitizen(tenantId, userType))
+//                .type(userType)
+//                .build();
+    	UserSearchCriteria userSearchCriteria;
+    	if(otpLogin) {
+    		userSearchCriteria = UserSearchCriteria.builder()
+                    .mobileNumber(userName)
+                    .tenantId(getStateLevelTenantForCitizen(tenantId, userType))
+                    .type(userType)
+                    .build();
+    	} else {
+    		userSearchCriteria = UserSearchCriteria.builder()
+                    .userName(userName)
+                    .tenantId(getStateLevelTenantForCitizen(tenantId, userType))
+                    .type(userType)
+                    .build();
+    	}
 
         if (isEmpty(userName) || isEmpty(tenantId) || isNull(userType)) {
             log.error("Invalid lookup, mandatory fields are absent");
@@ -142,7 +156,7 @@ public class UserService {
 
         /* encrypt here */
 
-        userSearchCriteria = encryptionDecryptionUtil.encryptObject(userSearchCriteria, "User", UserSearchCriteria.class);
+//        userSearchCriteria = encryptionDecryptionUtil.encryptObject(userSearchCriteria, "User", UserSearchCriteria.class);
         List<User> users = userRepository.findAll(userSearchCriteria);
 
         if (users.isEmpty())
@@ -193,7 +207,7 @@ public class UserService {
         	altmobnumber = searchCriteria.getMobileNumber();
         }
 
-        searchCriteria = encryptionDecryptionUtil.encryptObject(searchCriteria, "User", UserSearchCriteria.class);
+//        searchCriteria = encryptionDecryptionUtil.encryptObject(searchCriteria, "User", UserSearchCriteria.class);
         
         if(altmobnumber!=null) {
         	searchCriteria.setAlternatemobilenumber(altmobnumber);
@@ -203,7 +217,7 @@ public class UserService {
 
         /* decrypt here / final reponse decrypted*/
 
-        list = encryptionDecryptionUtil.decryptObject(list, null, User.class, requestInfo);
+//        list = encryptionDecryptionUtil.decryptObject(list, null, User.class, requestInfo);
 
         setFileStoreUrlsByFileStoreIds(list);
         return list;
@@ -220,7 +234,7 @@ public class UserService {
         user.validateNewUser(createUserValidateName);
         conditionallyValidateOtp(user);
         /* encrypt here */
-        user = encryptionDecryptionUtil.encryptObject(user, "User", User.class);
+//        user = encryptionDecryptionUtil.encryptObject(user, "User", User.class);
         validateUserUniqueness(user);
         if (isEmpty(user.getPassword())) {
             user.setPassword(UUID.randomUUID().toString());
@@ -231,7 +245,8 @@ public class UserService {
         user.setDefaultPasswordExpiry(defaultPasswordExpiryInDays);
         user.setTenantId(getStateLevelTenantForCitizen(user.getTenantId(), user.getType()));
         User persistedNewUser = persistNewUser(user);
-        return encryptionDecryptionUtil.decryptObject(persistedNewUser, "UserSelf", User.class, requestInfo);
+//        return encryptionDecryptionUtil.decryptObject(persistedNewUser, "UserSelf", User.class, requestInfo);
+        return persistedNewUser;
 
         /* decrypt here  because encrypted data coming from DB*/
 
@@ -242,6 +257,9 @@ public class UserService {
                 .getType()), user.getType()))
             throw new DuplicateUserNameException(UserSearchCriteria.builder().userName(user.getUsername()).type(user
                     .getType()).tenantId(user.getTenantId()).build());
+        
+        if(userRepository.isUserPresent(user))
+        	throw new CustomException("DUPPLICATE_USER","User already present with same Mobile Number or Email or Passport");
     }
 
     private String getStateLevelTenantForCitizen(String tenantId, UserType userType) {
@@ -265,12 +283,13 @@ public class UserService {
 
     private void validateAndEnrichCitizen(User user) {
         log.info("Validating User........");
-        if (isCitizenLoginOtpBased && !StringUtils.isNumeric(user.getUsername()))
-            throw new UserNameNotValidException();
-        else if (isCitizenLoginOtpBased)
-            user.setMobileNumber(user.getUsername());
-        if (!isCitizenLoginOtpBased)
-            validatePassword(user.getPassword());
+//        if (isCitizenLoginOtpBased && !StringUtils.isNumeric(user.getUsername()))
+//            throw new UserNameNotValidException();
+//        else if (isCitizenLoginOtpBased)
+//            user.setMobileNumber(user.getUsername());
+//        if (!isCitizenLoginOtpBased)
+//            validatePassword(user.getPassword());
+        validatePassword(user.getPassword());
         user.setRoleToCitizen();
         user.setTenantId(getStateLevelTenantForCitizen(user.getTenantId(), user.getType()));
     }
@@ -359,7 +378,7 @@ public class UserService {
         validatePassword(user.getPassword());
         user.setPassword(encryptPwd(user.getPassword()));
         /* encrypt */
-        user = encryptionDecryptionUtil.encryptObject(user, "User", User.class);
+//        user = encryptionDecryptionUtil.encryptObject(user, "User", User.class);
         userRepository.update(user, existingUser,requestInfo.getUserInfo().getId(), requestInfo.getUserInfo().getUuid() );
 
         // If user is being unlocked via update, reset failed login attempts
@@ -367,8 +386,9 @@ public class UserService {
             resetFailedLoginAttempts(user);
 
         User encryptedUpdatedUserfromDB = getUserByUuid(user.getUuid());
-        User decryptedupdatedUserfromDB = encryptionDecryptionUtil.decryptObject(encryptedUpdatedUserfromDB, "UserSelf", User.class, requestInfo);
-        return decryptedupdatedUserfromDB;
+//        User decryptedupdatedUserfromDB = encryptionDecryptionUtil.decryptObject(encryptedUpdatedUserfromDB, "UserSelf", User.class, requestInfo);
+//        return decryptedupdatedUserfromDB;
+        return encryptedUpdatedUserfromDB;
     }
 
     public void removeTokensByUser(User user) {
@@ -410,7 +430,7 @@ public class UserService {
      */
     public User partialUpdate(User user, RequestInfo requestInfo) {
         /* encrypt here */
-        user = encryptionDecryptionUtil.encryptObject(user, "User", User.class);
+//        user = encryptionDecryptionUtil.encryptObject(user, "User", User.class);
 
         User existingUser = getUserByUuid(user.getUuid());
         validateProfileUpdateIsDoneByTheSameLoggedInUser(user);
@@ -420,8 +440,8 @@ public class UserService {
         User updatedUser = getUserByUuid(user.getUuid());
         
         /* decrypt here */
-        existingUser = encryptionDecryptionUtil.decryptObject(existingUser, "UserSelf", User.class, requestInfo);
-        updatedUser = encryptionDecryptionUtil.decryptObject(updatedUser, "UserSelf", User.class, requestInfo);
+//        existingUser = encryptionDecryptionUtil.decryptObject(existingUser, "UserSelf", User.class, requestInfo);
+//        updatedUser = encryptionDecryptionUtil.decryptObject(updatedUser, "UserSelf", User.class, requestInfo);
 
         setFileStoreUrlsByFileStoreIds(Collections.singletonList(updatedUser));
         String oldEmail = existingUser.getEmailId();
@@ -441,7 +461,7 @@ public class UserService {
     public void updatePasswordForLoggedInUser(LoggedInUserUpdatePasswordRequest updatePasswordRequest) {
         updatePasswordRequest.validate();
         final User user = getUniqueUser(updatePasswordRequest.getUserName(), updatePasswordRequest.getTenantId(),
-                updatePasswordRequest.getType());
+                false, updatePasswordRequest.getType());
 
         if (user.getType().toString().equals(UserType.CITIZEN.toString()) && isCitizenLoginOtpBased)
             throw new InvalidUpdatePasswordRequestException();
@@ -462,7 +482,7 @@ public class UserService {
     public void updatePasswordForNonLoggedInUser(NonLoggedInUserUpdatePasswordRequest request, RequestInfo requestInfo) {
         request.validate();
         // validateOtp(request.getOtpValidationRequest());
-        User user = getUniqueUser(request.getUserName(), request.getTenantId(), request.getType());
+        User user = getUniqueUser(request.getUserName(), request.getTenantId(), false, request.getType());
         if (user.getType().toString().equals(UserType.CITIZEN.toString()) && isCitizenLoginOtpBased) {
             log.info("CITIZEN forgot password flow is disabled");
             throw new InvalidUpdatePasswordRequestException();
@@ -473,14 +493,14 @@ public class UserService {
         }
         /* decrypt here */
         /* the reason for decryption here is the otp service requires decrypted username */
-        user = encryptionDecryptionUtil.decryptObject(user, "User", User.class, requestInfo);
+//        user = encryptionDecryptionUtil.decryptObject(user, "User", User.class, requestInfo);
         user.setOtpReference(request.getOtpReference());
         validateOtp(user);
         validatePassword(request.getNewPassword());
         user.updatePassword(encryptPwd(request.getNewPassword()));
         /* encrypt here */
         /* encrypted value is stored in DB*/
-        user = encryptionDecryptionUtil.encryptObject(user, "User", User.class);
+//        user = encryptionDecryptionUtil.encryptObject(user, "User", User.class);
         userRepository.update(user, user,requestInfo.getUserInfo().getId() , requestInfo.getUserInfo().getUuid());
     }
 
