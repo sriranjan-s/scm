@@ -2,6 +2,7 @@ package org.egov.infra.mdms.service;
 
 import java.util.List;
 
+import org.egov.infra.mdms.dto.Office;
 import org.egov.infra.mdms.dto.Organization;
 import org.egov.infra.mdms.repository.MDMSAdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,5 +23,10 @@ public class MDMSAdminService {
 	public JSONArray getOrganization() {
 		List<Organization> organizations = adminRepository.fetchOrganization();
 		return JsonPath.read(JSONArray.toJSONString(organizations),"$");
+	}
+
+	public JSONArray getOffice() {
+		List<Office> offices = adminRepository.fetchOffice();
+		return JsonPath.read(JSONArray.toJSONString(offices),"$");
 	}
 }

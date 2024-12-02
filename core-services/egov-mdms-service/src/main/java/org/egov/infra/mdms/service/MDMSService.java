@@ -72,8 +72,10 @@ public class MDMSService {
                 // JSONArray masterData = masters.get(masterDetail.getName());
                 JSONArray masterData = null;
                 try {
-                	if(masterDetail.getName().equalsIgnoreCase("tenants")) {
+                	if(masterDetail.getName().equalsIgnoreCase("tenants") || masterDetail.getName().equalsIgnoreCase("organizations")) {
                 		masterData = adminService.getOrganization();
+                	} else if(masterDetail.getName().equalsIgnoreCase("offices")) {
+                		masterData = adminService.getOffice();
                 	} else {
                 		masterData = getMasterData(stateLevel, ulbLevel, moduleDetail.getModuleName(),
                                 masterDetail.getName(), tenantId);
