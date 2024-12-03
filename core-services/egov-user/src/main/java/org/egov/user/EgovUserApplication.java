@@ -51,7 +51,8 @@ import java.util.regex.Pattern;
 
 @SpringBootApplication
 @Slf4j
-@Import({TracerConfiguration.class, EncryptionConfiguration.class})
+//@Import({TracerConfiguration.class, EncryptionConfiguration.class})
+@Import({TracerConfiguration.class})
 public class EgovUserApplication {
 
 
