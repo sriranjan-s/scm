@@ -17,7 +17,7 @@ import org.egov.user.domain.model.NonLoggedInUserUpdatePasswordRequest;
 import org.egov.user.domain.model.User;
 import org.egov.user.domain.model.UserSearchCriteria;
 import org.egov.user.domain.model.enums.UserType;
-import org.egov.user.domain.service.utils.EncryptionDecryptionUtil;
+//import org.egov.user.domain.service.utils.EncryptionDecryptionUtil;
 import org.egov.user.domain.service.utils.NotificationUtil;
 import org.egov.user.persistence.dto.FailedLoginAttempt;
 import org.egov.user.persistence.repository.FileStoreRepository;
@@ -63,7 +63,7 @@ public class UserService {
     private boolean isCitizenLoginOtpBased;
     private boolean isEmployeeLoginOtpBased;
     private FileStoreRepository fileRepository;
-    private EncryptionDecryptionUtil encryptionDecryptionUtil;
+//    private EncryptionDecryptionUtil encryptionDecryptionUtil;
     private TokenStore tokenStore;
 
     @Value("${egov.user.host}")
@@ -98,7 +98,7 @@ public class UserService {
     private NotificationUtil notificationUtil;
 
     public UserService(UserRepository userRepository, OtpRepository otpRepository, FileStoreRepository fileRepository,
-                       PasswordEncoder passwordEncoder, EncryptionDecryptionUtil encryptionDecryptionUtil, TokenStore tokenStore,
+                       PasswordEncoder passwordEncoder, TokenStore tokenStore,
                        @Value("${default.password.expiry.in.days}") int defaultPasswordExpiryInDays,
                        @Value("${citizen.login.password.otp.enabled}") boolean isCitizenLoginOtpBased,
                        @Value("${employee.login.password.otp.enabled}") boolean isEmployeeLoginOtpBased,
@@ -112,7 +112,7 @@ public class UserService {
         this.isCitizenLoginOtpBased = isCitizenLoginOtpBased;
         this.isEmployeeLoginOtpBased = isEmployeeLoginOtpBased;
         this.fileRepository = fileRepository;
-        this.encryptionDecryptionUtil = encryptionDecryptionUtil;
+//        this.encryptionDecryptionUtil = encryptionDecryptionUtil;
         this.tokenStore = tokenStore;
         this.pwdRegex = pwdRegex;
         this.pwdMaxLength = pwdMaxLength;

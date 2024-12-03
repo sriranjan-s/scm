@@ -10,7 +10,7 @@ import org.egov.user.domain.model.SecureUser;
 import org.egov.user.domain.model.User;
 import org.egov.user.domain.model.enums.UserType;
 import org.egov.user.domain.service.UserService;
-import org.egov.user.domain.service.utils.EncryptionDecryptionUtil;
+//import org.egov.user.domain.service.utils.EncryptionDecryptionUtil;
 import org.egov.user.web.contract.auth.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,8 +45,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     private UserService userService;
 
-    @Autowired
-    private EncryptionDecryptionUtil encryptionDecryptionUtil;
+//    @Autowired
+//    private EncryptionDecryptionUtil encryptionDecryptionUtil;
 
     @Value("${citizen.login.password.otp.enabled}")
     private boolean citizenLoginPasswordOtpEnabled;
