@@ -10,7 +10,7 @@ import org.egov.user.domain.model.SecureUser;
 import org.egov.user.domain.model.User;
 import org.egov.user.domain.model.enums.UserType;
 import org.egov.user.domain.service.UserService;
-import org.egov.user.domain.service.utils.EncryptionDecryptionUtil;
+//import org.egov.user.domain.service.utils.EncryptionDecryptionUtil;
 import org.egov.user.web.contract.auth.Role;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +39,8 @@ public class CustomPreAuthenticatedProvider implements AuthenticationProvider {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private EncryptionDecryptionUtil encryptionDecryptionUtil;
+//    @Autowired
+//    private EncryptionDecryptionUtil encryptionDecryptionUtil;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
