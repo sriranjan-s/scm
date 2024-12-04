@@ -280,16 +280,23 @@ public class UserService {
         return createUser(user, requestInfo);
     }
 
-
-    private void validateAndEnrichCitizen(User user) {
-        log.info("Validating User........");
+//    Original Method
+//    private void validateAndEnrichCitizen(User user) {
+//        log.info("Validating User........");
 //        if (isCitizenLoginOtpBased && !StringUtils.isNumeric(user.getUsername()))
 //            throw new UserNameNotValidException();
 //        else if (isCitizenLoginOtpBased)
 //            user.setMobileNumber(user.getUsername());
 //        if (!isCitizenLoginOtpBased)
 //            validatePassword(user.getPassword());
-        validatePassword(user.getPassword());
+//        user.setRoleToCitizen();
+//        user.setTenantId(getStateLevelTenantForCitizen(user.getTenantId(), user.getType()));
+//    }
+    
+    private void validateAndEnrichCitizen(User user) {
+        log.info("Validating User........");
+        if (!isCitizenLoginOtpBased)
+            validatePassword(user.getPassword());
         user.setRoleToCitizen();
         user.setTenantId(getStateLevelTenantForCitizen(user.getTenantId(), user.getType()));
     }
@@ -313,7 +320,7 @@ public class UserService {
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
             headers.set("Authorization", "Basic ZWdvdi11c2VyLWNsaWVudDo=");
             MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-            map.add("username", user.getUsername());
+            map.add("username", user.getMobileNumber());
             if (!isEmpty(password))
                 map.add("password", password);
             else
@@ -323,6 +330,7 @@ public class UserService {
             map.add("tenantId", user.getTenantId());
             map.add("isInternal", "true");
             map.add("userType", UserType.CITIZEN.name());
+            map.add("otp", "Y");
 
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map,
                     headers);
