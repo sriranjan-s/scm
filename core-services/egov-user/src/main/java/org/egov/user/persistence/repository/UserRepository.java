@@ -293,6 +293,7 @@ public class UserRepository {
 
         updateuserInputs.put("LastModifiedDate", new Date());
         updateuserInputs.put("LastModifiedBy", userId );
+        updateuserInputs.put("additionaldetails", user.getAdditionalDetails());
         
         updateAuditDetails(oldUser, userId, uuid);
 
@@ -538,6 +539,7 @@ public class UserRepository {
         userInputs.put("createdby", entityUser.getLoggedInUserId());
         userInputs.put("lastmodifiedby", entityUser.getLoggedInUserId());
         userInputs.put("alternatemobilenumber", entityUser.getAlternateMobileNumber());
+        userInputs.put("additionaldetails", entityUser.getAdditionalDetails());
 
         namedParameterJdbcTemplate.update(userTypeQueryBuilder.getInsertUserQuery(), userInputs);
         return entityUser;
