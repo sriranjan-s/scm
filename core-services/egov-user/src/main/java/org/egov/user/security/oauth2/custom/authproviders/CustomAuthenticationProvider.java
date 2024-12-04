@@ -136,7 +136,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
                 //for automation allow fixing otp validation to a fixed otp
                 isPasswordMatched = true;
             } else {
-                isPasswordMatched = isPasswordMatch(citizenLoginPasswordOtpEnabled, password, user, authentication);
+                isPasswordMatched = isPasswordMatch(citizenLoginPasswordOtpEnabled && otpLogin, password, user, authentication);
             }
         } else {
             isPasswordMatched = isPasswordMatch(employeeLoginPasswordOtpEnabled, password, user, authentication);
