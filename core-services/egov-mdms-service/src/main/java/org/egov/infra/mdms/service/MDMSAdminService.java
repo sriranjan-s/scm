@@ -50,6 +50,23 @@ public class MDMSAdminService {
 			throw new CustomException("INVALID_REQUEST", "Not Supported");
 		}
 	}
+	
+	public void update(String entity, EntityRequest request) {
+		Organization organization;
+		Office office;
+		if(entity.equalsIgnoreCase(MDMSConstants.ORGANIZATION)) {
+			validateOrganization(request);
+			enrichOrgCreateRequest(request);
+			adminRepository.updateOrganization(request);
+		} else if(entity.equalsIgnoreCase(MDMSConstants.OFFICE)) {
+			validateOffice(request);
+			enrichOfcCreateRequest(request);
+			adminRepository.updateOffice(request);
+		} else {
+			throw new CustomException("INVALID_REQUEST", "Not Supported");
+		}
+		
+	}
 
 	private void enrichOfcCreateRequest(EntityRequest request) {
 		
@@ -70,4 +87,5 @@ public class MDMSAdminService {
 			throw new CustomException("INVALID_REQUEST", "No organization details found in the request.");
 		}
 	}
+
 }

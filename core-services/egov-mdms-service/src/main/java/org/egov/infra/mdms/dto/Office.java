@@ -12,7 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class Office {
-	private String id;
+	private Long id;
 	private String organizationId;
 	private String code;
 	private String name;
