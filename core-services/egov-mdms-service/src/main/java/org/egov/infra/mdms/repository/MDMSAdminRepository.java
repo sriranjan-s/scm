@@ -42,8 +42,8 @@ public class MDMSAdminRepository {
 
 	public void createOffice(EntityRequest request) {
 		String query = "INSERT INTO public.eg_offices"
-				+ "(organization_id, code, name, description, email_id, telephone_number, head_office_code, office_address, district, sub_district, state, pin, status, head_office)"
-				+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				+ " (organization_id, code, name, description, email_id, telephone_number, head_office_code, office_address, district, sub_district, state, pin, status, head_office)"
+				+ " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		jdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
 
@@ -75,8 +75,8 @@ public class MDMSAdminRepository {
 
 	public void createOrganization(EntityRequest request) {
 		String query = "INSERT INTO public.eg_organizations"
-				+ "(code, name, description, hod, email_id, telephone_number, address, district, sub_district, state, pin, status)"
-				+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				+ " (code, name, description, hod, email_id, telephone_number, address, district, sub_district, state, pin, status)"
+				+ " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		jdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
 
@@ -107,8 +107,8 @@ public class MDMSAdminRepository {
 
 	public void updateOrganization(EntityRequest request) {
 		String query = "UPDATE public.eg_organizations"
-				+ "SET code=?, name=?, description=?, hod=?, email_id=?, telephone_number=?, address=?, district=?', sub_district=?, state=?, pin=?, status=?"
-				+ "WHERE id=?";
+				+ " SET code=?, name=?, description=?, hod=?, email_id=?, telephone_number=?, address=?, district=?', sub_district=?, state=?, pin=?, status=?"
+				+ " WHERE id=?";
 
 		jdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
 
