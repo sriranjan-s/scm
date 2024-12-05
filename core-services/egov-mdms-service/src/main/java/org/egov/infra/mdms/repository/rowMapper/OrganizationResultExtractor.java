@@ -22,7 +22,7 @@ public class OrganizationResultExtractor  implements ResultSetExtractor<List<Org
 		Map<String, Organization> orgMap = new LinkedHashMap<>();
 		while (rs.next()) {
 			String code=rs.getString("code");
-			Organization org = Organization.builder().id(rs.getString("id")).code(rs.getString("code"))
+			Organization org = Organization.builder().id(rs.getLong("id")).code(rs.getString("code"))
 					.name(rs.getString("name")).description(rs.getString("description"))
 					.hod(rs.getString("hod")).emailId(rs.getString("email_id")).telephoneNumber(rs.getString("telephone_number"))
 					.address(rs.getString("address")).district(rs.getString("district")).subDistrict(rs.getString("sub_district"))
