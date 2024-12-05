@@ -21,7 +21,7 @@ public class OfficeResultExtractor  implements ResultSetExtractor<List<Office>> 
 		Map<String, Office> officeMap = new LinkedHashMap<>();
 		while (rs.next()) {
 			String code=rs.getString("code");
-			Office office = Office.builder().id(rs.getLong("id")).code(rs.getString("code")).organizationId(rs.getString("organization_id"))
+			Office office = Office.builder().id(rs.getLong("id")).code(rs.getString("code")).organizationId(rs.getLong("organization_id"))
 					.name(rs.getString("name")).description(rs.getString("description"))
 					.emailId(rs.getString("email_id")).telephoneNumber(rs.getString("telephone_number"))
 					.officeAddress(rs.getString("office_address")).district(rs.getString("district")).subDistrict(rs.getString("sub_district"))
