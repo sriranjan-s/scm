@@ -50,7 +50,7 @@ public class MDMSAdminRepository {
 			@Override
 			public void setValues(PreparedStatement ps, int i) throws SQLException {
 				Office office = request.getOffices().get(i);
-				ps.setString(1, office.getOrganizationId());
+				ps.setLong(1, office.getOrganizationId());
 				ps.setString(2, office.getCode());
 				ps.setString(3, office.getName());
 				ps.setString(4, office.getDescription());
@@ -107,7 +107,7 @@ public class MDMSAdminRepository {
 
 	public void updateOrganization(EntityRequest request) {
 		String query = "UPDATE public.eg_organizations"
-				+ " SET code=?, name=?, description=?, hod=?, email_id=?, telephone_number=?, address=?, district=?', sub_district=?, state=?, pin=?, status=?"
+				+ " SET code=?, name=?, description=?, hod=?, email_id=?, telephone_number=?, address=?, district=?, sub_district=?, state=?, pin=?, status=?"
 				+ " WHERE id=?";
 
 		jdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
@@ -149,7 +149,7 @@ public class MDMSAdminRepository {
 			@Override
 			public void setValues(PreparedStatement ps, int i) throws SQLException {
 				Office office = request.getOffices().get(i);
-				ps.setString(1, office.getOrganizationId());
+				ps.setLong(1, office.getOrganizationId());
 				ps.setString(2, office.getCode());
 				ps.setString(3, office.getName());
 				ps.setString(4, office.getDescription());

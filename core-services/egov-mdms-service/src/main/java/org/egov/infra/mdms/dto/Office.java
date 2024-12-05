@@ -14,7 +14,7 @@ import lombok.Setter;
 public class Office {
 	private String tenantId;
 	private Long id;
-	private String organizationId;
+	private Long organizationId;
 	private String code;
 	private String name;
 	private String description;
