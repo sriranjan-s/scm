@@ -1,89 +1,65 @@
 import React from "react";
-
+import { initLibraries } from "@egovernments/digit-ui-libraries";
+import {
+  paymentConfigs,
+  PaymentLinks,
+  PaymentModule,
+} from "@egovernments/digit-ui-module-common";
+import { DigitUI } from "@egovernments/digit-ui-module-core";
+import { initDSSComponents } from "@egovernments/digit-ui-module-dss";
+import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
+import { initHRMSComponents } from "@egovernments/digit-ui-module-hrms";
+import { initUtilitiesComponents } from "@egovernments/digit-ui-module-utilities";
+import { UICustomizations } from "./Customisations/UICustomizations";
+import { initWorkbenchComponents } from "@egovernments/digit-ui-module-workbench";
 import {
   initPGRComponents,
   PGRReducers,
 } from "@egovernments/digit-ui-module-pgr";
 
-
-
-
-import {
-  PaymentModule,
-  PaymentLinks,
-  paymentConfigs,
-} from "@egovernments/digit-ui-module-common";
-import { DigitUI } from "@egovernments/digit-ui-module-core";
-import { initLibraries } from "@egovernments/digit-ui-libraries";
-
-
-import { initReceiptsComponents, ReceiptsModule } from "@egovernments/digit-ui-module-receipts";
-import { initOBPSComponents } from "@egovernments/digit-ui-module-obps";
-
-import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
-
-import { initCustomisationComponents } from "./Customisations";
-import { initCommonPTComponents } from "@egovernments/digit-ui-module-commonpt";
-import { initBillsComponents } from "@egovernments/digit-ui-module-bills";
-// import { initReportsComponents } from "@egovernments/digit-ui-module-reports";
-
-initLibraries();
+window.contextPath = window?.globalConfigs?.getConfig("CONTEXT_PATH");
 
 const enabledModules = [
-  "PGR",
-  
-  "Payment",
-  "PT",
-  "QuickPayLinks",
- 
+  "DSS",
   "NDSS",
-  
+  "Utilities",
   "HRMS",
-  "TL",
-  "Receipts",
-  "OBPS",
-  
   "Engagement",
-  "CommonPT",
-  
-  "Reports",
-  "Bills",
-  "SW",
-  "BillAmendment"
+  "Workbench",
+  "PGR"
+
 ];
-window.Digit.ComponentRegistryService.setupRegistry({
-  ...paymentConfigs,
-  PTModule,
-  PTLinks,
-  PaymentModule,
-  PaymentLinks,
-  ...PTComponents,
- 
-  HRMSModule,
-  TLModule,
-  TLLinks,
-  // ReceiptsModule
-});
-
-initPGRComponents();
-
-
-
-// initReceiptsComponents();
-initOBPSComponents();
-
-initEngagementComponents();
-
-initCommonPTComponents();
-initBillsComponents();
-// initReportsComponents();
-initCustomisationComponents();
 
 const moduleReducers = (initData) => ({
-  pgr: PGRReducers(initData),
+  initData, pgr: PGRReducers(initData),
+});
+
+const initDigitUI = () => {
+  window.Digit.ComponentRegistryService.setupRegistry({
+    PaymentModule,
+    ...paymentConfigs,
+    PaymentLinks,
+  });
+
+  initPGRComponents();
+  initDSSComponents();
+  initHRMSComponents();
+  initEngagementComponents();
+  initUtilitiesComponents();
+  initWorkbenchComponents();
+
+  window.Digit.Customizations = {
+    PGR: {},
+    commonUiConfig: UICustomizations,
+  };
+};
+
+initLibraries().then(() => {
+  initDigitUI();
 });
 
 function App() {
+  window.contextPath = window?.globalConfigs?.getConfig("CONTEXT_PATH");
   const stateCode =
     window.globalConfigs?.getConfig("STATE_LEVEL_TENANT_ID") ||
     process.env.REACT_APP_STATE_LEVEL_TENANT_ID;
@@ -95,6 +71,7 @@ function App() {
       stateCode={stateCode}
       enabledModules={enabledModules}
       moduleReducers={moduleReducers}
+      // defaultLanding="employee"
     />
   );
 }

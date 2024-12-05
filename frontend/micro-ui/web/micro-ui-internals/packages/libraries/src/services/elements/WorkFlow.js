@@ -3,57 +3,26 @@ import { Request } from "../atoms/Utils/Request";
 import cloneDeep from "lodash/cloneDeep";
 
 const getThumbnails = async (ids, tenantId, documents = []) => {
-  tenantId = window.location.href.includes("/obps/") || window.location.href.includes("/pt/") ? Digit.ULBService.getStateId() : tenantId;
+
   
-  if (window.location.href.includes("/obps/")) {
-    if (documents?.length > 0) {
-      let workflowsDocs = [];
-      documents?.map(doc => {
-        if (doc?.url) {
-          const thumbs = doc?.url?.split(",")?.[3] || doc?.url?.split(",")?.[0]
-          workflowsDocs.push({
-            thumbs: [thumbs],
-            images: [Digit.Utils.getFileUrl(doc.url)]
-          }) 
-        }
-      })
-      return workflowsDocs?.[0];
-    } else {
-      return null;
-    }
-  } else {
     const res = await Digit.UploadServices.Filefetch(ids, tenantId);
     if (res.data.fileStoreIds && res.data.fileStoreIds.length !== 0) {
-      return { 
-        thumbs: res.data.fileStoreIds.map((o) => o.url.split(",")[3] || o.url.split(",")[0]), 
-        images: res.data.fileStoreIds.map((o) => Digit.Utils.getFileUrl(o.url)) };
+      return {
+        thumbs: res.data.fileStoreIds.map((o) => o.url.split(",")[3] || o.url.split(",")[0]),
+        images: res.data.fileStoreIds.map((o) => Digit.Utils.getFileUrl(o.url))
+      };
     } else {
       return null;
     }
-  }
+  
 };
 
 const makeCommentsSubsidariesOfPreviousActions = async (wf) => {
   const TimelineMap = new Map();
-  const tenantId = window.location.href.includes("/obps/") ? Digit.ULBService.getStateId() : wf?.[0]?.tenantId;
+  const tenantId =  wf?.[0]?.tenantId;
   let fileStoreIdsList = [];
   let res = {};
 
-  if (window.location.href.includes("/obps/")) {
-    wf?.map(wfData => {
-      wfData?.documents?.map(wfDoc => {
-        if (wfDoc?.fileStoreId) fileStoreIdsList.push(wfDoc?.fileStoreId);
-      })
-    })
-    if (fileStoreIdsList?.length > 0) {
-      res = await Digit.UploadServices.Filefetch(fileStoreIdsList, tenantId);
-    }
-    wf?.forEach(wfData => {
-      wfData?.documents?.forEach(wfDoc => {
-        if (wfDoc?.fileStoreId) wfDoc.url = res.data[wfDoc?.fileStoreId];
-      })
-    });
-  }
   for (const eventHappened of wf) {
     if (eventHappened?.documents) {
       eventHappened.thumbnailsToShow = await getThumbnails(eventHappened?.documents?.map(e => e?.fileStoreId), eventHappened?.tenantId, eventHappened?.documents)
@@ -74,9 +43,39 @@ const makeCommentsSubsidariesOfPreviousActions = async (wf) => {
   return response
 }
 
+const getThumbnailsV2 = async (ids, tenantId, documents = []) => {
+
+  const res = await Digit.UploadServices.Filefetch(ids, tenantId);
+  if (res.data.fileStoreIds && res.data.fileStoreIds.length !== 0) {
+    return {
+      thumbs: res.data.fileStoreIds.map((o) => o.url.split(",")[3] || o.url.split(",")[0]),
+      images: res.data.fileStoreIds.map((o) => Digit.Utils.getFileUrl(o.url))
+    };
+  } else {
+    return null;
+  }
+};
+
+const makeCommentsSubsidariesOfPreviousActionsV2 = async (wf) => {
+  const TimelineMap = new Map();
+  // const tenantId = window.location.href.includes("/obps/") ? Digit.ULBService.getStateId() : wf?.[0]?.tenantId;
+ 
+  
+  for (const eventHappened of wf) {
+    
+    //currenlty in workflow documentUid is getting populated so while update we are sending fileStoreId in documentUid field
+    if (eventHappened?.documents) {
+      eventHappened.thumbnailsToShow = await getThumbnailsV2(eventHappened?.documents?.map(e => e?.documentUid || e?.fileStoreId), eventHappened?.tenantId, eventHappened?.documents)
+    }
+
+      
+  }
+ 
+}
+
 const getAssignerDetails = (instance, nextStep, moduleCode) => {
   let assigner = instance?.assigner
-  if (moduleCode === "FSM" || moduleCode === "FSM_POST_PAY_SERVICE" || moduleCode === "FSM_ADVANCE_PAY_SERVICE" || moduleCode === "FSM_ADVANCE_PAY_SERVICE_V1"|| moduleCode === "PAY_LATER_SERVICE" || moduleCode === "FSM_ZERO_PAY_SERVICE") {
+  if (moduleCode === "FSM" || moduleCode === "FSM_POST_PAY_SERVICE") {
     if (instance.state.applicationStatus === "CREATED") {
       assigner = instance?.assigner
     } else {
@@ -108,233 +107,14 @@ export const WorkflowService = {
       auth: true,
     });
   },
-
-  getDetailsById: async ({ tenantId, id, moduleCode, role, getTripData }) => {
-    const workflow = 
-      {
-       
-          "ResponseInfo": null,
-          "ProcessInstances": [
-              {
-                  "id": "01e99665-2f41-4805-8f39-a0018733e06d",
-                  "tenantId": "pg.citya",
-                  "businessService": "IM",
-                  "businessId": "PG-IM-2024-03-29-002332",
-                  "action": "APPLY",
-                  "moduleName": "im-services",
-                  "state": {
-                      "auditDetails": null,
-                      "uuid": "008ab0d5-5522-4d1e-a848-04cb2b1e3e46",
-                      "tenantId": "pg",
-                      "businessServiceId": "2317d56c-f1e4-426b-bb1d-fd819cdfc37d",
-                      "sla": 300000,
-                      "state": "PENDINGFORASSIGNMENT",
-                      "applicationStatus": "PENDINGFORASSIGNMENT",
-                      "docUploadRequired": false,
-                      "isStartState": false,
-                      "isTerminateState": false,
-                      "isStateUpdatable": null,
-                      "actions": [
-                          {
-                              "auditDetails": null,
-                              "uuid": "f922000e-b744-41f3-8086-7de42f983232",
-                              "tenantId": "pg",
-                              "currentState": "008ab0d5-5522-4d1e-a848-04cb2b1e3e46",
-                              "action": "REJECT",
-                              "nextState": "12aeabba-7245-4acb-8dde-9ee64f6b3cb3",
-                              "roles": [
-                                  "GRO",
-                                  "DGRO"
-                              ],
-                              "active": null
-                          },
-                          {
-                              "auditDetails": null,
-                              "uuid": "8830aef4-7cab-42b9-8b37-9c8c9609942a",
-                              "tenantId": "pg",
-                              "currentState": "008ab0d5-5522-4d1e-a848-04cb2b1e3e46",
-                              "action": "ASSIGNEDBYAUTOESCALATION",
-                              "nextState": "548abe23-c673-4e42-8851-4e5f9092f0a5",
-                              "roles": [
-                                  "AUTO_ESCALATE"
-                              ],
-                              "active": null
-                          },
-                          {
-                              "auditDetails": null,
-                              "uuid": "07fbef9d-e3d5-4ceb-9443-50e88ea98d35",
-                              "tenantId": "pg",
-                              "currentState": "008ab0d5-5522-4d1e-a848-04cb2b1e3e46",
-                              "action": "ASSIGN",
-                              "nextState": "548abe23-c673-4e42-8851-4e5f9092f0a5",
-                              "roles": [
-                                  "GRO",
-                                  "DGRO"
-                              ],
-                              "active": null
-                          },
-                          {
-                              "auditDetails": null,
-                              "uuid": "15ba6655-0560-428f-8baa-4735bd79a0e6",
-                              "tenantId": "pg",
-                              "currentState": "008ab0d5-5522-4d1e-a848-04cb2b1e3e46",
-                              "action": "COMMENT",
-                              "nextState": "008ab0d5-5522-4d1e-a848-04cb2b1e3e46",
-                              "roles": [
-                                  "CITIZEN"
-                              ],
-                              "active": null
-                          },
-                          {
-                              "auditDetails": null,
-                              "uuid": "90882c08-7887-4979-a69f-d189311d5f85",
-                              "tenantId": "pg.citya",
-                              "currentState": "008ab0d5-5522-4d1e-a848-04cb2b1e3e46",
-                              "action": "EDIT",
-                              "nextState": "008ab0d5-5522-4d1e-a848-04cb2b1e3e46",
-                              "roles": [
-                                  "GRO",
-                                  "DGRO"
-                              ],
-                              "active": null
-                          }
-                      ]
-                  },
-                  "comment": null,
-                  "documents": null,
-                  "assigner": {
-                      "id": 9988,
-                      "userName": "PGRSU",
-                      "name": "PGR SU",
-                      "type": "EMPLOYEE",
-                      "mobileNumber": "9000000091",
-                      "emailId": null,
-                      "roles": [
-                          {
-                              "id": null,
-                              "name": "Employee",
-                              "code": "EMPLOYEE",
-                              "tenantId": "pg.citya"
-                          },
-                          {
-                              "id": null,
-                              "name": "Auto Escalation Employee",
-                              "code": "AUTO_ESCALATE",
-                              "tenantId": "pg.citya"
-                          },
-                          {
-                              "id": null,
-                              "name": "Auto Escalation Supervisor",
-                              "code": "SUPERVISOR",
-                              "tenantId": "pg.citya"
-                          },
-                          {
-                              "id": null,
-                              "name": "PGR Last Mile Employee",
-                              "code": "PGR_LME",
-                              "tenantId": "pg.citya"
-                          },
-                          {
-                              "id": null,
-                              "name": "Customer Support Representative",
-                              "code": "CSR",
-                              "tenantId": "pg.citya"
-                          },
-                          {
-                              "id": null,
-                              "name": "Grievance Routing Officer",
-                              "code": "GRO",
-                              "tenantId": "pg.citya"
-                          },
-                          {
-                              "id": null,
-                              "name": "Super User",
-                              "code": "SUPERUSER",
-                              "tenantId": "pg.citya"
-                          }
-                      ],
-                      "tenantId": "pg.citya",
-                      "uuid": "55fa55f0-5348-4eef-922c-2d36c50c56e1"
-                  },
-                  "assignes": null,
-                  "nextActions": [
-                      {
-                          "auditDetails": null,
-                          "uuid": "07fbef9d-e3d5-4ceb-9443-50e88ea98d35",
-                          "tenantId": "pg",
-                          "currentState": "008ab0d5-5522-4d1e-a848-04cb2b1e3e46",
-                          "action": "ASSIGN",
-                          "nextState": "548abe23-c673-4e42-8851-4e5f9092f0a5",
-                          "roles": [
-                              "GRO",
-                              "DGRO"
-                          ],
-                          "active": null
-                      },
-                      {
-                          "auditDetails": null,
-                          "uuid": "8830aef4-7cab-42b9-8b37-9c8c9609942a",
-                          "tenantId": "pg",
-                          "currentState": "008ab0d5-5522-4d1e-a848-04cb2b1e3e46",
-                          "action": "ASSIGNEDBYAUTOESCALATION",
-                          "nextState": "548abe23-c673-4e42-8851-4e5f9092f0a5",
-                          "roles": [
-                              "AUTO_ESCALATE"
-                          ],
-                          "active": null
-                      },
-                      {
-                          "auditDetails": null,
-                          "uuid": "90882c08-7887-4979-a69f-d189311d5f85",
-                          "tenantId": "pg.citya",
-                          "currentState": "008ab0d5-5522-4d1e-a848-04cb2b1e3e46",
-                          "action": "EDIT",
-                          "nextState": "008ab0d5-5522-4d1e-a848-04cb2b1e3e46",
-                          "roles": [
-                              "GRO",
-                              "DGRO"
-                          ],
-                          "active": null
-                      },
-                      {
-                          "auditDetails": null,
-                          "uuid": "f922000e-b744-41f3-8086-7de42f983232",
-                          "tenantId": "pg",
-                          "currentState": "008ab0d5-5522-4d1e-a848-04cb2b1e3e46",
-                          "action": "REJECT",
-                          "nextState": "12aeabba-7245-4acb-8dde-9ee64f6b3cb3",
-                          "roles": [
-                              "GRO",
-                              "DGRO"
-                          ],
-                          "active": null
-                      }
-                  ],
-                  "stateSla": -260924304,
-                  "businesssServiceSla": 170775696,
-                  "previousStatus": null,
-                  "entity": null,
-                  "auditDetails": {
-                      "createdBy": "55fa55f0-5348-4eef-922c-2d36c50c56e1",
-                      "lastModifiedBy": "55fa55f0-5348-4eef-922c-2d36c50c56e1",
-                      "createdTime": 1711694776653,
-                      "lastModifiedTime": 1711694776653
-                  },
-                  "rating": 0,
-                  "escalated": false
-              }
-          ],
-          "totalCount": 0
-      }
+  getDetailsByIdV2: async ({ tenantId, id, moduleCode }) => {
     
-   
-    console.log("workflow", workflow)
+    //process instance search
+    const workflow = await Digit.WorkflowService.getByBusinessId(tenantId, id);
     const applicationProcessInstance = cloneDeep(workflow?.ProcessInstances);
-    const getLocationDetails = window.location.href.includes("/obps/") || window.location.href.includes("noc/inbox");
-    const moduleCodeData = "IM"
-    console.log("modulecode", moduleCodeData)
-    const businessServiceResponse = (await Digit.WorkflowService.init(tenantId, moduleCodeData))?.BusinessServices[0]?.states;
-    console.log("busre", businessServiceResponse)
+    //business service search
+    const businessServiceResponse = (await Digit.WorkflowService.init(tenantId, moduleCode))?.BusinessServices[0]?.states;
+
     if (workflow && workflow.ProcessInstances) {
       const processInstances = workflow.ProcessInstances;
       const nextStates = processInstances[0]?.nextActions.map((action) => ({ action: action?.action, nextState: processInstances[0]?.state.uuid }));
@@ -342,10 +122,111 @@ export const WorkflowService = {
         action: id.action,
         state: businessServiceResponse?.find((state) => state.uuid === id.nextState),
       }));
+
+      /* To check state is updatable and provide edit option*/
+      const currentState = businessServiceResponse?.find((state) => state.uuid === processInstances[0]?.state.uuid);
+      
+      // if current state is editable then we manually append an edit action
+      //(doing only for muster)
+      //beacuse in other module edit action is defined in workflow
+      
+      // if (currentState && currentState?.isStateUpdatable && moduleCode==="muster-roll-approval" ) {
+      //   nextActions.push({ action: "EDIT", state: currentState });
+      //  }
+      // Check when to add Edit action(In Estimate only when send back to originator action is taken)
+
+      const getStateForUUID = (uuid) => businessServiceResponse?.find((state) => state.uuid === uuid);
+
+      //this actionState is used in WorkflowActions component
+      const actionState = businessServiceResponse
+        ?.filter((state) => state.uuid === processInstances[0]?.state.uuid)
+        .map((state) => {
+          let _nextActions = state.actions?.map?.((ac) => {
+            let actionResultantState = getStateForUUID(ac.nextState);
+            let assignees = actionResultantState?.actions?.reduce?.((acc, act) => {
+              return [...acc, ...act.roles];
+            }, []);
+            return { ...actionResultantState, assigneeRoles: assignees, action: ac.action, roles: ac.roles };
+          });
+          // if (state?.isStateUpdatable && moduleCode==="MR") {
+          //   _nextActions.push({ action: "RE-SUBMIT", ...state, roles: state?.actions?.[0]?.roles })
+          // }
+          //CHECK WHEN EDIT ACTION TO BE SHOWN
+          return { ...state, nextActions: _nextActions, roles: state?.action, roles: state?.actions?.reduce((acc, el) => [...acc, ...el.roles], []) };
+        })?.[0];
+
+
+        //mapping nextActions with suitable roles
+      const actionRolePair = nextActions?.map((action) => ({
+        action: action?.action,
+        roles: action.state?.actions?.map((action) => action.roles).join(","),
+      }));
+
+
+      if (processInstances.length > 0) {
+        // const EnrichedWfData = await makeCommentsSubsidariesOfPreviousActions(processInstances)
+        //if any documents are there this fn will add thumbnails to show
+        
+        await makeCommentsSubsidariesOfPreviousActionsV2(processInstances)
+
+        let timeline = processInstances.map((instance, ind) => {
+          let checkPoint = {
+            performedAction: instance.action,
+            status: instance.state.applicationStatus,
+            state: instance.state.state,
+            assigner: instance?.assigner,
+            rating: instance?.rating,
+            // wfComment: instance?.wfComments?.map(e => e?.comment),
+            comment:instance?.comment,
+            wfDocuments: instance?.documents,
+            thumbnailsToShow: { thumbs: instance?.thumbnailsToShow?.thumbs, fullImage: instance?.thumbnailsToShow?.images },
+            assignes: instance.assignes,
+            caption: instance.assignes ? instance.assignes?.map((assignee) => ({ name: assignee.name, mobileNumber: assignee.mobileNumber })) : null,
+            auditDetails: {
+              created: Digit.DateUtils.ConvertEpochToDate(instance.auditDetails.createdTime),
+              lastModified: Digit.DateUtils.ConvertEpochToDate(instance.auditDetails.lastModifiedTime),
+              lastModifiedEpoch: instance.auditDetails.lastModifiedTime,
+            },
+            isTerminateState : instance?.state?.isTerminateState
+          };
+          return checkPoint;
+        });
+
+        
+        const details = {
+          timeline,
+          nextActions:actionRolePair,
+          actionState,
+          applicationBusinessService: workflow?.ProcessInstances?.[0]?.businessService,
+          processInstances: applicationProcessInstance,
+        };
+        
+
+        return details;
+      }
+    } else {
+      throw new Error("error fetching workflow services");
+    }
+    return {};
+  },
+  getDetailsById: async ({ tenantId, id, moduleCode, role, getTripData }) => {
+    const workflow = await Digit.WorkflowService.getByBusinessId(tenantId, id);
+    const applicationProcessInstance = cloneDeep(workflow?.ProcessInstances);
+    const getLocationDetails = window.location.href.includes("/obps/") || window.location.href.includes("noc/inbox");
+    const moduleCodeData = getLocationDetails ? applicationProcessInstance?.[0]?.businessService : moduleCode;
+    const businessServiceResponse = (await Digit.WorkflowService.init(tenantId, moduleCodeData))?.BusinessServices[0]?.states;
+    if (workflow && workflow.ProcessInstances) {
+      const processInstances = workflow.ProcessInstances;
+      const nextStates = processInstances[0]?.nextActions.map((action) => ({ action: action?.action, nextState: processInstances[0]?.state.uuid }));
+      const nextActions = nextStates.map((id) => ({
+        action: id.action,
+        state: businessServiceResponse?.find((state) => state.uuid === id.nextState),
+      }));
+
       /* To check state is updatable and provide edit option*/
       const currentState = businessServiceResponse?.find((state) => state.uuid === processInstances[0]?.state.uuid);
       if (currentState && currentState?.isStateUpdatable) {
-        if (moduleCode === "FSM" || moduleCode === "FSM_POST_PAY_SERVICE" || moduleCode === "FSM_ADVANCE_PAY_SERVICE" || moduleCode === "FSM_ADVANCE_PAY_SERVICE_V1" || moduleCode === "FSM_ZERO_PAY_SERVICE" || moduleCode === "PAY_LATER_SERVICE" || moduleCode === "FSM_VEHICLE_TRIP" || moduleCode === "IM" || moduleCode === "OBPS") null;
+        if (moduleCode === "FSM" || moduleCode === "FSM_POST_PAY_SERVICE" || moduleCode === "FSM_VEHICLE_TRIP" || moduleCode === "PGR" || moduleCode === "OBPS") null;
         else nextActions.push({ action: "EDIT", state: currentState });
       }
 
@@ -361,6 +242,9 @@ export const WorkflowService = {
             }, []);
             return { ...actionResultantState, assigneeRoles: assignees, action: ac.action, roles: ac.roles };
           });
+          if(state?.isStateUpdatable) {
+            _nextActions.push({ action: "EDIT", ...state, roles: state?.actions?.[0]?.roles})
+          }
           return { ...state, nextActions: _nextActions, roles: state?.action, roles: state?.actions?.reduce((acc, el) => [...acc, ...el.roles], []) };
         })?.[0];
 
@@ -370,17 +254,17 @@ export const WorkflowService = {
         "roles": "FSM_EMP_FSTPO,FSM_EMP_FSTPO"
       }]
 
-      // const actionRolePair = nextActions?.map((action) => ({
-      //   action: action?.action,
-      //   roles: action.state?.actions?.map((action) => action.roles).join(","),
-      // }));
+      const actionRolePair = nextActions?.map((action) => ({
+        action: action?.action,
+        roles: action.state?.actions?.map((action) => action.roles).join(","),
+      }));
 
       if (processInstances.length > 0) {
         const TLEnrichedWithWorflowData = await makeCommentsSubsidariesOfPreviousActions(processInstances)
         let timeline = TLEnrichedWithWorflowData.map((instance, ind) => {
           let checkPoint = {
             performedAction: instance.action,
-            status: moduleCode === "WS.AMENDMENT" ||  moduleCode === "SW.AMENDMENT" ? instance.state.state :instance.state.applicationStatus,
+            status: moduleCode === "BS.AMENDMENT" ? instance.state.state :instance.state.applicationStatus,
             state: instance.state.state,
             assigner: getAssignerDetails(instance, TLEnrichedWithWorflowData[ind - 1], moduleCode),
             rating: instance?.rating,
@@ -392,6 +276,7 @@ export const WorkflowService = {
             auditDetails: {
               created: Digit.DateUtils.ConvertEpochToDate(instance.auditDetails.createdTime),
               lastModified: Digit.DateUtils.ConvertEpochToDate(instance.auditDetails.lastModifiedTime),
+              lastModifiedEpoch: instance.auditDetails.lastModifiedTime,
             },
             timeLineActions: instance.nextActions
               ? instance.nextActions.filter((action) => action.roles.includes(role)).map((action) => action?.action)
@@ -480,16 +365,8 @@ export const WorkflowService = {
           } catch (err) { }
         }
 
-      //Added the condition so that following filter can happen only for fsm and does not affect other module
-      let nextStep = [];
-      if(window.location.href?.includes("fsm")){
-        // TAKING OUT CURRENT APPL STATUS
-        const actionRolePair = nextActions?.map((action) => ({
-          action: action?.action,
-          roles: action.state?.actions?.map((action) => action.roles).join(","),
-        }));
-        nextStep = location.pathname.includes("new-vehicle-entry") ? action_newVehicle : location.pathname.includes("dso") ? actionRolePair.filter((i)=> i.action !== "PAY") : actionRolePair;
-      }
+      // HANDLING ACTION FOR NEW VEHICLE LOG FROM UI SIDE
+        const nextActions = location.pathname.includes("new-vehicle-entry") ? action_newVehicle : actionRolePair;
 
         if (role !== "CITIZEN" && moduleCode === "PGR") {
           const onlyPendingForAssignmentStatusArray = timeline?.filter(e => e?.status === "PENDINGFORASSIGNMENT")
@@ -501,14 +378,14 @@ export const WorkflowService = {
           });
         }
 
-        if (timeline[timeline.length - 1].status !== "CREATED" && (moduleCode === "FSM" || moduleCode === "FSM_POST_PAY_SERVICE" || moduleCode==="FSM_ADVANCE_PAY_SERVICE" || moduleCode==="FSM_ADVANCE_PAY_SERVICE_V1"|| moduleCode==="FSM_ZERO_PAY_SERVICE" || moduleCode==="PAY_LATER_SERVICE" ))
+        if (timeline[timeline.length - 1].status !== "CREATED" && (moduleCode === "FSM" || moduleCode === "FSM_POST_PAY_SERVICE"))
           timeline.push({
             status: "CREATED",
           });
 
         const details = {
           timeline,
-          nextActions : window.location.href?.includes("fsm") ? nextStep : nextActions,
+          nextActions,
           actionState,
           applicationBusinessService: workflow?.ProcessInstances?.[0]?.businessService,
           processInstances: applicationProcessInstance,

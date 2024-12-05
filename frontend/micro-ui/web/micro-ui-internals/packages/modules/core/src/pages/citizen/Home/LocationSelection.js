@@ -26,12 +26,8 @@ const LocationSelection = () => {
   }
 
   const RadioButtonProps = useMemo(() => {
-    //adding this condition for not showing state option in case of central instance
-    let updatedCities = cities;
-    if(window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE"))
-    updatedCities = cities?.filter((ob) => ob?.code !== Digit.ULBService.getStateId())
     return {
-      options: updatedCities,
+      options: cities,
       optionsKey: "i18nKey",
       additionalWrapperClass: "reverse-radio-selection-wrapper",
       onSelect: selectCity,
@@ -45,7 +41,7 @@ const LocationSelection = () => {
       const redirectBackTo = location.state?.redirectBackTo;
       if (redirectBackTo) {
         history.replace(redirectBackTo);
-      } else history.push("/digit-ui/citizen");
+      } else history.push(`/${window?.contextPath}/citizen`);
     } else {
       setShowError(true);
     }

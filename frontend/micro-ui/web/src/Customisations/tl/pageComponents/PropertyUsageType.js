@@ -14,7 +14,7 @@ const TLUsageType = ({ t, config, onSelect, userType, formData, formState, setEr
   );
   
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = Digit.ULBService.getStateId();
+  const stateId = tenantId.split(".")[0];
   const { data: Menu = { }, isLoading: menuLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "UsageCategory") || { };
   let usagecat = [];
   usagecat = Menu?.PropertyTax?.UsageCategory || [];

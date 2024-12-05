@@ -4,7 +4,7 @@ import { Request } from "../atoms/Utils/Request";
 export const PGRService = {
   search: (tenantId, filters = {}) => {
     return Request({
-      url: Urls.im_search,
+      url: Urls.pgr_search,
       useCache: false,
       method: "POST",
       auth: true,
@@ -14,7 +14,7 @@ export const PGRService = {
   },
   create: (details, tenantId) =>
     Request({
-      url: Urls.IM_Create,
+      url: Urls.PGR_Create,
       data: details,
       useCache: true,
       method: "POST",
@@ -34,7 +34,7 @@ export const PGRService = {
     }),
   count: (tenantId, params) =>
     Request({
-      url: Urls.im_count,
+      url: Urls.pgr_count,
       useCache: true,
       auth: true,
       method: "POST",
