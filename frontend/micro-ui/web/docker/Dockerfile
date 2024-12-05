@@ -21,7 +21,9 @@ RUN yarn add @egovernments/digit-ui-module-bills
 
 ARG WORK_DIR
 WORKDIR /app
+
 ENV NODE_OPTIONS "--max-old-space-size=8192"
+
 ENV GENERATE_SOURCEMAP "false"
 
 COPY ${WORK_DIR} .
@@ -33,7 +35,7 @@ RUN cd web/ \
     && node -e 'console.log(v8.getHeapStatistics().heap_size_limit/(8192*8192))' \
     &&  ./install-deps.sh \
     && yarn install \
-    && yarn build 
+    && yarn build:webpack 
 
 FROM nginx:mainline-alpine
 #FROM ghcr.io/egovernments/nginx:mainline-alpine
