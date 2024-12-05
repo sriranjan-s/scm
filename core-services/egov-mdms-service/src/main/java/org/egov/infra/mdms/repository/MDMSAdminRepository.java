@@ -43,27 +43,27 @@ public class MDMSAdminRepository {
 	public void createOffice(EntityRequest request) {
 		String query = "INSERT INTO public.eg_offices"
 				+ "(organization_id, code, name, description, email_id, telephone_number, head_office_code, office_address, district, sub_district, state, pin, status, head_office)"
-				+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		jdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
 
 			@Override
 			public void setValues(PreparedStatement ps, int i) throws SQLException {
 				Office office = request.getOffices().get(i);
-				ps.setString(2, office.getOrganizationId());
-				ps.setString(3, office.getCode());
-				ps.setString(4, office.getName());
-				ps.setString(5, office.getDescription());
-				ps.setString(6, office.getEmailId());
-				ps.setString(7, office.getTelephoneNumber());
-				ps.setString(8, office.getHeadOfficeCode());
-				ps.setString(9, office.getOfficeAddress());
-				ps.setString(10, office.getDistrict());
-				ps.setString(11, office.getSubDistrict());
-				ps.setString(12, office.getState());
-				ps.setString(13, office.getPin());
-				ps.setString(14, office.getStatus());
-				ps.setBoolean(15, office.isHeadOffice());
+				ps.setString(1, office.getOrganizationId());
+				ps.setString(2, office.getCode());
+				ps.setString(3, office.getName());
+				ps.setString(4, office.getDescription());
+				ps.setString(5, office.getEmailId());
+				ps.setString(6, office.getTelephoneNumber());
+				ps.setString(7, office.getHeadOfficeCode());
+				ps.setString(8, office.getOfficeAddress());
+				ps.setString(9, office.getDistrict());
+				ps.setString(10, office.getSubDistrict());
+				ps.setString(11, office.getState());
+				ps.setString(12, office.getPin());
+				ps.setString(13, office.getStatus());
+				ps.setBoolean(14, office.isHeadOffice());
 			}
 
 			@Override
@@ -76,7 +76,7 @@ public class MDMSAdminRepository {
 	public void createOrganization(EntityRequest request) {
 		String query = "INSERT INTO public.eg_organizations"
 				+ "(code, name, description, hod, email_id, telephone_number, address, district, sub_district, state, pin, status)"
-				+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		jdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
 
@@ -84,18 +84,18 @@ public class MDMSAdminRepository {
 			public void setValues(PreparedStatement ps, int i) throws SQLException {
 				Organization org = request.getOrganizations().get(i);
 
-				ps.setString(2, org.getCode());
-				ps.setString(3, org.getName());
-				ps.setString(4, org.getDescription());
-				ps.setString(5, org.getHod());
-				ps.setString(6, org.getEmailId());
-				ps.setString(7, org.getTelephoneNumber());
-				ps.setString(8, org.getAddress());
-				ps.setString(9, org.getDistrict());
-				ps.setString(10, org.getSubDistrict());
-				ps.setString(11, org.getState());
-				ps.setString(12, org.getPin());
-				ps.setString(13, org.getStatus());
+				ps.setString(1, org.getCode());
+				ps.setString(2, org.getName());
+				ps.setString(3, org.getDescription());
+				ps.setString(4, org.getHod());
+				ps.setString(5, org.getEmailId());
+				ps.setString(6, org.getTelephoneNumber());
+				ps.setString(7, org.getAddress());
+				ps.setString(8, org.getDistrict());
+				ps.setString(9, org.getSubDistrict());
+				ps.setString(10, org.getState());
+				ps.setString(11, org.getPin());
+				ps.setString(12, org.getStatus());
 			}
 
 			@Override
@@ -116,19 +116,19 @@ public class MDMSAdminRepository {
 			public void setValues(PreparedStatement ps, int i) throws SQLException {
 				Organization org = request.getOrganizations().get(i);
 
-				ps.setString(2, org.getCode());
-				ps.setString(3, org.getName());
-				ps.setString(4, org.getDescription());
-				ps.setString(5, org.getHod());
-				ps.setString(6, org.getEmailId());
-				ps.setString(7, org.getTelephoneNumber());
-				ps.setString(8, org.getAddress());
-				ps.setString(9, org.getDistrict());
-				ps.setString(10, org.getSubDistrict());
-				ps.setString(11, org.getState());
-				ps.setString(12, org.getPin());
-				ps.setString(13, org.getStatus());
-				ps.setLong(14, org.getId());
+				ps.setString(1, org.getCode());
+				ps.setString(2, org.getName());
+				ps.setString(3, org.getDescription());
+				ps.setString(4, org.getHod());
+				ps.setString(5, org.getEmailId());
+				ps.setString(6, org.getTelephoneNumber());
+				ps.setString(7, org.getAddress());
+				ps.setString(8, org.getDistrict());
+				ps.setString(9, org.getSubDistrict());
+				ps.setString(10, org.getState());
+				ps.setString(11, org.getPin());
+				ps.setString(12, org.getStatus());
+				ps.setLong(13, org.getId());
 			}
 
 			@Override
@@ -149,21 +149,21 @@ public class MDMSAdminRepository {
 			@Override
 			public void setValues(PreparedStatement ps, int i) throws SQLException {
 				Office office = request.getOffices().get(i);
-				ps.setString(2, office.getOrganizationId());
-				ps.setString(3, office.getCode());
-				ps.setString(4, office.getName());
-				ps.setString(5, office.getDescription());
-				ps.setString(6, office.getEmailId());
-				ps.setString(7, office.getTelephoneNumber());
-				ps.setString(8, office.getHeadOfficeCode());
-				ps.setString(9, office.getOfficeAddress());
-				ps.setString(10, office.getDistrict());
-				ps.setString(11, office.getSubDistrict());
-				ps.setString(12, office.getState());
-				ps.setString(13, office.getPin());
-				ps.setString(14, office.getStatus());
-				ps.setBoolean(15, office.isHeadOffice());
-				ps.setLong(16, office.getId());
+				ps.setString(1, office.getOrganizationId());
+				ps.setString(2, office.getCode());
+				ps.setString(3, office.getName());
+				ps.setString(4, office.getDescription());
+				ps.setString(5, office.getEmailId());
+				ps.setString(6, office.getTelephoneNumber());
+				ps.setString(7, office.getHeadOfficeCode());
+				ps.setString(8, office.getOfficeAddress());
+				ps.setString(9, office.getDistrict());
+				ps.setString(10, office.getSubDistrict());
+				ps.setString(11, office.getState());
+				ps.setString(12, office.getPin());
+				ps.setString(13, office.getStatus());
+				ps.setBoolean(14, office.isHeadOffice());
+				ps.setLong(15, office.getId());
 			}
 
 			@Override
