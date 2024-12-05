@@ -12,6 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class Organization {
+	private String tenantId;
 	private Long id;
 	private String code;
 	private String name;
