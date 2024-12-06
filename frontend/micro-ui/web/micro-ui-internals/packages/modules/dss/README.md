@@ -23,7 +23,7 @@ frontend/micro-ui/web/package.json
 ```
 
 ```json
-"@egovernments/digit-ui-module-dss":"^1.5.0",
+"@upyog/digit-ui-module-dss":"^1.5.0",
 ```
 
 then navigate to App.js
@@ -36,7 +36,7 @@ then navigate to App.js
 ```jsx
 /** add this import **/
 
-import { initDSSComponents } from "@egovernments/digit-ui-module-dss";
+import { initDSSComponents } from "@upyog/digit-ui-module-dss";
 
 /** inside enabledModules add this new module key **/
 
