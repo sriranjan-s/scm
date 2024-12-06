@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 
-import { Card, DetailsCard, Loader, PopUp, SearchAction } from "@egovernments/digit-ui-react-components";
-import { FilterAction } from "@egovernments/digit-ui-react-components";
+import { Card, DetailsCard, Loader, PopUp, SearchAction } from "@upyog/digit-ui-react-components";
+import { FilterAction } from "@upyog/digit-ui-react-components";
 import Filter from "../InboxFilter";
 import SearchApplication from "./search";
 
@@ -83,7 +83,7 @@ export const ApplicationCard = ({
       <DetailsCard
         data={data}
         serviceRequestIdKey={serviceRequestIdKey}
-        linkPrefix={linkPrefix ? linkPrefix : DSO ?  `/${window?.contextPath}/employee/fsm/application-details/` : `/${window?.contextPath}/employee/fsm/`}
+        linkPrefix={linkPrefix ? linkPrefix : DSO ? "/digit-ui/employee/fsm/application-details/" : "/digit-ui/employee/fsm/"}
       />
     );
   }

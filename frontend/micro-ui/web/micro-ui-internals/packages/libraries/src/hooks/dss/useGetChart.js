@@ -2,21 +2,27 @@ import { useQuery } from "react-query";
 import { startOfMonth, endOfMonth, getTime } from "date-fns";
 import { DSSService } from "../../services/elements/DSS";
 
-const getRequest = (type, code, requestDate, filters, moduleLevel = "", addlFilter) => {
+const getRequest = (type, code, requestDate, filters, moduleLevel = "", addlFilter, indexKeyForEmptyModule) => {
   let newFilter = { ...{ ...filters, ...addlFilter } };
   let updatedFilter = Object.keys(newFilter)
-    .filter((ele) => newFilter[ele].length > 0)
+    .filter((ele) => newFilter[ele]?.length > 0)
     .reduce((acc, curr) => {
       acc[curr] = newFilter[curr];
       return acc;
     }, {});
+
+    // if (!requestDate.interval){
+    //   requestDate.interval = 'month'
+    // }
+  
+    requestDate.interval = JSON.parse(sessionStorage.getItem("customDateFilter"))?.filterType || "month";
   return {
     aggregationRequestDto: {
       visualizationType: type.toUpperCase(),
       visualizationCode: code,
       queryType: "",
       filters: updatedFilter,
-      moduleLevel: moduleLevel,
+      moduleLevel: indexKeyForEmptyModule?.includes(code)? "" : moduleLevel,
       aggregationFactors: null,
       requestDate,
     },
@@ -38,17 +44,25 @@ const defaultSelect = (data) => {
 
 const useGetChart = (args) => {
   const { key, type, tenantId, requestDate, filters, moduleLevel, addlFilter } = args;
+  const indexKeyForEmptyModule = [
+    "nssPtCitizenFeedbackScore",
+    "nssPtCitizenServiceDeliveryIndex",
+    "sdssPtCitizenFeedbackScore",
+  ];
   return useQuery(
     [args],
     () =>
       DSSService.getCharts({
-        ...getRequest(type, key, requestDate, filters, moduleLevel, addlFilter),
+        ...getRequest(type, key, requestDate, filters, moduleLevel, addlFilter, indexKeyForEmptyModule),
         headers: {
           tenantId,
         },
       }),
     {
       select: defaultSelect,
+      refetchOnMount: true,
+      retry: false,
+      refetchOnWindowFocus: false
     }
   );
 };
