@@ -8,7 +8,7 @@ import { initUtilitiesComponents } from "@egovernments/digit-ui-module-utilities
 import {
   initPGRComponents,
   PGRReducers,
-} from "@egovernments/digit-ui-module-pgr";
+} from "@upyog/digit-ui-module-pgr";
 import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
 
 window.contextPath = window?.globalConfigs?.getConfig("CONTEXT_PATH");

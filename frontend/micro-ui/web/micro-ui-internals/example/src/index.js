@@ -9,7 +9,7 @@ import { initEngagementComponents } from "@egovernments/digit-ui-module-engageme
 import { initHRMSComponents } from "@egovernments/digit-ui-module-hrms";
 // import { initUtilitiesComponents } from  "@egovernments/digit-ui-module-utilities";
 import {initWorkbenchComponents} from "@egovernments/digit-ui-module-workbench";
-import { PGRReducers , initPGRComponents} from "@egovernments/digit-ui-module-pgr";
+import { PGRReducers , initPGRComponents} from "@upyog/digit-ui-module-pgr";
 
 import "@egovernments/digit-ui-css/example/index.css";
 

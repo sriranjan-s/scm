@@ -4,7 +4,7 @@ import { DigitUI } from "@egovernments/digit-ui-module-core";
 import { UICustomizations } from "./Customisations/UICustomizations";
 import { initWorkbenchComponents } from "@egovernments/digit-ui-module-workbench";
 import { initUtilitiesComponents } from "@egovernments/digit-ui-module-utilities";
-import { initPGRComponents,PGRReducers } from "@egovernments/digit-ui-module-pgr";
+import { initPGRComponents,PGRReducers } from "@upyog/digit-ui-module-pgr";
 
 window.contextPath = window?.globalConfigs?.getConfig("CONTEXT_PATH");
 

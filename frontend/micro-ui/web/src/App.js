@@ -15,7 +15,7 @@ import { initWorkbenchComponents } from "@egovernments/digit-ui-module-workbench
 import {
   initPGRComponents,
   PGRReducers,
-} from "@egovernments/digit-ui-module-pgr";
+} from "@upyog/digit-ui-module-pgr";
 
 window.contextPath = window?.globalConfigs?.getConfig("CONTEXT_PATH");
 
