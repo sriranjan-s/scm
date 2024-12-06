@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React, { useEffect, useRef, useState } from "react";
-import { ArrowDown,SearchIcon } from "./svgindex";
+import { ArrowDown } from "./svgindex";
 
 const TextField = (props) => {
   const [value, setValue] = useState(props.selectedVal ? props.selectedVal : "");
@@ -49,13 +49,8 @@ const TextField = (props) => {
         props?.addProps?.currentIndex > 2 && e?.target?.parentElement?.parentElement?.children?.namedItem("jk-dropdown-unique")?.scrollBy?.(0, -45);
       }
       e.preventDefault();
-    } else if (e.key === "Enter") {
-      if (props.addProps.length === 1) {
-        props.addProps.selectOption(0);
-      } else {
-        props.addProps.selectOption(props.addProps.currentIndex);
-      }
-      e.preventDefault();
+    } else if (e.key == "Enter") {
+      props.addProps.selectOption(props.addProps.currentIndex);
     }
   };
 
@@ -82,7 +77,7 @@ const TextField = (props) => {
       autoFocus={props.autoFocus}
       placeholder={props.placeholder}
       autoComplete={"off"}
-      style={props.style}
+      style={{...props.style, zIndex: "auto"}}
     />
   );
 };
@@ -152,7 +147,9 @@ const Dropdown = (props) => {
   function selectOption(ind) {
     onSelect(filteredOption[ind]);
   }
-
+  // if (props?.option?.[0]?.label == "PropertyType") {
+  //   filteredOption = props.option
+  // }
   if(props.isBPAREG && selectedOption)
   {
     let isSelectedSameAsOptions = props.option?.filter((ob) => ob?.code === selectedOption?.code)?.length > 0;
@@ -173,7 +170,7 @@ const Dropdown = (props) => {
       {!hasCustomSelector && (
         <div
           className={`${dropdownStatus ? "select-active" : "select"} ${props.disable && "disabled"}`}
-          style={props.errorStyle ? { border: "1px solid red", ...(props.noBorder ? { "border": "none" } : {}) } : { ...(props.noBorder ? { "border": "none" } : {}) }}
+          style={props.errorStyle ? { border: "1px solid red" } : {}}
         >
           <TextField
             autoComplete={props.autoComplete}
@@ -204,15 +201,14 @@ const Dropdown = (props) => {
             onBlur={props?.onBlur}
             inputRef={props.ref}
           />
-          {props.showSearchIcon ?null:<ArrowDown onClick={dropdownSwitch} className="cp" disable={props.disable} />}
-          {props.showSearchIcon ?<SearchIcon onClick={dropdownSwitch} className="cp" disable={props.disable} />:null}
+          <ArrowDown onClick={dropdownSwitch} className="cp" disable={props.disable} />
         </div>
       )}
       {dropdownStatus ? (
         props.optionKey ? (
           <div
             id="jk-dropdown-unique"
-            className={`${hasCustomSelector ? "margin-top-10 display: table" : ""} options-card ${props?.topbarOptionsClassName ? props?.topbarOptionsClassName : ""}`}
+            className={`${hasCustomSelector ? "margin-top-10 display: table" : ""} options-card`}
             style={{ ...props.optionCardStyles }}
             ref={optionRef}
           >
@@ -254,7 +250,7 @@ const Dropdown = (props) => {
             ref={optionRef}
           >
             {props.option
-              ?.filter((option) => option?.toUpperCase().indexOf(filterVal?.toUpperCase()) > -1)
+              .filter((option) => option?.toUpperCase().indexOf(filterVal?.toUpperCase()) > -1)
               .map((option, index) => {
                 return (
                   <p

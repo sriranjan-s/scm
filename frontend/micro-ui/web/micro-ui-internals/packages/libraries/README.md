@@ -1,6 +1,5 @@
-<!-- TODO: update this -->
 
-# digit-ui-svg-components
+# digit-ui-libraries
 
 ## Install
 
@@ -23,7 +22,7 @@ frontend/micro-ui/web/package.json
 ```
 
 ```json
-"@egovernments/digit-ui-libraries":"1.8.0",
+"@upyog/digit-ui-libraries":"1.8.0",
 ```
 
 then navigate to App.js
@@ -37,7 +36,7 @@ then navigate to App.js
 
 ```jsx
 import React from "react";
-import initLibraries from "@egovernments/digit-ui-libraries";
+import initLibraries from "@upyog/digit-ui-libraries";
 
 import defaultConfig from "./config";
 
@@ -55,14 +54,11 @@ export default App;
 ### Changelog
 
 ```bash
-1.8.3 commented the renderTenantLogos logic due to multilogo rendered issue
-1.8.2 Added mdms-v2 url & mdms v1 globalconfig MDMS_V1_CONTEXT_PATH to support both v1 and v2
-1.8.1 Added logoutRedirectURL for mgramseva workbench
-1.8.0 Released as part of workbench v1.0
+1.7.1 UPYOG Base
 ```
 
 ### Published from DIGIT Frontend 
-DIGIT Frontend Repo (https://github.com/egovernments/Digit-Frontend/tree/master)
+DIGIT Frontend Repo (https://github.com/upyog/UPYOG/tree/develop)
 
 ### Contributors
 

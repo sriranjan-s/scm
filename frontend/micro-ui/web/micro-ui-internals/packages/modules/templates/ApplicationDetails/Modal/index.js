@@ -6,13 +6,18 @@ import BPAREGActionModal from "./BPAREGActionModal";
 import BPAActionModal from "./BPAActionModal";
 import NOCActionModal from "./NOCActionModal";
 import WNSActionModal from "./WNSActionModal";
-import WorksActionModal from "./WorksActionModal";
-import AttendanceActionModal from "./AttendanceActionModal";
-import ExpenditureActionModal from "./ExpenditureActionModal";
+import PTRActionModal from "./PTRActionModal";
+
+
+
+
 
 const ActionModal = (props) => {
   if (props?.businessService.includes("PT")) {
     return <PTActionModal {...props} />;
+  }
+  if (props?.businessService.includes("ptr")) {
+    return <PTRActionModal {...props} />;
   }
 
   if (props?.businessService.includes("NewTL") || props?.businessService.includes("TL") || props?.businessService.includes("EDITRENEWAL") || props?.businessService.includes("DIRECTRENEWAL")) {
@@ -34,16 +39,7 @@ const ActionModal = (props) => {
   if (props?.moduleCode.includes("WS")) {
     return <WNSActionModal {...props} />;
   }
-  if (props?.moduleCode.includes("works")) {
-    return <WorksActionModal {...props} />;
-  }
-  if (props?.moduleCode.includes("AttendenceMgmt")) {
-    return <AttendanceActionModal {...props} />;
-  }
-  if (props?.moduleCode.includes("Expenditure")) {
-    return <ExpenditureActionModal {...props} />;
-  }
-
+  // return <FSMActionModal {...props} />;
 };
 
 export default ActionModal;

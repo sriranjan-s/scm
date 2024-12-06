@@ -6,26 +6,7 @@ const defaultApiCachingSettings = [
     cacheTimeInSecs: 86400,
   },
   {
-    serviceName: "access/v1/actions",
-    cacheTimeInSecs: 86400,
-  },
-  {
-    serviceName: "user/_search",
-    cacheTimeInSecs: 86400,
-  },
-  {
     serviceName: "egov-mdms-service",
-    cacheTimeInSecs: 3600,
-    debounceTimeInMS: 100,
-    moduleSettings: [
-      {
-        moduleName: "FSM",
-        cacheTimeInSecs: 7200,
-      },
-    ],
-  },
-  {
-    serviceName: "mdms-v2",
     cacheTimeInSecs: 3600,
     debounceTimeInMS: 100,
     moduleSettings: [
@@ -50,8 +31,8 @@ const getSetting = (serviceName, moduleName) => {
   const setting = getCachedSetting();
   const serviceSetting = setting.find((item) => item.serviceName === serviceName);
   const responseSetting = {
-    cacheTimeInSecs: serviceSetting.cacheTimeInSecs,
-    debounceTimeInMS: serviceSetting.debounceTimeInMS || 100,
+    cacheTimeInSecs: serviceSetting?.cacheTimeInSecs,
+    debounceTimeInMS: serviceSetting?.debounceTimeInMS || 100,
   };
   if (!moduleName) {
     return responseSetting;
@@ -61,8 +42,8 @@ const getSetting = (serviceName, moduleName) => {
     return responseSetting;
   }
   return {
-    cacheTimeInSecs: moduleSettings.cacheTimeInSecs || responseSetting.cacheTimeInSecs,
-    debounceTimeInMS: moduleSettings.debounceTimeInMS || responseSetting.debounceTimeInMS,
+    cacheTimeInSecs: moduleSettings?.cacheTimeInSecs || responseSetting?.cacheTimeInSecs,
+    debounceTimeInMS: moduleSettings?.debounceTimeInMS || responseSetting?.debounceTimeInMS,
   };
 };
 export const ApiCacheService = {

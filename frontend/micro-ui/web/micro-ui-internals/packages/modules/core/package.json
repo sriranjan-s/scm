@@ -1,5 +1,5 @@
 {
-  "name": "@egovernments/digit-ui-module-core",
+  "name": "@upyog/digit-ui-module-core",
   "version": "1.8.2",
   "license": "MIT",
   "main": "dist/index.js",
@@ -14,7 +14,8 @@
     "prepublish": "yarn build"
   },
   "dependencies": {
-    "@egovernments/digit-ui-react-components": "1.8.4",
+    "@upyog/digit-ui-react-components": "1.8.0",
+    "microbundle-crl": "^0.13.11",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-i18next": "11.16.2",

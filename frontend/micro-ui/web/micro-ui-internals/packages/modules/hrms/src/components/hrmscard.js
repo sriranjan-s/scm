@@ -1,4 +1,4 @@
-import { PersonIcon, EmployeeModuleCard } from "@egovernments/digit-ui-react-components";
+import { PersonIcon, EmployeeModuleCard } from "@upyog/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
@@ -18,22 +18,22 @@ const HRMSCard = () => {
             {
                 count:  isLoading ? "-" : data?.EmployeCount?.totalEmployee,
                 label: t("TOTAL_EMPLOYEES"),
-                link: `/${window?.contextPath}/employee/hrms/inbox`
+                link: `/digit-ui/employee/hrms/inbox`
             },
             {
               count:  isLoading ? "-" : data?.EmployeCount?.activeEmployee,
                 label: t("ACTIVE_EMPLOYEES"),
-                link: `/${window?.contextPath}/employee/hrms/inbox`
+                link: `/digit-ui/employee/hrms/inbox`
             }  
         ],
         links: [
             {
                 label: t("HR_HOME_SEARCH_RESULTS_HEADING"),
-                link: `/${window?.contextPath}/employee/hrms/inbox`
+                link: `/digit-ui/employee/hrms/inbox`
             },
             {
                 label: t("HR_COMMON_CREATE_EMPLOYEE_HEADER"),
-                link: `/${window?.contextPath}/employee/hrms/create`
+                link: `/digit-ui/employee/hrms/create`
             }           
         ]
     }

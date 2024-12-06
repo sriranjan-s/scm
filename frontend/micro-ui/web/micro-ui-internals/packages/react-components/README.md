@@ -1,7 +1,4 @@
 
-
-<!-- TODO: update this -->
-
 # digit-ui-react-components
 
 ## Install
@@ -25,7 +22,7 @@ frontend/micro-ui/web/package.json
 ```
 
 ```json
-"@egovernments/digit-ui-react-components":"1.5.24",
+"@upyog/digit-ui-react-components":"1.5.24",
 ```
 
 then navigate to App.js
@@ -38,73 +35,18 @@ Syntax for importing any component;
 
 ```jsx
 import React, { Component } from "react";
-import MyComponent from "@egovernments/digit-ui-react-components";
+import MyComponent from "@upyog/digit-ui-react-components";
 
 class Example extends Component {
   render() {
     return <MyComponent />;
   }
 }
-```
-Syntax for the Inbox Composers
-
-```jsx
-    import { InboxSearchComposer } from "@egovernments/digit-ui-react-components";
-
-    <React.Fragment>
-      <Header className="works-header-search">{t(updatedConfig?.label)}</Header>
-      <div className="inbox-search-wrapper">
-        <InboxSearchComposer configs={updatedConfig}></InboxSearchComposer>
-      </div>
-    </React.Fragment>
-```
-
-Syntax for the FormComposersV2
-
-```jsx
-    import { FormComposerV2 as FormComposer } from "@egovernments/digit-ui-react-components";
-
-   <React.Fragment>
-      <Header >{t("CREATE_HEADER")}</Header>
-      <FormComposer
-        label={t("PROCEED")}
-        config={configs.map((config) => {
-          return {
-            ...config,
-            body: config.body.filter((a) => !a.hideInEmployee),
-          };
-        })}
-        defaultValues={sessionFormData}
-        onFormValueChange={onFormValueChange}
-        onSubmit={onFormSubmit}
-        fieldStyle={{ marginRight: 0 }}
-        className="form-no-margin"
-        labelBold={true}
-      />
-    </React.Fragment>
-```
- 
 
 ### Changelog
 
 ```bash
-1.8.4 updated the breadcrumb component to handle external api redirection
-1.8.3 updated Inboxsearchcomposer with customhook
-1.8.2 updated serachcomponent for serachscreen inside popup
-1.8.1 build issue fix due to ajv library
-1.8.0 workbench v1.0 release
-1.8.0-beta workbench base version beta release
-1.7.0 urban 2.9
-1.6.0 urban 2.8
-1.5.36 added classname for topbar options
-1.5.35 aligment issue in edit and logout
-1.5.34 updated login scss and alignment issues
-1.5.28 passing response data in case for custom component in inbox composer
-1.5.27 integrated with the svg library
-1.5.26 fixed shipping truck icon fill issue
-1.5.25 added new icon and fixed other issues
-1.5.24 added and updated the Readme file
-1.5.23 base version
+1.7.1 UPYOG base version
 ```
 
 ### Contributors
@@ -121,7 +63,7 @@ Documentation Site (https://core.digit.org/guides/developer-guide/ui-developer-g
 
 
 ### Published from DIGIT Frontend 
-DIGIT Frontend Repo (https://github.com/egovernments/Digit-Frontend/tree/master)
+DIGIT Frontend Repo (https://github.com/upyog/UPYOG/tree/develop)
 
 
 ![Logo](https://s3.ap-south-1.amazonaws.com/works-dev-asset/mseva-white-logo.png)
