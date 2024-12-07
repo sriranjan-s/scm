@@ -77,7 +77,7 @@ const TopBar = ({
   const urlsToDisableNotificationIcon = (pathname) =>
     !!Digit.UserService?.getUser()?.access_token
       ? false
-      : ["/digit-ui/citizen/select-language", "/digit-ui/citizen/select-location"].includes(pathname);
+      : ["/digit-ui/citizen/login", "/digit-ui/citizen/select-location"].includes(pathname);
 
   if (CITIZEN) {
     return (
@@ -101,9 +101,9 @@ const TopBar = ({
   }
   const loggedin = userDetails?.access_token ? true : false;
   return (
-    <div className="topbar">
-      {mobileView ? <Hamburger handleClick={toggleSidebar} color="#9E9E9E" /> : null}
-      <img className="city" src="https://in-egov-assets.s3.ap-south-1.amazonaws.com/images/Upyog-logo.png" />
+    <div className="topbar" style={{padding:"0px"}}>
+      {/* {mobileView ? <Hamburger handleClick={toggleSidebar} color="#9E9E9E" /> : null}
+      <img className="city" src={loggedin ? cityDetails?.logoId : stateInfo?.statelogo} />
       <span style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
         {loggedin &&
           (cityDetails?.city?.ulbGrade ? (
@@ -147,10 +147,81 @@ const TopBar = ({
                 />
               </div>
             )}
-            <img className="state" src="https://in-egov-assets.s3.ap-south-1.amazonaws.com/images/Upyog-logo.png" />
+            <img className="state" src={logoUrl} />
           </div>
         )}
-      </span>
+      </span> */}
+    <div className="" style={{width:"100%"}}>
+      {/* <div className="center-container back-wrapper">
+        <div className="hambuger-back-wrapper">
+          {isMobile && <Hamburger handleClick={toggleSidebar} />}
+          <a href={window.location.href.includes("citizen")?"/digit-ui/citizen":"/digit-ui/employee"}><img
+            className="city"
+            id="topbar-logo"
+            src={img || "https://cdn.jsdelivr.net/npm/@egovernments/digit-ui-css@1.0.7/img/m_seva_white_logo.png"}
+            alt="mSeva"
+          />
+          </a>
+          <h3>{cityOfCitizenShownBesideLogo}</h3>
+        </div>
+
+        <div className="RightMostTopBarOptions">
+          {!hideNotificationIconOnSomeUrlsWhenNotLoggedIn ? changeLanguage : null}
+          {!hideNotificationIconOnSomeUrlsWhenNotLoggedIn ? (
+            <div className="EventNotificationWrapper" onClick={onNotificationIconClick}>
+              {notificationCountLoaded && notificationCount ? (
+                <span>
+                  <p>{notificationCount}</p>
+                </span>
+              ) : null}
+              <NotificationBell />
+            </div>
+          ) : null}
+        </div>
+      </div> */}
+       {/* <header className="header">
+                <img src="logo.png" alt="Logo" className="logo" />
+                <h1>NextGen CPGRAMS</h1>
+                <h2>DEPARTMENT OF ADMINISTRATIVE REFORMS & PUBLIC GRIEVANCES</h2>
+            </header> */}
+            <div className="topHeader" style={{height:"30px",backgroundColor:"#23316b"}}>
+
+            </div>
+            <div className="middleHeader"style={{height:"70px",backgroundColor:"white",display:"flex"}}>
+<div style={{height:"70px",paddingLeft:"15px"}}>
+  <img src="https://pgportal.gov.in/Images/iconHome/logo.png" style={{width:"190px", verticalAlign:"middle",height:"inherit"}}></img>
+</div>
+<div style={{width:"100%",marginLeft:"-190px", fontSize:"xx-large",textAlign:"center",fontWeight:"bolder",color:"#23316b",display:"flex",justifyContent:"center",alignItems:"center"}}>
+<h1>NextGen CPGRAMS</h1>
+</div>
+            </div>
+            <div className="lowerHeader"style={{height:"30px",backgroundColor:"#23316b",color:"white",display:"flex",   justifyContent: "space-evenly",
+    alignItems: "center",
+    paddingLeft: "25%",
+    paddingRight: "25%"}}>
+<span> Home </span> <span> About Us </span> <span>Redressal Process</span> <span>Officer List</span> <span> FAQs/Help </span>
+{userDetails?.access_token && (
+              <div className="left">
+                <Dropdown
+                  option={userOptions}
+                  optionKey={"name"}
+                  select={handleUserDropdownSelection}
+                  showArrow={true}
+                  freeze={true}
+                  style={mobileView ? { right: 0 } : {}}
+                  optionCardStyles={{ overflow: "revert" }}
+                  customSelector={
+                    profilePic == null ? (
+                     <span>Logout</span>
+                    ) : (
+                      <img src={profilePic} style={{ height: "48px", width: "48px", borderRadius: "50%" }} />
+                    )
+                  }
+                />
+              </div>
+            )}
+            </div>
+    </div>
     </div>
   );
 };

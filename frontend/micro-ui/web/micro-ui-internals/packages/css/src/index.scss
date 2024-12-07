@@ -110,9 +110,7 @@
 .display-none {
   display: none;
 }
-.primary-label-btn{
-  margin: 10px auto 0px !important;
-}
+
 .p-unset {
   padding: unset !important;
 }
@@ -186,7 +184,7 @@
 }
 
 .clear-search-label {
-  color: #a82227;
+  color: #f47738;
   cursor: pointer;
 }
 
@@ -199,7 +197,7 @@
   @apply flex justify-between items-center;
 
   .download-button {
-    color: a82227;
+    color: #f47738;
     margin-left: 8px;
   }
 }
@@ -208,7 +206,7 @@
   @apply flex mb-sm;
 
   .download-button {
-    color: #a82227;
+    color: #f47738;
     margin-left: 8px;
     white-space: nowrap;
 
@@ -216,7 +214,7 @@
 }
 
 .check-page-link-button {
-  color: #a82227 !important;
+  color: #f47738 !important;
 }
 
 .pt-application-download-btn {
@@ -239,10 +237,10 @@
   gap: 10px;
 
   svg {
-    fill: #a82227;
+    fill: #f47738;
   }
 
-  color: #5a1166;
+  color: #f47738;
 
   cursor: pointer;
   font-weight: 500;
@@ -505,12 +503,10 @@ input[type="number"] {
   width: 100% !important;
 }
 
-
-.edcr-citizen-inbox{ 
-   thead th:first-child{
-  min-width:100px; 
-}
-
+.edcr-citizen-inbox {
+  thead th:first-child {
+    min-width: 155px;
+  }
 }
 
 .error-boundary {
@@ -522,7 +518,6 @@ input[type="number"] {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  position: absolute !important;
   .error-container {
     display: flex;
     width: 400px;
@@ -540,7 +535,7 @@ input[type="number"] {
       padding: 8px 24px;
       color: white;
       cursor: pointer;
-      background-color: #a82227;
+      background-color: #f47738;
     }
   }
 }
@@ -718,51 +713,27 @@ input[type="number"] {
   }
 }
 
-.employee-app-wrapper{
-min-height: calc(100vh - 8em);
+.privacy-icon-2 {
+  cursor: pointer;
 }
-.submit-bar header{
-  line-height: 2.0rem !important;
-}
-.logo-removeBorderRadiusLogo svg{
-  width: 50px;
-  height: 60px;
-}
-
-.icon-banner-employee {
-    background-color:#d7aefc !important;
-}
-.icon-banner-employee svg{
-  background-color:#bf2f3b !important;
-  width: 40px;
-  height: 40px;
-}
-.inboxButton{
-    border: none;
-    color: white;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 14px;
-    margin: 4px 2px;
-    cursor: pointer;
-    height: fit-content;
-    border-radius: 5px;
-    font-family: sans-serif;
-    font-weight: 700;
-}
-.employee .inboxButton{
-  padding: 5px 15px;
-  background: #ba2b36
-}
-.citizen .inboxButton{
-  padding: 15px;
-  font-size: 1.2rem
-}
-
-@media screen and (max-width: 768px) {
-  .citizen .inboxButton{
-    font-size: 1rem;
+.privacy-icon-2:hover {
+  path {
+    fill: none;
   }
 }
 
+.audit-card {
+  width: 80%;
+  margin-left: -260px;
+  margin-right: -27%;
+  max-height: 120px;
+  margin-top: 90px;
+}
+.fsm-inline-style {
+  background: #fafafa;
+  border: 1px solid #d6d5d4;
+  border-radius: 4px;
+  padding: 16px;
+  margin-bottom: 40px;
+  width: 90%;
+}

@@ -18,8 +18,6 @@ import StaticDynamicCard from "./StaticDynamicComponent/StaticDynamicCard";
 import AcknowledgementCF from "../../components/AcknowledgementCF";
 import CitizenFeedback from "../../components/CitizenFeedback";
 import Search from "./SearchApp";
-import QRCode from "./QRCode";
-import ChallanQRCode from "./ChallanQRCode";
 const sidebarHiddenFor = [
   "digit-ui/citizen/register/name",
   "/digit-ui/citizen/select-language",
@@ -69,12 +67,10 @@ const Home = ({
       },
     }
   );
-  const isMobile = window.Digit.Utils.browser.isMobile();
+
   const classname = Digit.Hooks.fsm.useRouteSubscription(pathname);
   const { t } = useTranslation();
   const { path } = useRouteMatch();
-  sourceUrl = "https://s3.ap-south-1.amazonaws.com/egov-qa-assets";
-  const pdfUrl = "https://pg-egov-assets.s3.ap-south-1.amazonaws.com/Upyog+Code+and+Copyright+License_v1.pdf"
   const history = useHistory();
   const handleClickOnWhatsApp = (obj) => {
     window.open(obj);
@@ -103,9 +99,9 @@ const Home = ({
       <React.Fragment>
         <Route key={index} path={`${path}/${code.toLowerCase()}-home`}>
           <div className="moduleLinkHomePage">
-            <img src={ "https://nugp-assets.s3.ap-south-1.amazonaws.com/nugp+asset/Banner+UPYOG+%281920x500%29B+%282%29.jpg"||bannerImage || stateInfo?.bannerUrl} alt="noimagefound" />
-            <BackButton className="moduleLinkHomePageBackButton" />
-           {isMobile? <h4 style={{top: "calc(16vw + 40px)",left:"1.5rem",position:"absolute",color:"white"}}>{t("MODULE_" + code.toUpperCase())}</h4>:<h1>{t("MODULE_" + code.toUpperCase())}</h1>}
+            <img src={bannerImage || stateInfo?.bannerUrl} alt="noimagefound" />
+            {/* <BackButton className="moduleLinkHomePageBackButton" /> */}
+            <h1>{t("MODULE_" + code.toUpperCase())}</h1>
             <div className="moduleLinkHomePageModuleLinks">
               {mdmsDataObj && (
                 <CitizenHomeCard
@@ -157,7 +153,7 @@ const Home = ({
         islinkDataLoading={islinkDataLoading}
       />
 
-      <div className={`main center-container citizen-home-container mb-25`}>
+      <div className={`main center-container citizen-home-container mb-25`} style={{paddingTop:"0px"}}>
         {hideSidebar ? null : (
           <div className="SideBarStatic">
             <StaticCitizenSideBar linkData={linkData} islinkDataLoading={islinkDataLoading} />
@@ -205,18 +201,12 @@ const Home = ({
             <Login stateCode={stateCode} isUserRegistered={false} />
           </Route>
 
-          <PrivateRoute path={`${path}/user/profile`}>
+          <Route path={`${path}/user/profile`}>
             <UserProfile stateCode={stateCode} userType={"citizen"} cityDetails={cityDetails} />
-          </PrivateRoute>
+          </Route>
 
           <Route path={`${path}/Audit`}>
             <Search/>
-          </Route>
-          <Route path={`${path}/payment/verification`}>
-         <QRCode></QRCode>
-          </Route>
-          <Route path={`${path}/challan/details`}>
-         <ChallanQRCode></ChallanQRCode>
           </Route>
           <ErrorBoundary initData={initData}>
             {appRoutes}
@@ -224,22 +214,12 @@ const Home = ({
           </ErrorBoundary>
         </Switch>
       </div>
-
-      <div style={{ width: '100%', position: 'fixed', bottom: 0,backgroundColor:"white",textAlign:"center" }}>
-        <div style={{ display: 'flex', justifyContent: 'center', color:"black" }}>
-          {/* <span style={{ cursor: "pointer", fontSize: window.Digit.Utils.browser.isMobile()?"12px":"14px", fontWeight: "400"}} onClick={() => { window.open('https://www.digit.org/', '_blank').focus();}} >Powered by DIGIT</span>
-          <span style={{ margin: "0 10px" ,fontSize: window.Digit.Utils.browser.isMobile()?"12px":"14px"}}>|</span> */}
-          <a style={{ cursor: "pointer", fontSize: window.Digit.Utils.browser.isMobile()?"12px":"14px", fontWeight: "400"}} href="#" target='_blank'>UPYOG License</a>
-
-          <span  className="upyog-copyright-footer" style={{ margin: "0 10px",fontSize: window.Digit.Utils.browser.isMobile()?"12px":"14px" }} >|</span>
-          <span  className="upyog-copyright-footer" style={{ cursor: "pointer", fontSize: window.Digit.Utils.browser.isMobile()?"12px":"14px", fontWeight: "400"}} onClick={() => { window.open('https://niua.in/', '_blank').focus();}} >Copyright © 2022 National Institute of Urban Affairs</span>
-          
-          {/* <a style={{ cursor: "pointer", fontSize: "16px", fontWeight: "400"}} href="#" target='_blank'>UPYOG License</a> */}
-
-        </div>
-        <div className="upyog-copyright-footer-web">
-          <span className="" style={{ cursor: "pointer", fontSize:  window.Digit.Utils.browser.isMobile()?"12px":"14px", fontWeight: "400"}} onClick={() => { window.open('https://niua.in/', '_blank').focus();}} >Copyright © 2022 National Institute of Urban Affairs</span>
-          </div>
+      <div className="citizen-home-footer" style={window.location.href.includes("citizen/obps") ? { zIndex: "-1", backgroundColor:"#23316b",height:"100%",color:"white" } : {backgroundColor:"#23316b",height:"100%",color:"white",position:"fixed"}}>
+      <footer className="footer" style={{textAlign:"center"}}>
+                <p>An initiative by Department of Administrative Reforms & Public Grievances (DARPG)</p>
+                <p>Disclaimer | Website Policies | Web Information Manager</p>
+                {/* <p>Copyright ©2024 Last Updated On: 30-08-2024</p> */}
+            </footer>
       </div>
     </div>
   );

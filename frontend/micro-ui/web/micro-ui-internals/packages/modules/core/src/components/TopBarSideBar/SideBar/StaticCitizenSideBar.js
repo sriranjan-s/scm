@@ -55,7 +55,7 @@ Feature :: Citizen Webview sidebar
 const Profile = ({ info, stateName, t }) => (
   <div className="profile-section">
     <div className="imageloader imageloader-loaded">
-      <img className="img-responsive img-circle img-Profile" src={info?.photo ? info?. photo : defaultImage} />
+      <img className="img-responsive img-circle img-Profile" src={defaultImage} />
     </div>
     <div id="profile-name" className="label-container name-Profile">
       <div className="label-text"> {info?.name} </div>
@@ -242,7 +242,7 @@ const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
           }}
         >
           {profileItem}
-          <div className="drawer-desktop" style={{"backgroundColor":"white"}}>
+          <div className="drawer-desktop">
             {menuItems?.map((item, index) => (
               <div className={`sidebar-list ${pathname === item?.link || pathname === item?.sidebarURL ? "active" : ""}`} key={index}>
                 <MenuItem item={item} />

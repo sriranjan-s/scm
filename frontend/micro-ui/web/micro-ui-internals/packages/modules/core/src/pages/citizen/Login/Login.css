@@ -1,0 +1,98 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f7;
+    margin: 0;
+    padding: 0;
+}
+
+.login-container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    text-align: center;
+    background-color: #1a1a2e;
+    color: white;
+    padding: 20px 0;
+}
+
+.logo {
+    width: 80px;
+}
+
+h1, h2 {
+    margin: 10px 0;
+}
+
+.login-section {
+    padding: 20px;
+}
+
+.login-section h3 {
+    text-align: center;
+}
+
+label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+input {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #1a1a2e;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    margin: 5px 0;
+}
+
+button:hover {
+    background-color: #0f0f1a;
+}
+
+.links {
+    text-align: center;
+    margin: 15px 0;
+}
+
+.links a {
+    margin: 0 10px;
+    color: #1a1a2e;
+    text-decoration: none;
+}
+
+.social-login {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.social-button {
+    background-color: #e7e7e7;
+    color: #1a1a2e;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 45%;
+    margin: 10px 2.5%;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 12px;
+}

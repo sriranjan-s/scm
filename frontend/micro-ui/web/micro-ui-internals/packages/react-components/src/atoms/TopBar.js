@@ -30,15 +30,15 @@ const TopBar = ({
   //   }
   // };
   return (
-    <div className="navbar">
-      <div className="center-container back-wrapper" style={{display:"flex",marginRight:"2rem",marginLeft:"2rem",justifyContent:"space-between"}}>
-        <div className="hambuger-back-wrapper" style={{display:"flex"}}>
-          {window.innerWidth <= 660  && <Hamburger handleClick={toggleSidebar} />}
+    <div className="">
+      {/* <div className="center-container back-wrapper">
+        <div className="hambuger-back-wrapper">
+          {isMobile && <Hamburger handleClick={toggleSidebar} />}
           <a href={window.location.href.includes("citizen")?"/digit-ui/citizen":"/digit-ui/employee"}><img
             className="city"
             id="topbar-logo"
-            src={"https://in-egov-assets.s3.ap-south-1.amazonaws.com/images/Upyog-logo.png" || "https://cdn.jsdelivr.net/npm/@egovernments/digit-ui-css@1.0.7/img/m_seva_white_logo.png"}
-            alt="UPYOG"
+            src={img || "https://cdn.jsdelivr.net/npm/@egovernments/digit-ui-css@1.0.7/img/m_seva_white_logo.png"}
+            alt="mSeva"
           />
           </a>
           <h3>{cityOfCitizenShownBesideLogo}</h3>
@@ -56,16 +56,30 @@ const TopBar = ({
               <NotificationBell />
             </div>
           ) : null}
-          <h3></h3>
-          <img
-          className="city"
-          id="topbar-logo" 
-          src={"https://in-egov-assets.s3.ap-south-1.amazonaws.com/images/Upyog-logo.png" || "https://cdn.jsdelivr.net/npm/@egovernments/digit-ui-css@1.0.7/img/m_seva_white_logo.png"}
-          alt="mSeva"
-          style={{marginLeft:"10px"}}
-        />
         </div>
-      </div>
+      </div> */}
+       {/* <header className="header">
+                <img src="logo.png" alt="Logo" className="logo" />
+                <h1>NextGen CPGRAMS</h1>
+                <h2>DEPARTMENT OF ADMINISTRATIVE REFORMS & PUBLIC GRIEVANCES</h2>
+            </header> */}
+            <div className="topHeader" style={{height:"30px",backgroundColor:"#23316b"}}>
+
+            </div>
+            <div className="middleHeader"style={{height:"70px",backgroundColor:"white",display:"flex"}}>
+<div style={{height:"70px",paddingLeft:"15px"}}>
+  <img src="https://pgportal.gov.in/Images/iconHome/logo.png" style={{width:"190px", verticalAlign:"middle",height:"inherit"}}></img>
+</div>
+<div style={{width:"100%",marginLeft:"-190px", fontSize:"xx-large",textAlign:"center",fontWeight:"bolder",color:"#23316b",display:"flex",justifyContent:"center",alignItems:"center"}}>
+<h1>NextGen CPGRAMS</h1>
+</div>
+            </div>
+            <div className="lowerHeader"style={{height:"30px",backgroundColor:"#23316b",color:"white",display:"flex",   justifyContent: "space-evenly",
+    alignItems: "center",
+    paddingLeft: "25%",
+    paddingRight: "25%"}}>
+<span> Home </span> <span> About Us </span> <span>Redressal Process</span> <span>Officer List</span> <span> FAQs/Help </span>
+            </div>
     </div>
   );
 };
