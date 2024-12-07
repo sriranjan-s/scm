@@ -12,7 +12,8 @@
     "packages/modules/core",
     "packages/modules/commonPt",
     "packages/modules/dss",
-    "packages/modules/fsm"
+    "packages/modules/fsm",
+    "packages/modules/hrms"
   ],
   "license": "MIT",
   "private": true,
@@ -61,7 +62,7 @@
     "buildD:mcollect": "cd packages/modules/mCollect && yarn build",
     "buildD:receipts": "cd packages/modules/receipts && yarn build",
     "build:tl": "cd packages/modules/tl && yarn build",
-    "buildD:hrms": "cd packages/modules/hrms && yarn build",
+    "build:hrms": "cd packages/modules/hrms && yarn build",
     "buildD:obps": "cd packages/modules/obps && yarn build",
     "buildD:engagement": "cd packages/modules/engagement && yarn build",
     "buildD:noc": "cd packages/modules/noc && yarn build",
