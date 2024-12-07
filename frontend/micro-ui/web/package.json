@@ -10,13 +10,14 @@
     "micro-ui-internals/packages/modules/common",
     "micro-ui-internals/packages/modules/pt",
     "micro-ui-internals/packages/modules/core",
-    "micro-ui-internals/packages/modules/dss"
+    "micro-ui-internals/packages/modules/dss",
+    "micro-ui-internals/packages/modules/hrms"
   ],
   "engines": {
     "node": ">=14"
   },
   "dependencies": {
-    "@upyog-niua/upyog-css": "1.0.10",
+    "@selco/selco-css": "1.0.10",
     "@upyog/digit-ui-libraries": "1.8.0",
     "@upyog/digit-ui-module-bills": "1.8.0",
     "@upyog/digit-ui-module-common": "2.0.0",
