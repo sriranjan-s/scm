@@ -1,6 +1,6 @@
 {
-  "name": "@upyog-niua/upyog-css",
-  "version": "1.8.11",
+  "name": "@selco/selco-css",
+  "version": "1.8.14",
   "license": "MIT",
   "main": "dist/index.css",
   "author": "Jagankumar <jagan.kumar@egov.org.in>",

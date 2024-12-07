@@ -61,22 +61,18 @@
   .SideBarStatic {
     width: 219px;
     background: #ffffff;
-    margin-top: -24px;
-  }
-}
-@media (max-width: 780px) {
-  .SideBarStatic {
-    width: 219px;
-    background: #ffffff;
-    margin-top: -24px;
-    display: none;
   }
 }
 
+@media (max-width: 780px) {
+  .SideBarStatic {
+    display: none;
+  }
+}
 .HomePageContainer {
   @media (min-width: 780px) {
     display: flex;
-    width: 100% !important;
+    width: calc(100% - 219px);
     height: calc(100%-30px);
   }
 }
@@ -157,7 +153,6 @@
   }
 
   .moduleLinkHomePageModuleLinks {
-    max-width: unset;
-    width:100%
+    width: 100%;
   }
 }

@@ -18,8 +18,9 @@
     }
 
     &.state {
-      min-height: 50px;
-      width: 80px;
+      height: 20px;
+      max-height: 20px;
+      width: auto;
     }
   }
 
@@ -38,7 +39,7 @@
     }
 
     .user-img-txt {
-      background: #a82227;
+      background: #f47738;
       padding: 10px 15px;
       border-radius: 50%;
       color: white;

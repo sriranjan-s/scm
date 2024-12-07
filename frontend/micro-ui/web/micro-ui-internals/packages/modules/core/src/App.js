@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Redirect, Route, Switch, useHistory, useLocation } from "react-router-dom";
 import EmployeeApp from "./pages/employee";
 import CitizenApp from "./pages/citizen";
-
+import HomeNew from "./Home";
 export const DigitApp = ({ stateCode, modules, appTenants, logoUrl, initData }) => {
   const history = useHistory();
   const { pathname } = useLocation();
@@ -71,8 +71,11 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl, initData }) 
       <Route path="/digit-ui/citizen">
         <CitizenApp {...commonProps} />
       </Route>
+      <Route path="/digit-ui/home">
+        <HomeNew {...commonProps} />
+      </Route>
       <Route>
-        <Redirect to="/digit-ui/citizen" />
+        <Redirect to="/digit-ui/home" />
       </Route>
     </Switch>
   );

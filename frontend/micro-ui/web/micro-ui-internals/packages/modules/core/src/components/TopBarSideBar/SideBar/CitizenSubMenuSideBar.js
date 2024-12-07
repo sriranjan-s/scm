@@ -13,7 +13,6 @@ import {
   BirthIcon,
   DeathIcon,
   FirenocIcon,
-  PTRIcon
 } from "@upyog/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 
@@ -37,14 +36,13 @@ const CitizenSubMenuSideBar = ({ item }) => {
     FirenocIcon: <FirenocIcon className="icon" />,
     MCollectIcon: <MCollectIcon />,
     BillsIcon: <CollectionIcon />,
-    PTRIcon: <PTRIcon />
   };
 
   const leftIconArray = item.icon;
   const leftIcon = leftIconArray ? IconsObject[leftIconArray] : IconsObject.BillsIcon;
   return (
     <React.Fragment>
-      <div className="submenu-container" style={{"position":"relative"}}>
+      <div className="submenu-container">
         <div onClick={item.links && showSubnav} className={`sidebar-link ${subnav === true ? "active" : ""}`}>
           <div className="actions">
             {leftIcon}
