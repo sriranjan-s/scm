@@ -11,34 +11,63 @@ const HRMSCard = () => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const { isLoading, isError, error, data, ...rest } = Digit.Hooks.hrms.useHRMSCount(tenantId);
 
-    const propsForModuleCard = {
+    const propsForModuleCardUserManagement = {
         Icon : <PersonIcon/>,
-        moduleName: t("ACTION_TEST_HRMS"),
-        kpis: [
-            {
-                count:  isLoading ? "-" : data?.EmployeCount?.totalEmployee,
-                label: t("TOTAL_EMPLOYEES"),
-                link: `/digit-ui/employee/hrms/inbox`
-            },
-            {
-              count:  isLoading ? "-" : data?.EmployeCount?.activeEmployee,
-                label: t("ACTIVE_EMPLOYEES"),
-                link: `/digit-ui/employee/hrms/inbox`
-            }  
-        ],
+        moduleName: t("User Management"),
+       
         links: [
             {
-                label: t("HR_HOME_SEARCH_RESULTS_HEADING"),
+                label: t("Add Organization"),
+                link: `/digit-ui/employee/hrms/create`
+            },
+            {
+                label: t("View Organization"),
                 link: `/digit-ui/employee/hrms/inbox`
             },
             {
-                label: t("HR_COMMON_CREATE_EMPLOYEE_HEADER"),
+                label: t("Add Ministry/Department"),
+                link: `/digit-ui/employee/hrms/createDepartment`
+            },
+            {
+                label: t("View Ministry/Department"),
+                link: `/digit-ui/employee/hrms/inbox`
+            } ,
+            {
+                label: t("Add Head of Department"),
+                link: `/digit-ui/employee/hrms/createHod`
+            },
+            {
+                label: t("View Head of Department"),
+                link: `/digit-ui/employee/hrms/inbox`
+            }            
+        ]
+    }
+    const propsForModuleCardDepartmengt = {
+        Icon : <PersonIcon/>,
+        moduleName: t("Department/Ministry Nodal"),
+       
+        links: [
+            {
+                label: t("Add Office"),
+                link: `/digit-ui/employee/hrms/createOffice`
+            }  ,
+            {
+                label: t("View office"),
+                link: `/digit-ui/employee/hrms/inbox`
+            },
+            {
+                label: t("Add Gro"),
                 link: `/digit-ui/employee/hrms/create`
-            }           
+            }  ,
+            {
+                label: t("View Gro"),
+                link: `/digit-ui/employee/hrms/inbox`
+            }
+                     
         ]
     }
 
-    return <EmployeeModuleCard {...propsForModuleCard} />
+    return <div><EmployeeModuleCard {...propsForModuleCardUserManagement} /><EmployeeModuleCard {...propsForModuleCardDepartmengt} /></div>
 };
 
 export default HRMSCard;
