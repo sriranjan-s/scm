@@ -11,6 +11,19 @@ const CreateEmployee = () => {
   const [showToast, setShowToast] = useState(null);
   const [phonecheck, setPhonecheck] = useState(false);
   const [checkfield, setcheck] = useState(false)
+  const [department, setDepartment] = useState("");
+  const [email, setEmail] = useState("");
+  const [telephone, setTelephone] = useState("");
+  const [headName, setHeadName] = useState("");
+  const [address, setAddress] = useState("");
+  const [pinCode, setPinCode] = useState("");
+  const [status, setStatus] = useState("Active");
+  const [locationDetails, setLocationDetails] = useState({
+    subDistrict: "",
+    district: "",
+    state: "",
+  });
+  const [error, setError] = useState("");
   const { t } = useTranslation();
   const history = useHistory();
   const isMobile = window.Digit.Utils.browser.isMobile();
@@ -126,7 +139,26 @@ const CreateEmployee = () => {
   const navigateToAcknowledgement = (Employees) => {
     history.replace("/digit-ui/employee/hrms/response", { Employees, key: "CREATE", action: "CREATE" });
   }
+  const fetchLocationDetails = async () => {
+    setError("");
+    try {
+      const response = await fetch(
+        `https://api.postalpincode.in/pincode/${pinCode}` // Replace with an actual API if needed
+      );
+      const data = await response.json();
 
+      if (data[0]?.Status === "Success") {
+        const { Block: subDistrict, District: district, State: state } =
+          data[0].PostOffice[0];
+        setLocationDetails({ subDistrict, district, state });
+      } else {
+        setError("Invalid PIN code or data not available.");
+      }
+    } catch (err) {
+      console.error("Error fetching location details:", err);
+      setError("Failed to fetch location details.");
+    }
+  };
 
   const onSubmit = (data) => {
     if (data.Jurisdictions.filter(juris => juris.tenantId == tenantId).length == 0) {
@@ -194,29 +226,266 @@ const CreateEmployee = () => {
     return <Loader />;
   }
   const config =mdmsData?.config?mdmsData.config: newConfig;
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Handle form submission logic
+    console.log({
+      department,
+      email,
+      telephone,
+      headName,
+      address,
+      pinCode,
+      status,
+    });
+  }
   return (
     <div>
-      <div style={isMobile ? {marginLeft: "-12px", fontFamily: "calibri", color: "#FF0000"} :{ marginLeft: "15px", fontFamily: "calibri", color: "#FF0000" }}>
-        <Header>{t("HR_COMMON_CREATE_EMPLOYEE_HEADER")}</Header>
+        <style>
+          {`
+                body {
+                    font-family: Arial, sans-serif;
+                    background-color: #f0f4f7;
+                    margin: 0;
+                    padding: 0;
+                }
+                
+                .login-container {
+                    max-width: 100%;
+                    margin: auto;
+                    background-color: #ffffff;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                }
+                
+                .login-section {
+                    padding: 20px;
+                }
+                
+                h3 {
+                    text-align: center;
+                }
+                
+                label {
+                    display: block;
+                    margin: 10px 0 5px;
+                }
+                
+                input {
+                    width: calc(100% - 20px);
+                    padding: 10px;
+                    margin-bottom: 15px;
+                    border: 1px solid #ccc;
+                    border-radius: 5px;
+                }
+                
+                .otp-container {
+                    display: flex;
+                    
+                    gap: 10px;
+                }
+                
+                button {
+                    background-color: #f57c00; /* Orange color */
+                    color: white;
+                    padding: 10px;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    width: 50%;
+                }
+                
+                button:hover {
+                    background-color: #e65c00;
+                }
+                
+                .submit-button {
+                    display: block;
+                    width: 50%;
+                    margin: 20px auto;
+                }
+                
+                .action-buttons {
+                    display: flex;
+                    justify-content: center;
+                    gap: 20px;
+                    margin: 10px 0;
+                }
+                
+                .social-login {
+                    text-align: center;
+                    margin: 20px 0;
+                }
+                
+                .social-icon {
+                    width: 30px;
+                    margin: 0 10px;
+                    cursor: pointer;
+                }
+                #department {
+                  border: 1px solid #ccc;
+    border-radius: 5px;
+                }
+                #address{
+                  border: 1px solid #ccc;
+                  border-radius: 5px;
+                }
+                #status{
+                  border: 1px solid #ccc;
+                  border-radius: 5px;
+                }
+                `}
+        </style>
+<div className="login-container" style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+      <div className="login-form" style={{ width: "100%", padding: "0 5%" }}>
+        <h3 style={{ fontSize: "x-large", color: "#23316b", fontWeight: "bolder" }}>
+          Add Organization
+        </h3>
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="department" style={{ color: "#23316b" }}>
+            Department/Ministry
+          </label>
+          <select
+            id="department"
+            value={department}
+            onChange={(e) => setDepartment(e.target.value)}
+            required
+            style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
+          >
+            <option value="">Select Department/Ministry</option>
+            <option value="Ministry A">Ministry A</option>
+            <option value="Ministry B">Ministry B</option>
+            <option value="Ministry C">Ministry C</option>
+          </select>
+
+          <label htmlFor="email" style={{ color: "#23316b" }}>
+            Department/Ministry Email ID
+          </label>
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
+          />
+
+          <label htmlFor="telephone" style={{ color: "#23316b" }}>
+            Telephone Number
+          </label>
+          <input
+            type="tel"
+            id="telephone"
+            value={telephone}
+            onChange={(e) => setTelephone(e.target.value)}
+            required
+            style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
+          />
+
+          <label htmlFor="headName" style={{ color: "#23316b" }}>
+            Department/Ministry Head Name
+          </label>
+          <input
+            type="text"
+            id="headName"
+            value={headName}
+            onChange={(e) => setHeadName(e.target.value)}
+            required
+            style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
+          />
+
+          <label htmlFor="address" style={{ color: "#23316b" }}>
+            Department/Ministry Address Details
+          </label>
+          <textarea
+            id="address"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            required
+            rows="3"
+            style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
+          ></textarea>
+
+<div style={{ marginBottom: "15px" }}>
+          <label htmlFor="pinCode">PIN Code:</label>
+          <input
+            type="text"
+            id="pinCode"
+            value={pinCode}
+            onChange={(e) => setPinCode(e.target.value)}
+            onBlur={fetchLocationDetails}
+            required
+          />
+          {error && <p style={{ color: "red" }}>{error}</p>}
+        </div>
+
+  <div>
+      <div>
+                      <label htmlFor="pinCode">Sub-District:</label>
+          <input
+            type="text"
+            id="pinCode"
+            value={locationDetails.subDistrict}
+           // onChange={(e) => setPinCode(e.target.value)}
+            //={fetchLocationDetails}
+            required
+          />
       </div>
-      <FormComposer
-        defaultValues={defaultValues}
-        heading={t("")}
-        config={config}
-        onSubmit={onSubmit}
-        onFormValueChange={onFormValueChange}
-        isDisabled={!canSubmit}
-        label={t("HR_COMMON_BUTTON_SUBMIT")}
-      />
-      {showToast && (
-        <Toast
-          error={showToast.key}
-          label={t(showToast.label)}
-          onClose={() => {
-            setShowToast(null);
-          }}
-        />
-      )}
+      <div>
+                      <label htmlFor="pinCode">District:</label>
+          <input
+            type="text"
+            id="pinCode"
+            value={locationDetails.district}
+           // onChange={(e) => setPinCode(e.target.value)}
+            //={fetchLocationDetails}
+            required
+          />
+      </div>
+      <div>
+                      <label htmlFor="pinCode">State:</label>
+          <input
+            type="text"
+            id="pinCode"
+            value={locationDetails.state}
+           // onChange={(e) => setPinCode(e.target.value)}
+            //={fetchLocationDetails}
+            required
+          />
+      </div>
+  </div>
+
+          <label htmlFor="status" style={{ color: "#23316b" }}>
+            Status
+          </label>
+          <select
+            id="status"
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            required
+            style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
+          >
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+
+          <button
+            type="submit"
+            className="submit-button"
+            style={{
+              backgroundColor: "#23316b",
+              color: "white",
+              padding: "10px",
+              width: "100%",
+              borderRadius: "5px",
+              border: "none",
+              cursor: "pointer",
+            }}
+          >
+            Save
+          </button>
+        </form>
+      </div>
+    </div>
     </div>
   );
 };
