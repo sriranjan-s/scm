@@ -58,19 +58,9 @@ const enabledModules = [
   "HRMS",
   "TL",
   "Receipts",
-  "OBPS",
-  "NOC",
-  "Engagement",
   "CommonPT",
-  "WS",
   "Reports",
-  "Bills",
-  "SW",
-  "BillAmendment",
-  "FireNoc",
-  "Birth",
-  "Death",
-  "PTR"
+  "Bills"
 ];
 window.Digit.ComponentRegistryService.setupRegistry({
   ...paymentConfigs,
