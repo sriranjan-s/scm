@@ -22,6 +22,26 @@ const HrmsService = {
       userService: true,
       params: { tenantId },
     }),
+    createOrg: (data, tenantId) =>
+    Request({
+      data: data,
+      url: Urls.hrms.createOrg,
+      useCache: false,
+      method: "POST",
+      auth: true,
+      userService: true,
+      params: { tenantId },
+    }),
+    createOff: (data, tenantId) =>
+    Request({
+      data: data,
+      url: Urls.hrms.createOff,
+      useCache: false,
+      method: "POST",
+      auth: true,
+      userService: true,
+      params: { tenantId },
+    }),
   update: (data, tenantId) =>
     Request({
       data: data,

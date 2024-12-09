@@ -61,7 +61,7 @@ const initRequestBody = (tenantId) => ({
       },
       {
         moduleName: "tenant",
-        masterDetails: [{ name: "tenants" }, { name: "citymodule" }],
+        masterDetails: [{ name: "tenants" }, { name: "citymodule" },{ name: "departments" }],
       },
       {
         moduleName: "DIGIT-UI",
@@ -146,7 +146,7 @@ const getBillsGenieKey = (tenantId, moduleCode) => ({
       },
       {
         moduleName: "tenant",
-        masterDetails: [{ name: "tenants" }, { name: "citymodule" }],
+        masterDetails: [{ name: "tenants" }, { name: "citymodule" },{ name: "departments" }],
       },
       {
       moduleName: "common-masters",
@@ -817,7 +817,7 @@ const getHrmsEmployeeRolesandDesignations = () => ({
     },
     {
       moduleName: "tenant",
-      masterDetails: [{ name: "tenants" }],
+      masterDetails: [{ name: "tenants" },{ name: "departments" }],
     },
     {
       moduleName: "ACCESSCONTROL-ROLES",

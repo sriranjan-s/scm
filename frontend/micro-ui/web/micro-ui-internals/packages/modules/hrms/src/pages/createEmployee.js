@@ -11,13 +11,15 @@ const CreateEmployee = () => {
   const [showToast, setShowToast] = useState(null);
   const [phonecheck, setPhonecheck] = useState(false);
   const [checkfield, setcheck] = useState(false)
-  const [department, setDepartment] = useState("");
+  const [departmentDropdown, setDepartmentDropdown] = useState(window.Digit.SessionStorage.get("initData").departments || []);
   const [email, setEmail] = useState("");
+  const [department, setDepartment] = useState("")
   const [telephone, setTelephone] = useState("");
   const [headName, setHeadName] = useState("");
   const [address, setAddress] = useState("");
   const [pinCode, setPinCode] = useState("");
   const [status, setStatus] = useState("Active");
+  const [dept, setDept] = useState([]);
   const [locationDetails, setLocationDetails] = useState({
     subDistrict: "",
     district: "",
@@ -27,8 +29,8 @@ const CreateEmployee = () => {
   const { t } = useTranslation();
   const history = useHistory();
   const isMobile = window.Digit.Utils.browser.isMobile();
-
- const { data: mdmsData,isLoading } = Digit.Hooks.useCommonMDMS(Digit.ULBService.getStateId(), "egov-hrms", ["CommonFieldsConfig"], {
+  //const Department =  window.Digit.SessionStorage.get("departments");
+ const { data: mdmsData,isLoading } = Digit.Hooks.useCommonMDMS(Digit.ULBService.getStateId(), "egov-hrms",["CommonFieldsConfig"] ,{
     select: (data) => {
       return {
         config: data?.MdmsRes?.['egov-hrms']?.CommonFieldsConfig
@@ -46,7 +48,10 @@ const CreateEmployee = () => {
     clearSuccessData();
     clearError();
   }, []);
-
+useEffect(() =>{
+  setDept(departmentDropdown)
+  console.log("deptdept33",dept,departmentDropdown)
+},[departmentDropdown])
   const checkMailNameNum = (formData) => {
 
     const email = formData?.SelectEmployeeEmailId?.emailId || '';
@@ -136,8 +141,8 @@ const CreateEmployee = () => {
     }
   };
 
-  const navigateToAcknowledgement = (Employees) => {
-    history.replace("/digit-ui/employee/hrms/response", { Employees, key: "CREATE", action: "CREATE" });
+  const navigateToAcknowledgement = (organizations) => {
+    history.replace("/digit-ui/employee/hrms/response", { organizations });
   }
   const fetchLocationDetails = async () => {
     setError("");
@@ -184,26 +189,19 @@ const CreateEmployee = () => {
     const mappedroles = [].concat.apply([], roles);
     let Employees = [
       {
-        tenantId: tenantId,
-        employeeStatus: "EMPLOYED",
-        assignments: data?.Assignments,
-        code: data?.SelectEmployeeId?.code ? data?.SelectEmployeeId?.code : undefined,
-        dateOfAppointment: new Date(data?.SelectDateofEmployment?.dateOfAppointment).getTime(),
-        employeeType: data?.SelectEmployeeType?.code,
-        jurisdictions: data?.Jurisdictions,
-        user: {
-          mobileNumber: data?.SelectEmployeePhoneNumber?.mobileNumber,
-          name: data?.SelectEmployeeName?.employeeName,
-          correspondenceAddress: data?.SelectEmployeeCorrespondenceAddress?.correspondenceAddress,
-          emailId: data?.SelectEmployeeEmailId?.emailId ? data?.SelectEmployeeEmailId?.emailId : undefined,
-          gender: data?.SelectEmployeeGender?.gender.code,
-          dob: new Date(data?.SelectDateofBirthEmployment?.dob).getTime(),
-          roles: mappedroles,
-          tenantId: tenantId,
-        },
-        serviceHistory: [],
-        education: [],
-        tests: [],
+            "tenantId": "pg",
+            "code": "pg.health",
+            "name": headName,
+            "description": "fgsg gdsg ",
+            "hod": null,
+            "emailId": email,
+            "telephoneNumber": telephone,
+            "address": address,
+            "district": locationDetails?.district,
+            "subDistrict": locationDetails?.subDistrict,
+            "state": locationDetails?.state,
+            "pin": pinCode,
+            "status": "ACTIVE"
       },
     ];
       /* use customiseCreateFormData hook to make some chnages to the Employee object */
@@ -238,7 +236,27 @@ const CreateEmployee = () => {
       pinCode,
       status,
     });
+    let organizations = [
+      {
+            "tenantId": "pg",
+            "code": department,
+            "name": headName,
+            "description": "fgsg gdsg ",
+            "hod": null,
+            "emailId": email,
+            "telephoneNumber": telephone,
+            "address": address,
+            "district": locationDetails?.district,
+            "subDistrict": locationDetails?.subDistrict,
+            "state": locationDetails?.state,
+            "pin": pinCode,
+            "status": "ACTIVE"
+      },
+    ];
+    console.log("employee",organizations)
+    navigateToAcknowledgement(organizations)
   }
+  console.log("deptdept",dept)
   return (
     <div>
         <style>
@@ -345,17 +363,20 @@ const CreateEmployee = () => {
             Department/Ministry
           </label>
           <select
-            id="department"
-            value={department}
-            onChange={(e) => setDepartment(e.target.value)}
-            required
-            style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
-          >
-            <option value="">Select Department/Ministry</option>
-            <option value="Ministry A">Ministry A</option>
-            <option value="Ministry B">Ministry B</option>
-            <option value="Ministry C">Ministry C</option>
-          </select>
+  id="department"
+  value={department}
+  onChange={(e) => setDepartment(e.target.value)}
+  required
+  style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
+>
+  <option value="">Select Department/Ministry</option>
+  {dept?.map((dep) => (
+    <option key={dep?.code} value={dep?.code}>
+      {dep?.name}
+    </option>
+  ))}
+</select>
+
 
           <label htmlFor="email" style={{ color: "#23316b" }}>
             Department/Ministry Email ID

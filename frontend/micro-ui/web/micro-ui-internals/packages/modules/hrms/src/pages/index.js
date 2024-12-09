@@ -5,6 +5,7 @@ import { Link, Switch, useLocation } from "react-router-dom";
 import CreateDepartment from "./createDeparment";
 import AddHeadOfDepartment from "./createHOD"
 import AddOffice from "./AddOffice";
+import AddGro from "./AddGro"
 const EmployeeApp = ({ path, url, userType }) => {
   const { t } = useTranslation();
   const location = useLocation();
@@ -41,6 +42,8 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute path={`${path}/createHod`} component={() => <AddHeadOfDepartment />} />
           <PrivateRoute path={`${path}/createDepartment`} component={() => <CreateDepartment />} />
           <PrivateRoute path={`${path}/createOffice`} component={() => <AddOffice />} />
+          <PrivateRoute path={`${path}/createGro`} component={() => <AddGro />} />
+          
           <PrivateRoute path={`${path}/response`} component={(props) => <HRMSResponse {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/details/:tenantId/:id`} component={() => <HRMSDetails />} />
           <PrivateRoute path={`${path}/edit/:tenantId/:id`} component={() => <EditEmpolyee />} />
