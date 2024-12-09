@@ -145,6 +145,8 @@ import useTLWorkflowData from "./tl/useTLWorkflowData";
 import useHRMSSearch from "./hrms/useHRMSsearch";
 import useHrmsMDMS from "./hrms/useHRMSMDMS";
 import useHRMSCreate from "./hrms/useHRMScreate";
+import useHRMSCreateOrg from "./hrms/useHRMScreateOrg";
+import useHRMSCreateOffice from "./hrms/useHRMScreateOffice";
 import useHRMSUpdate from "./hrms/useHRMSUpdate";
 import useHRMSCount from "./hrms/useHRMSCount";
 import useHRMSGenderMDMS from "./hrms/useHRMSGender";
@@ -399,6 +401,8 @@ const hrms = {
   useHRMSSearch,
   useHrmsMDMS,
   useHRMSCreate,
+  useHRMSCreateOrg,
+  useHRMSCreateOffice,
   useHRMSUpdate,
   useHRMSCount,
   useHRMSGenderMDMS,

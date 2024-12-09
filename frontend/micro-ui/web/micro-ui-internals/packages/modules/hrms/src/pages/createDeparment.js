@@ -1,31 +1,24 @@
 import { Toast, Loader } from "@upyog/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-
+import { useTranslation } from "react-i18next";
 const CreateDepartment = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const history = useHistory();
-  const [departments, setDepartments] = useState([]);
+  const [departments, setDepartments] = useState(window.Digit.SessionStorage.get("initData").tenants);
   const [department, setDepartment] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [confirmEmail, setConfirmEmail] = useState("");
   const [userType, setUserType] = useState("Admin");
-  const [role, setRole] = useState("Admin");
+  const [role, setRole] = useState("NODAL_ADMIN");
   const [state, setState] = useState("Active");
-  const [designation, setDesignation] = useState("");
+  const [stateUser, setStateuser] = useState("");
+  const [designation, setDesignation] = useState("Nodal Officer");
   const [error, setError] = useState("");
-  const [showToast, setShowToast] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-
-//   useEffect(() => {
-//     // Fetch departments and pre-defined options
-//     Digit.HRMSService.getDepartments(tenantId).then((data) => {
-//       setDepartments(data || []);
-//       setIsLoading(false);
-//     });
-//   }, []);
-
+  const { t } = useTranslation();
+  const [showToast, setShowToast] = useState(null);
   const handleSubmit = (e) => {
     e.preventDefault();
     if (email !== confirmEmail) {
@@ -48,19 +41,70 @@ const CreateDepartment = () => {
       designation,
       tenantId,
     };
+    let Employees = [
+      {
+        tenantId: tenantId,
+        employeeStatus: "EMPLOYED",
+        assignments: [ {
+          "fromDate": new Date().getTime(),
+          "isCurrentAssignment": true,
+          "department": department,
+          "designation": designation
+      }],
+        code: undefined,
+        dateOfAppointment: new Date(new Date().setDate(new Date().getDate() - 1)).getTime(),
+        employeeType: "PERMANENT",
+        jurisdictions: [
+          {
+              "hierarchy": "REVENUE",
+              "boundaryType": "City",
+              "boundary": department,
+              "tenantId": department,
+              "roles": [
+                  {
+                      "code": role,
+                      "name": role,
+                      "labelKey": role,
+                      "tenantId": department
+                  },
+                  {
+                    "code": "EMPLOYEE",
+                    "name": "Employee",
+                    "labelKey": "ACCESSCONTROL_ROLES_ROLES_EMPLOYEE",
+                    "tenantId": department
+                }
+              ]
+          }
+      ],
+        user: {
+          mobileNumber: mobileNumber,
+          name: name,
+          correspondenceAddress: stateUser,
+          emailId: confirmEmail,
+          gender: "MALE",
+          dob: 507254400000,
+          roles: [{
+            "code": "EMPLOYEE",
+            "name": "Employee",
+            "labelKey": role,
+            "tenantId": "pg.citya"
+        }],
+          tenantId: tenantId,
+        },
+        serviceHistory: [],
+        education: [],
+        tests: [],
+      },
+    ];
+      /* use customiseCreateFormData hook to make some chnages to the Employee object */
+      Employees=Digit?.Customizations?.HRMS?.customiseCreateFormData?Digit.Customizations.HRMS.customiseCreateFormData(data,Employees):Employees;
+      navigateToAcknowledgement(Employees)
+  }
+  const navigateToAcknowledgement = (Employees) => {
+    history.replace("/digit-ui/employee/hrms/response", { Employees, key: "CREATE", action: "CREATE" });
+  }
 
-    // Save department details
-    Digit.HRMSService.createDepartment(payload).then((response) => {
-      if (response.status === "success") {
-        setShowToast(true);
-        setTimeout(() => history.push("/departments"), 2000);
-      } else {
-        setError("Failed to save department details!");
-      }
-    });
-  };
-
-  if (isLoading) return <Loader />;
+  //if (isLoading) return <Loader />;
 
   return (
     <div>
@@ -171,23 +215,43 @@ const CreateDepartment = () => {
       <form onSubmit={handleSubmit}>
         <label className="blueColor">Department/Ministry</label>
         <select
-        id="department"
-          value={department}
-          onChange={(e) => setDepartment(e.target.value)}
-          required
-          style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
-        >
-          <option value="">Select Department/Ministry</option>
-          <option value="Ministry A">Ministry A</option>
-            <option value="Ministry B">Ministry B</option>
-            <option value="Ministry C">Ministry C</option>
-          {departments.map((dept) => (
-            <option key={dept.code} value={dept.code}>
-              {dept.name}
-            </option>
-          ))}
-        </select>
+  id="department"
+  value={department}
+  onChange={(e) => {
+    const selectedCode = e.target.value; // Get the selected code
+    setDepartment(selectedCode);
 
+    // Find the selected department object
+    const selectedDept = departments.find((dept) => dept.code === selectedCode);
+    if (selectedDept) {
+      setStateuser(selectedDept.state); // Update stateUser
+    }
+
+    // Set default role and user type
+    setRole("NODAL_ADMIN");
+    setUserType("Nodal User");
+    setDesignation("Nodal Officer")
+  }}
+  required
+  style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
+>
+  <option value="">Select Department/Ministry</option>
+  {departments.map((dept) => (
+    <option key={dept.code} value={dept.code}>
+      {dept.i18nKey}
+    </option>
+  ))}
+</select>
+
+
+        <label>Name</label>
+        <input
+          type="tel"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+          maxLength={10}
+        />
         <label>Mobile Number</label>
         <input
           type="tel"
@@ -213,20 +277,28 @@ const CreateDepartment = () => {
           required
         />
 
-        <label>Designation</label>
+        <label>User Type/Designation</label>
         <input
           type="text"
           value={designation}
-          onChange={(e) => setDesignation(e.target.value)}
+          readOnly
           required
         />
 
-        <label>User Type</label>
-        <input type="text" value={userType} readOnly />
-
         <label>Role</label>
-        <input type="text" value={role} readOnly />
+        <select
+        id="department"
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+          required
+          style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
+        >
+          <option value="NODAL_ADMIN">{t("Nodal Admin")}</option>
+          <option value="EMPLOYEE">{t("EMPLOYEE")}</option>
+        </select>
 
+        <label>State</label>
+        <input type="text" value={stateUser} readOnly />
         <label>Status</label>
         <select value={state} onChange={(e) => setState(e.target.value)} id="status"  style={{ width: "100%", padding: "10px", marginBottom: "15px" }} required>
           <option value="Active">Active</option>

@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 const AddHeadOfDepartment = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const history = useHistory();
-  const [departments, setDepartments] = useState([]);
+  const [departments, setDepartments] = useState(window.Digit.SessionStorage.get("initData").tenants);
   const [department, setDepartment] = useState("");
   const [name, setName] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
@@ -17,7 +17,7 @@ const AddHeadOfDepartment = () => {
   const [error, setError] = useState("");
   const [showToast, setShowToast] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [stateUser, setStateuser] = useState("");
 //   useEffect(() => {
 //     // Fetch departments from system
 //     Digit.HRMSService.getDepartments(tenantId).then((data) => {
@@ -26,39 +26,90 @@ const AddHeadOfDepartment = () => {
 //     });
 //   }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (email !== confirmEmail) {
-      setError("Emails do not match!");
-      return;
-    }
+const handleSubmit = (e) => {
+  e.preventDefault();
+  if (email !== confirmEmail) {
+    setError("Emails do not match!");
+    return;
+  }
 
-    if (!mobileNumber.match(/^[6-9]\d{9}$/)) {
-      setError("Invalid mobile number!");
-      return;
-    }
+  if (!mobileNumber.match(/^[6-9]\d{9}$/)) {
+    setError("Invalid mobile number!");
+    return;
+  }
 
-    const payload = {
-      department,
-      name,
-      mobileNumber,
-      email,
-      userType,
-      role,
-      state,
-      tenantId,
-    };
-
-    // Save Head of Department details
-    Digit.HRMSService.addHeadOfDepartment(payload).then((response) => {
-      if (response.status === "success") {
-        setShowToast(true);
-        setTimeout(() => history.push("/head-of-departments"), 2000);
-      } else {
-        setError("Failed to save Head of Department details!");
-      }
-    });
+  const payload = {
+    department,
+    mobileNumber,
+    email,
+    userType,
+    role,
+    state,
+    userType,
+    tenantId,
   };
+  let Employees = [
+    {
+      tenantId: tenantId,
+      employeeStatus: "EMPLOYED",
+      assignments: [ {
+        "fromDate": new Date().getTime(),
+        "isCurrentAssignment": true,
+        "department": department,
+        "designation": userType
+    }],
+      code: undefined,
+      dateOfAppointment: new Date(new Date().setDate(new Date().getDate() - 1)).getTime(),
+      employeeType: "PERMANENT",
+      jurisdictions: [
+        {
+            "hierarchy": "REVENUE",
+            "boundaryType": "City",
+            "boundary": department,
+            "tenantId": department,
+            "roles": [
+                {
+                    "code": role,
+                    "name": role,
+                    "labelKey": role,
+                    "tenantId": department
+                },
+                {
+                  "code": "EMPLOYEE",
+                  "name": "Employee",
+                  "labelKey": "ACCESSCONTROL_ROLES_ROLES_EMPLOYEE",
+                  "tenantId": department
+              }
+            ]
+        }
+    ],
+      user: {
+        mobileNumber: mobileNumber,
+        name: name,
+        correspondenceAddress: stateUser,
+        emailId: confirmEmail,
+        gender: "MALE",
+        dob: 507254400000,
+        roles: [{
+          "code": "EMPLOYEE",
+          "name": "Employee",
+          "labelKey": role,
+          "tenantId": "pg.citya"
+      }],
+        tenantId: tenantId,
+      },
+      serviceHistory: [],
+      education: [],
+      tests: [],
+    },
+  ];
+    /* use customiseCreateFormData hook to make some chnages to the Employee object */
+    Employees=Digit?.Customizations?.HRMS?.customiseCreateFormData?Digit.Customizations.HRMS.customiseCreateFormData(data,Employees):Employees;
+    navigateToAcknowledgement(Employees)
+}
+const navigateToAcknowledgement = (Employees) => {
+  history.replace("/digit-ui/employee/hrms/response", { Employees, key: "CREATE", action: "CREATE" });
+}
 
   if (isLoading) return <Loader />;
 
@@ -121,20 +172,30 @@ const AddHeadOfDepartment = () => {
         <form onSubmit={handleSubmit}>
           <label>Department/Ministry</label>
           <select
-            value={department}
-            onChange={(e) => setDepartment(e.target.value)}
-            required
-          >
-            <option value="">Select Department/Ministry</option>
-            <option value="Ministry A">Ministry A</option>
-            <option value="Ministry B">Ministry B</option>
-            <option value="Ministry C">Ministry C</option>
-            {departments.map((dept) => (
-              <option key={dept.code} value={dept.code}>
-                {dept.name}
-              </option>
-            ))}
-          </select>
+  id="department"
+  value={department}
+  onChange={(e) => {
+    const selectedCode = e.target.value; // Get the selected code
+    setDepartment(selectedCode);
+
+    // Find the selected department object
+    const selectedDept = departments.find((dept) => dept.code === selectedCode);
+    if (selectedDept) {
+      setStateuser(selectedDept.state); // Update stateUser
+    }
+
+
+  }}
+  required
+  style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
+>
+  <option value="">Select Department/Ministry</option>
+  {departments.map((dept) => (
+    <option key={dept.code} value={dept.code}>
+      {dept.i18nKey}
+    </option>
+  ))}
+</select>
 
           <label>Name</label>
           <input
@@ -169,12 +230,13 @@ const AddHeadOfDepartment = () => {
             required
           />
 
-          <label>User Type</label>
+          <label>User Type/Designation</label>
           <input type="text" value={userType} readOnly />
 
           <label>Role</label>
           <input type="text" value={role} readOnly />
-
+          <label>State</label>
+        <input type="text" value={stateUser} readOnly />
           <label>Status</label>
         <select value={state} onChange={(e) => setState(e.target.value)} id="status"  style={{ width: "100%", padding: "10px", marginBottom: "15px" }} required>
           <option value="Active">Active</option>

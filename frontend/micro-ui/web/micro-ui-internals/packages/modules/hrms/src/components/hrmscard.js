@@ -57,7 +57,7 @@ const HRMSCard = () => {
             },
             {
                 label: t("Add Gro"),
-                link: `/digit-ui/employee/hrms/create`
+                link: `/digit-ui/employee/hrms/createGro`
             }  ,
             {
                 label: t("View Gro"),

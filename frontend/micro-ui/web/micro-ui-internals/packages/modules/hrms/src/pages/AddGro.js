@@ -12,11 +12,14 @@ const AddOffice = () => {
   const [email, setEmail] = useState("");
   const [id, setId] = useState("");
   const [telephone, setTelephone] = useState("");
+  const [mobile, setMobile] = useState("");
   const [officeHead, setOfficeHead] = useState("");
   const [address, setAddress] = useState("");
   const [pinCode, setPinCode] = useState("");
   const [location, setLocation] = useState("");
   const [state, setState] = useState("Active");
+  const [userType, setUserType] = useState("GRO User");
+  const [groOfficerName, setGroOfficerName] = useState("");
   const [error, setError] = useState("");
   const [showToast, setShowToast] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -29,9 +32,7 @@ const AddOffice = () => {
   const fetchLocationDetails = async () => {
     setError("");
     try {
-      const response = await fetch(
-        `https://api.postalpincode.in/pincode/${pinCode}` // Replace with an actual API if needed
-      );
+      const response = await fetch(`https://api.postalpincode.in/pincode/${pinCode}`);
       const data = await response.json();
 
       if (data[0]?.Status === "Success") {
@@ -46,10 +47,11 @@ const AddOffice = () => {
       setError("Failed to fetch location details.");
     }
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!telephone.match(/^\d{10}$/)) {
-      setError("Invalid telephone number!");
+    if (!telephone.match(/^\d{10}$/) || !mobile.match(/^\d{10}$/)) {
+      setError("Invalid telephone or mobile number!");
       return;
     }
 
@@ -59,38 +61,45 @@ const AddOffice = () => {
       role,
       email,
       telephone,
+      mobile,
       officeHead,
       address,
       pinCode,
       location,
       state,
+      userType,
+      groOfficerName,
       tenantId,
     };
     let offices = [
       {
-        "tenantId": "pg",
-        "organizationId": id,
-        "code": department + "." + officeName,
-        "name": officeName,
-        "description": "Office1",
-        "emailId": email,
-        "telephoneNumber": telephone,
-        "HeadOfficeCode": null,
-        "officeAddress": address,
-        "district": locationDetails?.district,
-        "subDistrict": "subD",
-        "state": locationDetails?.state,
-        "pin": pinCode,
-        "status": state,
-        "headOffice": true
-      }
+        tenantId: "pg",
+        organizationId: id,
+        code: department + "." + officeName,
+        name: officeName,
+        description: "Office1",
+        emailId: email,
+        telephoneNumber: telephone,
+        mobileNumber: mobile,
+        HeadOfficeCode: null,
+        officeAddress: address,
+        district: locationDetails?.district,
+        subDistrict: locationDetails?.subDistrict,
+        state: locationDetails?.state,
+        pin: pinCode,
+        status: state,
+        headOffice: true,
+        groOfficerName,
+        userType,
+      },
     ];
     navigateToAcknowledgement(offices);
-
   };
+
   const navigateToAcknowledgement = (offices) => {
     history.replace("/digit-ui/employee/hrms/response", { offices, key: "office" });
-  }
+  };
+
   if (isLoading) return <Loader />;
 
   return (
@@ -144,44 +153,24 @@ const AddOffice = () => {
           }
         `}
       </style>
-      <div
-        className="login-container"
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          minHeight: "100vh",
-        }}
-      >
-        <div className="login-form" style={{ width: "100%", padding: "0 5%" }}>
-          <h3
-            style={{
-              fontSize: "x-large",
-              color: "#23316b",
-              fontWeight: "bolder",
-            }}
-          >
-            Add Office
-          </h3>
+      <div className="login-container">
+        <div className="login-form">
+        <h3 style={{ fontSize: "x-large", color: "#23316b", fontWeight: "bolder" }}>Add GRO</h3>
           {showToast && <Toast label="Office added successfully!" />}
           {error && <p className="error">{error}</p>}
           <form onSubmit={handleSubmit}>
             <label>Department/Ministry</label>
             <select
-              id="department"
               value={department}
               onChange={(e) => {
-                const selectedCode = e.target.value; // Get the selected code
+                const selectedCode = e.target.value;
                 setDepartment(selectedCode);
-
-                // Find the selected department object
                 const selectedDept = departments.find((dept) => dept.code === selectedCode);
                 if (selectedDept) {
-                  setId(selectedDept.id); // Update stateUser
+                  setId(selectedDept.id);
                 }
               }}
               required
-              style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
             >
               <option value="">Select Department/Ministry</option>
               {departments.map((dept) => (
@@ -191,113 +180,85 @@ const AddOffice = () => {
               ))}
             </select>
 
-            <label>Name of Office/Section</label>
+            <label>Name of GRO Officer</label>
             <input
               type="text"
-              value={officeName}
-              onChange={(e) => setOfficeName(e.target.value)}
+              value={groOfficerName}
+              onChange={(e) => setGroOfficerName(e.target.value)}
               required
             />
 
             <label>Role</label>
-            <select
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              required
-            >
+            <select value={role} onChange={(e) => setRole(e.target.value)} required>
               <option value="">Select Role</option>
               <option value="GRO User">GRO User</option>
-              <option value="Nodal Appellant Authority">
-                Nodal Appellant Authority
-              </option>
+              <option value="Nodal Appellant Authority">Nodal Appellant Authority</option>
             </select>
 
             <label>Office/Section Email ID</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
 
             <label>Telephone No.</label>
-            <input
-              type="tel"
-              value={telephone}
-              onChange={(e) => setTelephone(e.target.value)}
-              required
-            />
+            <input type="tel" value={telephone} onChange={(e) => setTelephone(e.target.value)} required />
+
+            <label>Mobile Number</label>
+            <input type="tel" value={mobile} onChange={(e) => setMobile(e.target.value)} required />
 
             <label>Office Head Name</label>
-            <input
-              type="text"
-              value={officeHead}
-              onChange={(e) => setOfficeHead(e.target.value)}
-              required
-            />
+            <input type="text" value={officeHead} onChange={(e) => setOfficeHead(e.target.value)} required />
 
             <label>Office Address Details</label>
-            <input
-              type="text"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-            />
+            <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} />
 
-            <label>Pin Code</label>
-            <input
-              type="text"
-              value={pinCode}
-              onChange={(e) => {
-                setPinCode(e.target.value);
+            <div style={{ marginBottom: "15px" }}>
+          <label htmlFor="pinCode">PIN Code:</label>
+          <input
+            type="text"
+            id="pinCode"
+            value={pinCode}
+            onChange={(e) => setPinCode(e.target.value)}
+            onBlur={fetchLocationDetails}
+            required
+          />
+          {error && <p style={{ color: "red" }}>{error}</p>}
+        </div>
 
-              }}
-              onBlur={fetchLocationDetails}
-              maxLength={6}
-              required
-            />
-
-            <div>
-              <div>
-                <label htmlFor="pinCode">Sub-District:</label>
-                <input
-                  type="text"
-                  id="pinCode"
-                  value={locationDetails.subDistrict}
-                  // onChange={(e) => setPinCode(e.target.value)}
-                  //={fetchLocationDetails}
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="pinCode">District:</label>
-                <input
-                  type="text"
-                  id="pinCode"
-                  value={locationDetails.district}
-                  // onChange={(e) => setPinCode(e.target.value)}
-                  //={fetchLocationDetails}
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="pinCode">State:</label>
-                <input
-                  type="text"
-                  id="pinCode"
-                  value={locationDetails.state}
-                  // onChange={(e) => setPinCode(e.target.value)}
-                  //={fetchLocationDetails}
-                  required
-                />
-              </div>
-            </div>
-
-            <label>Status</label>
-            <select
-              value={state}
-              onChange={(e) => setState(e.target.value)}
-              required
-            >
+  <div>
+      <div>
+                      <label htmlFor="pinCode">Sub-District:</label>
+          <input
+            type="text"
+            id="pinCode"
+            value={locationDetails.subDistrict}
+           // onChange={(e) => setPinCode(e.target.value)}
+            //={fetchLocationDetails}
+            required
+          />
+      </div>
+      <div>
+                      <label htmlFor="pinCode">District:</label>
+          <input
+            type="text"
+            id="pinCode"
+            value={locationDetails.district}
+           // onChange={(e) => setPinCode(e.target.value)}
+            //={fetchLocationDetails}
+            required
+          />
+      </div>
+      <div>
+                      <label htmlFor="pinCode">State:</label>
+          <input
+            type="text"
+            id="pinCode"
+            value={locationDetails.state}
+           // onChange={(e) => setPinCode(e.target.value)}
+            //={fetchLocationDetails}
+            required
+          />
+      </div>
+  </div>            <label>Status</label>
+            <select value={state} onChange={(e) => setState(e.target.value)} required>
               <option value="Active">Active</option>
               <option value="Inactive">Inactive</option>
             </select>

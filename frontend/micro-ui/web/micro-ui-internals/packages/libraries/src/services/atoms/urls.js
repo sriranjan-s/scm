@@ -123,6 +123,8 @@ const Urls = {
     count: "/egov-hrms/employees/_count",
     create: "/egov-hrms/employees/_create",
     update: "/egov-hrms/employees/_update",
+    createOrg: "/egov-mdms-service/v1/org/_create",
+    createOff : "/egov-mdms-service/v1/ofc/_create"
   },
   tl: {
     create: "/tl-services/v1/_create",
