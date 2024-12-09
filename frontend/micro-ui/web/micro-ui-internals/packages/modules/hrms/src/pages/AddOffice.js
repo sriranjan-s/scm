@@ -101,6 +101,32 @@ const AddOffice = () => {
             font-family: Arial, sans-serif;
             background-color: #f0f4f7;
           }
+          .grid-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+          }
+
+          @media (min-width: 520px) {
+            .grid-container .half-width {
+              grid-template-columns: repeat(2, 1fr); 
+            }
+          }
+
+          @media (min-width: 768px) {
+            .grid-container {
+              grid-template-columns: 1fr 
+            }
+            .grid-container .half-width {
+              grid-template-columns: repeat(2, 1fr); 
+            }
+            .grid-container .full-width {
+              grid-template-columns: 1fr 
+            }
+            .grid-container .one-third-width {
+              grid-template-columns: repeat(3, 1fr) 
+            }
+          }
           .container {
             max-width: 600px;
             margin: 20px auto;
@@ -142,6 +168,11 @@ const AddOffice = () => {
             color: red;
             margin-bottom: 15px;
           }
+          .submit-button {
+            display: block;
+            width: 50%;
+            margin: 20px auto;
+        }
         `}
       </style>
       <div
@@ -159,104 +190,114 @@ const AddOffice = () => {
               fontSize: "x-large",
               color: "#23316b",
               fontWeight: "bolder",
+              marginBottom: "25px"
             }}
           >
             Add Office
           </h3>
           {showToast && <Toast label="Office added successfully!" />}
           {error && <p className="error">{error}</p>}
-          <form onSubmit={handleSubmit}>
-            <label>Department/Ministry</label>
-            <select
-              id="department"
-              value={department}
-              onChange={(e) => {
-                const selectedCode = e.target.value; // Get the selected code
-                setDepartment(selectedCode);
-
-                // Find the selected department object
-                const selectedDept = departments.find((dept) => dept.code === selectedCode);
-                if (selectedDept) {
-                  setId(selectedDept.id); // Update stateUser
-                }
-              }}
-              required
-              style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
-            >
-              <option value="">Select Department/Ministry</option>
-              {departments.map((dept) => (
-                <option key={dept.code} value={dept.code}>
-                  {dept.i18nKey}
-                </option>
-              ))}
-            </select>
-
-            <label>Name of Office/Section</label>
-            <input
-              type="text"
-              value={officeName}
-              onChange={(e) => setOfficeName(e.target.value)}
-              required
-            />
-
-            <label>Role</label>
-            <select
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              required
-            >
-              <option value="">Select Role</option>
-              <option value="GRO User">GRO User</option>
-              <option value="Nodal Appellant Authority">
-                Nodal Appellant Authority
-              </option>
-            </select>
-
-            <label>Office/Section Email ID</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-
-            <label>Telephone No.</label>
-            <input
-              type="tel"
-              value={telephone}
-              onChange={(e) => setTelephone(e.target.value)}
-              required
-            />
-
-            <label>Office Head Name</label>
-            <input
-              type="text"
-              value={officeHead}
-              onChange={(e) => setOfficeHead(e.target.value)}
-              required
-            />
-
-            <label>Office Address Details</label>
-            <input
-              type="text"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-            />
-
-            <label>Pin Code</label>
-            <input
-              type="text"
-              value={pinCode}
-              onChange={(e) => {
-                setPinCode(e.target.value);
-
-              }}
-              onBlur={fetchLocationDetails}
-              maxLength={6}
-              required
-            />
-
+          <form onSubmit={handleSubmit} className="grid-container">
             <div>
+              <label>Department/Ministry</label>
+              <select
+                id="department"
+                value={department}
+                onChange={(e) => {
+                  const selectedCode = e.target.value; // Get the selected code
+                  setDepartment(selectedCode);
+
+                  // Find the selected department object
+                  const selectedDept = departments.find((dept) => dept.code === selectedCode);
+                  if (selectedDept) {
+                    setId(selectedDept.id); // Update stateUser
+                  }
+                }}
+                required
+                style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
+              >
+                <option value="">Select Department/Ministry</option>
+                {departments.map((dept) => (
+                  <option key={dept.code} value={dept.code}>
+                    {dept.i18nKey}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="grid-container half-width">
+              <div>
+                <label>Name of Office/Section</label>
+                <input
+                  type="text"
+                  value={officeName}
+                  onChange={(e) => setOfficeName(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <label>Role</label>
+                <select
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  required
+                >
+                  <option value="">Select Role</option>
+                  <option value="GRO User">GRO User</option>
+                  <option value="Nodal Appellant Authority">
+                    Nodal Appellant Authority
+                  </option>
+                </select>
+              </div>
+              <div>
+                <label>Office/Section Email ID</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <label>Telephone No.</label>
+                <input
+                  type="tel"
+                  value={telephone}
+                  onChange={(e) => setTelephone(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <label>Office Head Name</label>
+                <input
+                  type="text"
+                  value={officeHead}
+                  onChange={(e) => setOfficeHead(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <label>Office Address Details</label>
+                <input
+                  type="text"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <label>Pin Code</label>
+                <input
+                  type="text"
+                  value={pinCode}
+                  onChange={(e) => {
+                    setPinCode(e.target.value);
+
+                  }}
+                  onBlur={fetchLocationDetails}
+                  maxLength={6}
+                  required
+                />
+              </div>
               <div>
                 <label htmlFor="pinCode">Sub-District:</label>
                 <input
@@ -291,18 +332,27 @@ const AddOffice = () => {
                 />
               </div>
             </div>
-
-            <label>Status</label>
-            <select
-              value={state}
-              onChange={(e) => setState(e.target.value)}
-              required
-            >
-              <option value="Active">Active</option>
-              <option value="Inactive">Inactive</option>
-            </select>
-
-            <button type="submit">Save</button>
+            <div>
+              <label>Status</label>
+              <select
+                value={state}
+                onChange={(e) => setState(e.target.value)}
+                required
+              >
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+            </div>
+            <button type="submit" className="submit-button"
+              style={{
+                backgroundColor: "#23316b",
+                color: "white",
+                padding: "10px",
+                width: "300px",
+                borderRadius: "5px",
+                border: "none",
+                cursor: "pointer",
+              }}>Save</button>
           </form>
         </div>
       </div>

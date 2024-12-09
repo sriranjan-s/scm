@@ -45,37 +45,37 @@ const CreateDepartment = () => {
       {
         tenantId: tenantId,
         employeeStatus: "EMPLOYED",
-        assignments: [ {
+        assignments: [{
           "fromDate": new Date().getTime(),
           "isCurrentAssignment": true,
           "department": department,
           "designation": designation
-      }],
+        }],
         code: undefined,
         dateOfAppointment: new Date(new Date().setDate(new Date().getDate() - 1)).getTime(),
         employeeType: "PERMANENT",
         jurisdictions: [
           {
-              "hierarchy": "REVENUE",
-              "boundaryType": "City",
-              "boundary": department,
-              "tenantId": department,
-              "roles": [
-                  {
-                      "code": role,
-                      "name": role,
-                      "labelKey": role,
-                      "tenantId": department
-                  },
-                  {
-                    "code": "EMPLOYEE",
-                    "name": "Employee",
-                    "labelKey": "ACCESSCONTROL_ROLES_ROLES_EMPLOYEE",
-                    "tenantId": department
-                }
-              ]
+            "hierarchy": "REVENUE",
+            "boundaryType": "City",
+            "boundary": department,
+            "tenantId": department,
+            "roles": [
+              {
+                "code": role,
+                "name": role,
+                "labelKey": role,
+                "tenantId": department
+              },
+              {
+                "code": "EMPLOYEE",
+                "name": "Employee",
+                "labelKey": "ACCESSCONTROL_ROLES_ROLES_EMPLOYEE",
+                "tenantId": department
+              }
+            ]
           }
-      ],
+        ],
         user: {
           mobileNumber: mobileNumber,
           name: name,
@@ -88,7 +88,7 @@ const CreateDepartment = () => {
             "name": "Employee",
             "labelKey": role,
             "tenantId": "pg.citya"
-        }],
+          }],
           tenantId: tenantId,
         },
         serviceHistory: [],
@@ -96,9 +96,9 @@ const CreateDepartment = () => {
         tests: [],
       },
     ];
-      /* use customiseCreateFormData hook to make some chnages to the Employee object */
-      Employees=Digit?.Customizations?.HRMS?.customiseCreateFormData?Digit.Customizations.HRMS.customiseCreateFormData(data,Employees):Employees;
-      navigateToAcknowledgement(Employees)
+    /* use customiseCreateFormData hook to make some chnages to the Employee object */
+    Employees = Digit?.Customizations?.HRMS?.customiseCreateFormData ? Digit.Customizations.HRMS.customiseCreateFormData(data, Employees) : Employees;
+    navigateToAcknowledgement(Employees)
   }
   const navigateToAcknowledgement = (Employees) => {
     history.replace("/digit-ui/employee/hrms/response", { Employees, key: "CREATE", action: "CREATE" });
@@ -108,15 +108,42 @@ const CreateDepartment = () => {
 
   return (
     <div>
-                        <style>
-          {`
+      <style>
+        {`
                 body {
                     font-family: Arial, sans-serif;
                     background-color: #f0f4f7;
                     margin: 0;
                     padding: 0;
                 }
-                
+
+                .grid-container {
+                  display: grid;
+                  grid-template-columns: 1fr;
+                  gap: 16px;
+                }
+
+                @media (min-width: 520px) {
+                  .grid-container .half-width {
+                    grid-template-columns: repeat(2, 1fr); 
+                  }
+                }
+
+                @media (min-width: 768px) {
+                  .grid-container {
+                    grid-template-columns: 1fr 
+                  }
+                  .grid-container .half-width {
+                    grid-template-columns: repeat(2, 1fr); 
+                  }
+                  .grid-container .full-width {
+                    grid-template-columns: 1fr 
+                  }
+                  .grid-container .one-third-width {
+                    grid-template-columns: repeat(3, 1fr) 
+                  }
+                }
+
                 .login-container {
                     max-width: 100%;
                     margin: auto;
@@ -204,111 +231,133 @@ const CreateDepartment = () => {
                     color:#23316b
                 }
                 `}
-        </style>
+      </style>
 
-    <div className="login-container" style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
-   <div className="login-form" style={{ width: "100%", padding: "0 5%" }}>
+      <div className="login-container" style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+        <div className="login-form" style={{ width: "100%", padding: "0 5%" }}>
 
-   <h3 style={{ fontSize: "x-large", color: "#23316b", fontWeight: "bolder" }}>Add Department (Nodal Level)</h3>
-      {showToast && <Toast label="Department added successfully!" />}
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <label className="blueColor">Department/Ministry</label>
-        <select
-  id="department"
-  value={department}
-  onChange={(e) => {
-    const selectedCode = e.target.value; // Get the selected code
-    setDepartment(selectedCode);
+          <h3 style={{ fontSize: "x-large", color: "#23316b", fontWeight: "bolder", marginBottom: "25px" }}>Add Department (Nodal Level)</h3>
+          {showToast && <Toast label="Department added successfully!" />}
+          {error && <p style={{ color: "red" }}>{error}</p>}
+          <form onSubmit={handleSubmit} className="grid-container">
+            <div className="grid-container">
+              <label className="blueColor">Department/Ministry</label>
+              <select
+                id="department"
+                value={department}
+                onChange={(e) => {
+                  const selectedCode = e.target.value; // Get the selected code
+                  setDepartment(selectedCode);
 
-    // Find the selected department object
-    const selectedDept = departments.find((dept) => dept.code === selectedCode);
-    if (selectedDept) {
-      setStateuser(selectedDept.state); // Update stateUser
-    }
+                  // Find the selected department object
+                  const selectedDept = departments.find((dept) => dept.code === selectedCode);
+                  if (selectedDept) {
+                    setStateuser(selectedDept.state); // Update stateUser
+                  }
 
-    // Set default role and user type
-    setRole("NODAL_ADMIN");
-    setUserType("Nodal User");
-    setDesignation("Nodal Officer")
-  }}
-  required
-  style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
->
-  <option value="">Select Department/Ministry</option>
-  {departments.map((dept) => (
-    <option key={dept.code} value={dept.code}>
-      {dept.i18nKey}
-    </option>
-  ))}
-</select>
-
-
-        <label>Name</label>
-        <input
-          type="tel"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-          maxLength={10}
-        />
-        <label>Mobile Number</label>
-        <input
-          type="tel"
-          value={mobileNumber}
-          onChange={(e) => setMobileNumber(e.target.value)}
-          required
-          maxLength={10}
-        />
-
-        <label>Email ID</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-
-        <label>Confirm Email ID</label>
-        <input
-          type="email"
-          value={confirmEmail}
-          onChange={(e) => setConfirmEmail(e.target.value)}
-          required
-        />
-
-        <label>User Type/Designation</label>
-        <input
-          type="text"
-          value={designation}
-          readOnly
-          required
-        />
-
-        <label>Role</label>
-        <select
-        id="department"
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
-          required
-          style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
-        >
-          <option value="NODAL_ADMIN">{t("Nodal Admin")}</option>
-          <option value="EMPLOYEE">{t("EMPLOYEE")}</option>
-        </select>
-
-        <label>State</label>
-        <input type="text" value={stateUser} readOnly />
-        <label>Status</label>
-        <select value={state} onChange={(e) => setState(e.target.value)} id="status"  style={{ width: "100%", padding: "10px", marginBottom: "15px" }} required>
-          <option value="Active">Active</option>
-          <option value="Inactive">Inactive</option>
-        </select>
-
-        <button type="submit">Save</button>
-      </form>
-    </div>
-    </div>
+                  // Set default role and user type
+                  setRole("NODAL_ADMIN");
+                  setUserType("Nodal User");
+                  setDesignation("Nodal Officer")
+                }}
+                required
+                style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
+              >
+                <option value="">Select Department/Ministry</option>
+                {departments.map((dept) => (
+                  <option key={dept.code} value={dept.code}>
+                    {dept.i18nKey}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="grid-container half-width">
+              <div>
+                <label>Name</label>
+                <input
+                  type="tel"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  maxLength={10}
+                />
+              </div>
+              <div>
+                <label>Mobile Number</label>
+                <input
+                  type="tel"
+                  value={mobileNumber}
+                  onChange={(e) => setMobileNumber(e.target.value)}
+                  required
+                  maxLength={10}
+                />
+              </div>
+              <div>
+                <label>Email ID</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <label>Confirm Email ID</label>
+                <input
+                  type="email"
+                  value={confirmEmail}
+                  onChange={(e) => setConfirmEmail(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <label>User Type/Designation</label>
+                <input
+                  type="text"
+                  value={designation}
+                  readOnly
+                  required
+                />
+              </div>
+              <div>
+                <label>Role</label>
+                <select
+                  id="department"
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  required
+                  style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
+                >
+                  <option value="NODAL_ADMIN">{t("Nodal Admin")}</option>
+                  <option value="EMPLOYEE">{t("EMPLOYEE")}</option>
+                </select>
+              </div>
+              <div>
+                <label>State</label>
+                <input type="text" value={stateUser} readOnly required/>
+              </div>
+              <div>
+                <label>Status</label>
+                <select value={state} onChange={(e) => setState(e.target.value)} id="status" style={{ width: "100%", padding: "10px", marginBottom: "15px" }} required>
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+              </div>
+            </div>
+            <button type="submit"
+              className="submit-button"
+              style={{
+                backgroundColor: "#23316b",
+                color: "white",
+                padding: "10px",
+                width: "300px",
+                borderRadius: "5px",
+                border: "none",
+                cursor: "pointer",
+              }}>Save</button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 };

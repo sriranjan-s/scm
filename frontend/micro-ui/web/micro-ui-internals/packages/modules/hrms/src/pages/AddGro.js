@@ -50,7 +50,7 @@ const AddOffice = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
 
     const payload = {
       department,
@@ -69,71 +69,71 @@ const AddOffice = () => {
       tenantId,
     };
     let Employees = [
-        {
-          tenantId: tenantId,
-          employeeStatus: "EMPLOYED",
-          assignments: [ {
-            "fromDate": new Date().getTime(),
-            "isCurrentAssignment": true,
-            "department": department,
-            "designation": "DESIG_01"
+      {
+        tenantId: tenantId,
+        employeeStatus: "EMPLOYED",
+        assignments: [{
+          "fromDate": new Date().getTime(),
+          "isCurrentAssignment": true,
+          "department": department,
+          "designation": "DESIG_01"
         }],
-          code: undefined,
-          dateOfAppointment: new Date(new Date().setDate(new Date().getDate() - 1)).getTime(),
-          employeeType: "PERMANENT",
-          jurisdictions: [
-            {
-                "hierarchy": "REVENUE",
-                "boundaryType": "City",
-                "boundary": department,
-                "tenantId": department,
-                "roles": [
-                    {
-                        "code": "EMPLOYEE",
-                        "name": "Employee",
-                        "labelKey": "ACCESSCONTROL_ROLES_ROLES_EMPLOYEE",
-                        "tenantId": department
-                    },
-                    {
-                        "code": "GRO",
-                        "name": "Grievance Routing Officer",
-                        "labelKey": "ACCESSCONTROL_ROLES_ROLES_GRO",
-                        "tenantId": department
-                    }
-                ]
-            }
+        code: undefined,
+        dateOfAppointment: new Date(new Date().setDate(new Date().getDate() - 1)).getTime(),
+        employeeType: "PERMANENT",
+        jurisdictions: [
+          {
+            "hierarchy": "REVENUE",
+            "boundaryType": "City",
+            "boundary": department,
+            "tenantId": department,
+            "roles": [
+              {
+                "code": "EMPLOYEE",
+                "name": "Employee",
+                "labelKey": "ACCESSCONTROL_ROLES_ROLES_EMPLOYEE",
+                "tenantId": department
+              },
+              {
+                "code": "GRO",
+                "name": "Grievance Routing Officer",
+                "labelKey": "ACCESSCONTROL_ROLES_ROLES_GRO",
+                "tenantId": department
+              }
+            ]
+          }
         ],
-          user: {
-            mobileNumber: mobile,
-            name: officeHead,
-            correspondenceAddress: address,
-            emailId: email,
-            gender: "MALE",
-            dob: 507254400000,
-            roles:[
-                {
-                    "code": "EMPLOYEE",
-                    "name": "Employee",
-                    "labelKey": "ACCESSCONTROL_ROLES_ROLES_EMPLOYEE",
-                    "tenantId": department
-                },
-                {
-                    "code": "GRO",
-                    "name": "Grievance Routing Officer",
-                    "labelKey": "ACCESSCONTROL_ROLES_ROLES_GRO",
-                    "tenantId": department
-                }
-            ],
-            tenantId: tenantId,
+        user: {
+          mobileNumber: mobile,
+          name: officeHead,
+          correspondenceAddress: address,
+          emailId: email,
+          gender: "MALE",
+          dob: 507254400000,
+          roles: [
+            {
+              "code": "EMPLOYEE",
+              "name": "Employee",
+              "labelKey": "ACCESSCONTROL_ROLES_ROLES_EMPLOYEE",
+              "tenantId": department
+            },
+            {
+              "code": "GRO",
+              "name": "Grievance Routing Officer",
+              "labelKey": "ACCESSCONTROL_ROLES_ROLES_GRO",
+              "tenantId": department
+            }
+          ],
+          tenantId: tenantId,
         },
-          serviceHistory: [],
-          education: [],
-          tests: [],
-        },
-      ];
-        /* use customiseCreateFormData hook to make some chnages to the Employee object */
-        Employees=Digit?.Customizations?.HRMS?.customiseCreateFormData?Digit.Customizations.HRMS.customiseCreateFormData(data,Employees):Employees;
-        navigateToAcknowledgement(Employees)
+        serviceHistory: [],
+        education: [],
+        tests: [],
+      },
+    ];
+    /* use customiseCreateFormData hook to make some chnages to the Employee object */
+    Employees = Digit?.Customizations?.HRMS?.customiseCreateFormData ? Digit.Customizations.HRMS.customiseCreateFormData(data, Employees) : Employees;
+    navigateToAcknowledgement(Employees)
   };
 
   const navigateToAcknowledgement = (Employees) => {
@@ -148,6 +148,32 @@ const AddOffice = () => {
           body {
             font-family: Arial, sans-serif;
             background-color: #f0f4f7;
+          }
+          .grid-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+          }
+
+          @media (min-width: 520px) {
+            .grid-container .half-width {
+              grid-template-columns: repeat(2, 1fr); 
+            }
+          }
+
+          @media (min-width: 768px) {
+            .grid-container {
+              grid-template-columns: 1fr 
+            }
+            .grid-container .half-width {
+              grid-template-columns: repeat(2, 1fr); 
+            }
+            .grid-container .full-width {
+              grid-template-columns: 1fr 
+            }
+            .grid-container .one-third-width {
+              grid-template-columns: repeat(3, 1fr) 
+            }
           }
           .container {
             max-width: 600px;
@@ -190,119 +216,146 @@ const AddOffice = () => {
             color: red;
             margin-bottom: 15px;
           }
+          .submit-button {
+            display: block;
+            width: 50%;
+            margin: 20px auto;
+        }
         `}
       </style>
       <div className="login-container">
         <div className="login-form">
-        <h3 style={{ fontSize: "x-large", color: "#23316b", fontWeight: "bolder" }}>Add GRO</h3>
+          <h3 style={{ fontSize: "x-large", color: "#23316b", fontWeight: "bolder", marginBottom: "25px" }}>Add GRO</h3>
           {showToast && <Toast label="Office added successfully!" />}
           {error && <p className="error">{error}</p>}
-          <form onSubmit={handleSubmit}>
-            <label>Department/Ministry</label>
-            <select
-              value={department}
-              onChange={(e) => {
-                const selectedCode = e.target.value;
-                setDepartment(selectedCode);
-                const selectedDept = departments.find((dept) => dept.code === selectedCode);
-                if (selectedDept) {
-                  setId(selectedDept.id);
-                }
-              }}
-              required
-            >
-              <option value="">Select Department/Ministry</option>
-              {departments.map((dept) => (
-                <option key={dept.code} value={dept.code}>
-                  {dept.i18nKey}
-                </option>
-              ))}
-            </select>
-
-            <label>Name of GRO Officer</label>
-            <input
-              type="text"
-              value={groOfficerName}
-              onChange={(e) => setGroOfficerName(e.target.value)}
-              required
-            />
-
-            <label>Role</label>
-            <select value={role} onChange={(e) => setRole(e.target.value)} required>
-              <option value="">Select Role</option>
-              <option value="GRO User">GRO User</option>
-              <option value="Nodal Appellant Authority">Nodal Appellant Authority</option>
-            </select>
-
-            <label>Office/Section Email ID</label>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-
-            <label>Telephone No.</label>
-            <input type="tel" value={telephone} onChange={(e) => setTelephone(e.target.value)} required />
-
-            <label>Mobile Number</label>
-            <input type="tel" value={mobile} onChange={(e) => setMobile(e.target.value)} required />
-
-            <label>Office Head Name</label>
-            <input type="text" value={officeHead} onChange={(e) => setOfficeHead(e.target.value)} required />
-
-            <label>Office Address Details</label>
-            <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} />
-
-            <div style={{ marginBottom: "15px" }}>
-          <label htmlFor="pinCode">PIN Code:</label>
-          <input
-            type="text"
-            id="pinCode"
-            value={pinCode}
-            onChange={(e) => setPinCode(e.target.value)}
-            onBlur={fetchLocationDetails}
-            required
-          />
-          {error && <p style={{ color: "red" }}>{error}</p>}
-        </div>
-
-  <div>
-      <div>
-                      <label htmlFor="pinCode">Sub-District:</label>
-          <input
-            type="text"
-            id="pinCode"
-            value={locationDetails.subDistrict}
-           // onChange={(e) => setPinCode(e.target.value)}
-            //={fetchLocationDetails}
-            required
-          />
-      </div>
-      <div>
-                      <label htmlFor="pinCode">District:</label>
-          <input
-            type="text"
-            id="pinCode"
-            value={locationDetails.district}
-           // onChange={(e) => setPinCode(e.target.value)}
-            //={fetchLocationDetails}
-            required
-          />
-      </div>
-      <div>
-                      <label htmlFor="pinCode">State:</label>
-          <input
-            type="text"
-            id="pinCode"
-            value={locationDetails.state}
-           // onChange={(e) => setPinCode(e.target.value)}
-            //={fetchLocationDetails}
-            required
-          />
-      </div>
-  </div>            <label>Status</label>
-            <select value={state} onChange={(e) => setState(e.target.value)} required>
-              <option value="Active">Active</option>
-              <option value="Inactive">Inactive</option>
-            </select>
-
-            <button type="submit">Save</button>
+          <form onSubmit={handleSubmit} className="grid-container">
+            <div>
+              <label>Department/Ministry</label>
+              <select
+                value={department}
+                onChange={(e) => {
+                  const selectedCode = e.target.value;
+                  setDepartment(selectedCode);
+                  const selectedDept = departments.find((dept) => dept.code === selectedCode);
+                  if (selectedDept) {
+                    setId(selectedDept.id);
+                  }
+                }}
+                required
+                style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
+              >
+                <option value="">Select Department/Ministry</option>
+                {departments.map((dept) => (
+                  <option key={dept.code} value={dept.code}>
+                    {dept.i18nKey}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label>Name of GRO Officer</label>
+              <input
+                type="text"
+                value={groOfficerName}
+                onChange={(e) => setGroOfficerName(e.target.value)}
+                required
+                style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
+              />
+            </div>
+            <div className="grid-container half-width">
+              <div>
+                <label>Role</label>
+                <select value={role} onChange={(e) => setRole(e.target.value)} required>
+                  <option value="">Select Role</option>
+                  <option value="GRO User">GRO User</option>
+                  <option value="Nodal Appellant Authority">Nodal Appellant Authority</option>
+                </select>
+              </div>
+              <div>
+                <label>Office/Section Email ID</label>
+                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+              </div>
+              <div>
+                <label>Telephone No.</label>
+                <input type="tel" value={telephone} onChange={(e) => setTelephone(e.target.value)} required />
+              </div>
+              <div>
+                <label>Mobile Number</label>
+                <input type="tel" value={mobile} onChange={(e) => setMobile(e.target.value)} required />
+              </div>
+              <div>
+                <label>Office Head Name</label>
+                <input type="text" value={officeHead} onChange={(e) => setOfficeHead(e.target.value)} required />
+              </div>
+              <div>
+                <label>Office Address Details</label>
+                <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} required/>
+              </div>
+              <div>
+                <label htmlFor="pinCode">PIN Code:</label>
+                <input
+                  type="text"
+                  id="pinCode"
+                  value={pinCode}
+                  onChange={(e) => setPinCode(e.target.value)}
+                  onBlur={fetchLocationDetails}
+                  required
+                />
+                {error && <p style={{ color: "red" }}>{error}</p>}
+              </div>
+              <div>
+                <label htmlFor="pinCode">Sub-District:</label>
+                <input
+                  type="text"
+                  id="pinCode"
+                  value={locationDetails.subDistrict}
+                  // onChange={(e) => setPinCode(e.target.value)}
+                  //={fetchLocationDetails}
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="pinCode">District:</label>
+                <input
+                  type="text"
+                  id="pinCode"
+                  value={locationDetails.district}
+                  // onChange={(e) => setPinCode(e.target.value)}
+                  //={fetchLocationDetails}
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="pinCode">State:</label>
+                <input
+                  type="text"
+                  id="pinCode"
+                  value={locationDetails.state}
+                  // onChange={(e) => setPinCode(e.target.value)}
+                  //={fetchLocationDetails}
+                  required
+                />
+              </div>
+            </div>
+            <div>
+              <label>Status</label>
+              <select value={state} onChange={(e) => setState(e.target.value)} required>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+            </div>
+            <button
+              type="submit"
+              className="submit-button"
+              style={{
+                backgroundColor: "#23316b",
+                color: "white",
+                padding: "10px",
+                width: "300px",
+                borderRadius: "5px",
+                border: "none",
+                cursor: "pointer",
+              }}>Save</button>
           </form>
         </div>
       </div>
