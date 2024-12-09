@@ -136,7 +136,7 @@ const Home = ({
       </React.Fragment>
     );
   });
-
+console.log("insidee")
   return (
     <div className={classname}>
       <TopBarSideBar
@@ -156,7 +156,7 @@ const Home = ({
       <div className={`main center-container citizen-home-container mb-25`} style={{paddingTop:"0px"}}>
         {hideSidebar ? null : (
           <div className="SideBarStatic">
-            <StaticCitizenSideBar linkData={linkData} islinkDataLoading={islinkDataLoading} />
+            <StaticCitizenSideBar linkData={""} islinkDataLoading={islinkDataLoading} />
           </div>
         )}
 
@@ -168,9 +168,9 @@ const Home = ({
           <PrivateRoute path={`${path}/feedback`} component={CitizenFeedback}></PrivateRoute>
           <PrivateRoute path={`${path}/feedback-acknowledgement`} component={AcknowledgementCF}></PrivateRoute>
 
-          <Route exact path={`${path}/select-language`}>
+          {/* <Route exact path={`${path}/select-language`}>
             <LanguageSelection />
-          </Route>
+          </Route> */}
 
           <Route exact path={`${path}/select-location`}>
             <LocationSelection />
@@ -214,12 +214,29 @@ const Home = ({
           </ErrorBoundary>
         </Switch>
       </div>
-      <div className="citizen-home-footer" style={window.location.href.includes("citizen/obps") ? { zIndex: "-1", backgroundColor:"#23316b",height:"100%",color:"white" } : {backgroundColor:"#23316b",height:"100%",color:"white",position:"fixed"}}>
+      {/* <div className="citizen-home-footer" style={window.location.href.includes("citizen/obps") ? { zIndex: "-1", backgroundColor:"#23316b",height:"100%",color:"white" } : {backgroundColor:"#23316b",height:"100%",color:"white",position:"fixed"}}>
       <footer className="footer" style={{textAlign:"center"}}>
                 <p>An initiative by Department of Administrative Reforms & Public Grievances (DARPG)</p>
                 <p>Disclaimer | Website Policies | Web Information Manager</p>
-                {/* <p>Copyright ©2024 Last Updated On: 30-08-2024</p> */}
-            </footer>
+                <p>Copyright ©2024 Last Updated On: 30-08-2024</p> 
+      </footer>
+      </div> */}
+      <div
+        style={{
+          backgroundColor: '#23316b',
+          color: 'white',
+          textAlign: 'center',
+          padding: '10px 0',
+          position: 'relative',
+          bottom: '0',
+          width: '100%',
+          marginTop: '130px',
+        }}
+      >
+        <footer>
+          <p>An initiative by Department of Administrative Reforms & Public Grievances (DARPG)</p>
+          <p>Disclaimer | Website Policies | Web Information Manager</p>
+        </footer>
       </div>
     </div>
   );
