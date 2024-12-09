@@ -50,10 +50,7 @@ const AddOffice = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!telephone.match(/^\d{10}$/) || !mobile.match(/^\d{10}$/)) {
-      setError("Invalid telephone or mobile number!");
-      return;
-    }
+  
 
     const payload = {
       department,
@@ -71,35 +68,77 @@ const AddOffice = () => {
       groOfficerName,
       tenantId,
     };
-    let offices = [
-      {
-        tenantId: "pg",
-        organizationId: id,
-        code: department + "." + officeName,
-        name: officeName,
-        description: "Office1",
-        emailId: email,
-        telephoneNumber: telephone,
-        mobileNumber: mobile,
-        HeadOfficeCode: null,
-        officeAddress: address,
-        district: locationDetails?.district,
-        subDistrict: locationDetails?.subDistrict,
-        state: locationDetails?.state,
-        pin: pinCode,
-        status: state,
-        headOffice: true,
-        groOfficerName,
-        userType,
-      },
-    ];
-    navigateToAcknowledgement(offices);
+    let Employees = [
+        {
+          tenantId: tenantId,
+          employeeStatus: "EMPLOYED",
+          assignments: [ {
+            "fromDate": new Date().getTime(),
+            "isCurrentAssignment": true,
+            "department": department,
+            "designation": "DESIG_01"
+        }],
+          code: undefined,
+          dateOfAppointment: new Date(new Date().setDate(new Date().getDate() - 1)).getTime(),
+          employeeType: "PERMANENT",
+          jurisdictions: [
+            {
+                "hierarchy": "REVENUE",
+                "boundaryType": "City",
+                "boundary": department,
+                "tenantId": department,
+                "roles": [
+                    {
+                        "code": "EMPLOYEE",
+                        "name": "Employee",
+                        "labelKey": "ACCESSCONTROL_ROLES_ROLES_EMPLOYEE",
+                        "tenantId": department
+                    },
+                    {
+                        "code": "GRO",
+                        "name": "Grievance Routing Officer",
+                        "labelKey": "ACCESSCONTROL_ROLES_ROLES_GRO",
+                        "tenantId": department
+                    }
+                ]
+            }
+        ],
+          user: {
+            mobileNumber: mobile,
+            name: officeHead,
+            correspondenceAddress: address,
+            emailId: email,
+            gender: "MALE",
+            dob: 507254400000,
+            roles:[
+                {
+                    "code": "EMPLOYEE",
+                    "name": "Employee",
+                    "labelKey": "ACCESSCONTROL_ROLES_ROLES_EMPLOYEE",
+                    "tenantId": department
+                },
+                {
+                    "code": "GRO",
+                    "name": "Grievance Routing Officer",
+                    "labelKey": "ACCESSCONTROL_ROLES_ROLES_GRO",
+                    "tenantId": department
+                }
+            ],
+            tenantId: tenantId,
+        },
+          serviceHistory: [],
+          education: [],
+          tests: [],
+        },
+      ];
+        /* use customiseCreateFormData hook to make some chnages to the Employee object */
+        Employees=Digit?.Customizations?.HRMS?.customiseCreateFormData?Digit.Customizations.HRMS.customiseCreateFormData(data,Employees):Employees;
+        navigateToAcknowledgement(Employees)
   };
 
-  const navigateToAcknowledgement = (offices) => {
-    history.replace("/digit-ui/employee/hrms/response", { offices, key: "office" });
-  };
-
+  const navigateToAcknowledgement = (Employees) => {
+    history.replace("/digit-ui/employee/hrms/response", { Employees, key: "CREATE", action: "CREATE" });
+  }
   if (isLoading) return <Loader />;
 
   return (
