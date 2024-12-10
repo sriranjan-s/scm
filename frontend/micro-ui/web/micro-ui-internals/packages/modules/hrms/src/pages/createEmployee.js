@@ -1,4 +1,4 @@
-import { FormComposer, Toast ,Loader, Header} from "@upyog/digit-ui-react-components";
+import { FormComposer, Toast, Loader, Header } from "@upyog/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
@@ -31,7 +31,7 @@ const CreateEmployee = () => {
   const history = useHistory();
   const isMobile = window.Digit.Utils.browser.isMobile();
   //const Department =  window.Digit.SessionStorage.get("departments");
- const { data: mdmsData,isLoading } = Digit.Hooks.useCommonMDMS(Digit.ULBService.getStateId(), "egov-hrms",["CommonFieldsConfig"] ,{
+  const { data: mdmsData, isLoading } = Digit.Hooks.useCommonMDMS(Digit.ULBService.getStateId(), "egov-hrms", ["CommonFieldsConfig"], {
     select: (data) => {
       return {
         config: data?.MdmsRes?.['egov-hrms']?.CommonFieldsConfig
@@ -49,10 +49,10 @@ const CreateEmployee = () => {
     clearSuccessData();
     clearError();
   }, []);
-useEffect(() =>{
-  setDept(departmentDropdown)
-  console.log("deptdept33",dept,departmentDropdown)
-},[departmentDropdown])
+  useEffect(() => {
+    setDept(departmentDropdown)
+    console.log("deptdept33", dept, departmentDropdown)
+  }, [departmentDropdown])
   const checkMailNameNum = (formData) => {
 
     const email = formData?.SelectEmployeeEmailId?.emailId || '';
@@ -166,10 +166,65 @@ useEffect(() =>{
     }
   };
 
+  const onSubmit = (data) => {
+    if (data.Jurisdictions.filter(juris => juris.tenantId == tenantId).length == 0) {
+      setShowToast({ key: true, label: "ERR_BASE_TENANT_MANDATORY" });
+      return;
+    }
+    if (!Object.values(data.Jurisdictions.reduce((acc, sum) => {
+      if (sum && sum?.tenantId) {
+        acc[sum.tenantId] = acc[sum.tenantId] ? acc[sum.tenantId] + 1 : 1;
+      }
+      return acc;
+    }, {})).every(s => s == 1)) {
+      setShowToast({ key: true, label: "ERR_INVALID_JURISDICTION" });
+      return;
+    }
+    let roles = data?.Jurisdictions?.map((ele) => {
+      return ele.roles?.map((item) => {
+        item["tenantId"] = ele.boundary;
+        return item;
+      });
+    });
+
+    const mappedroles = [].concat.apply([], roles);
+    let Employees = [
+      {
+        "tenantId": "pg",
+        "code": "pg.health",
+        "name": headName,
+        "description": "fgsg gdsg ",
+        "hod": null,
+        "emailId": email,
+        "telephoneNumber": telephone,
+        "address": address,
+        "district": locationDetails?.district,
+        "subDistrict": locationDetails?.subDistrict,
+        "state": locationDetails?.state,
+        "pin": pinCode,
+        "status": "ACTIVE"
+      },
+    ];
+    /* use customiseCreateFormData hook to make some chnages to the Employee object */
+    Employees = Digit?.Customizations?.HRMS?.customiseCreateFormData ? Digit.Customizations.HRMS.customiseCreateFormData(data, Employees) : Employees;
+
+    if (data?.SelectEmployeeId?.code && data?.SelectEmployeeId?.code?.trim().length > 0) {
+      Digit.HRMSService.search(tenantId, null, { codes: data?.SelectEmployeeId?.code }).then((result, err) => {
+        if (result.Employees.length > 0) {
+          setShowToast({ key: true, label: "ERR_HRMS_USER_EXIST_ID" });
+          return;
+        } else {
+          navigateToAcknowledgement(Employees);
+        }
+      });
+    } else {
+      navigateToAcknowledgement(Employees);
+    }
+  };
   if (isLoading) {
     return <Loader />;
   }
-  const config =mdmsData?.config?mdmsData.config: newConfig;
+  const config = mdmsData?.config ? mdmsData.config : newConfig;
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle form submission logic
@@ -197,21 +252,48 @@ useEffect(() =>{
             "state": locationDetails?.state,
             "pin": pinCode,
             "status": "ACTIVE"
+
       },
     ];
-    console.log("employee",organizations)
+    console.log("employee", organizations)
     navigateToAcknowledgement(organizations)
   }
-  console.log("deptdept",dept)
+  console.log("deptdept", dept)
   return (
     <div>
-        <style>
-          {`
+      <style>
+        {`
                 body {
                     font-family: Arial, sans-serif;
                     background-color: #f0f4f7;
                     margin: 0;
                     padding: 0;
+                }
+                .grid-container {
+                  display: grid;
+                  grid-template-columns: 1fr;
+                  gap: 16px;
+                }
+
+                @media (min-width: 520px) {
+                  .grid-container .half-width {
+                    grid-template-columns: repeat(2, 1fr); 
+                  }
+                }
+
+                @media (min-width: 768px) {
+                  .grid-container {
+                    grid-template-columns: 1fr 
+                  }
+                  .grid-container .half-width {
+                    grid-template-columns: repeat(2, 1fr); 
+                  }
+                  .grid-container .full-width {
+                    grid-template-columns: 1fr 
+                  }
+                  .grid-container .one-third-width {
+                    grid-template-columns: repeat(3, 1fr) 
+                  }
                 }
                 
                 .login-container {
@@ -325,8 +407,6 @@ useEffect(() =>{
     </option>
   ))}
 </select>
-
-
           <label htmlFor="email" style={{ color: "#23316b" }}>
             Department/Ministry Email ID
           </label>
@@ -339,123 +419,161 @@ useEffect(() =>{
             style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
           />
 
-          <label htmlFor="telephone" style={{ color: "#23316b" }}>
-            Telephone Number
-          </label>
-          <input
-            type="tel"
-            id="telephone"
-            value={telephone}
-            onChange={(e) => setTelephone(e.target.value)}
-            required
-            style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
-          />
 
-          <label htmlFor="headName" style={{ color: "#23316b" }}>
-            Department/Ministry Head Name
-          </label>
-          <input
-            type="text"
-            id="headName"
-            value={hod}
-            onChange={(e) => setHod(e.target.value)}
-            required
-            style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
-          />
+            <div>
+              <label htmlFor="department" style={{ color: "#23316b", display: "block" }}>
+                Department/Ministry
+              </label>
+              <select
+                id="department"
+                value={department}
+                onChange={(e) => setDepartment(e.target.value)}
+                required
+                style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
+              >
+                <option value="">Select Department/Ministry</option>
+                {dept?.map((dep) => (
+                  <option key={dep?.code} value={dep?.code}>
+                    {dep?.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="grid-container half-width">
+              <div>
+                <label htmlFor="email" style={{ color: "#23316b" }}>
+                  Department/Ministry Email ID
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
+                />
+              </div>
+              <div>
+                <label htmlFor="telephone" style={{ color: "#23316b" }}>
+                  Telephone Number
+                </label>
+                <input
+                  type="tel"
+                  id="telephone"
+                  value={telephone}
+                  onChange={(e) => setTelephone(e.target.value)}
+                  required
+                  style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
+                />
+              </div>
+            </div>
+            <div>
+              <label htmlFor="headName" style={{ color: "#23316b" }}>
+                Department/Ministry Head Name
+              </label>
+              <input
+                type="text"
+                id="headName"
+                value={headName}
+                onChange={(e) => setHeadName(e.target.value)}
+                required
+                style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
+              />
+            </div>
+            <div className="grid-container full-width">
+              <label htmlFor="address" style={{ color: "#23316b" }}>
+                Department/Ministry Address Details
+              </label>
+              <textarea
+                id="address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                required
+                rows="3"
+                style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
+              ></textarea>
+            </div>
+            <div className="grid-container half-width" >
+              <div style={{ marginBottom: "15px" }}>
+                <label htmlFor="pinCode">PIN Code:</label>
+                <input
+                  type="text"
+                  id="pinCode"
+                  value={pinCode}
+                  onChange={(e) => setPinCode(e.target.value)}
+                  onBlur={fetchLocationDetails}
+                  required
+                />
+                {error && <p style={{ color: "red" }}>{error}</p>}
+              </div>
+              <div>
+                <label htmlFor="pinCode">Sub-District:</label>
+                <input
+                  type="text"
+                  id="pinCode"
+                  value={locationDetails.subDistrict}
+                  // onChange={(e) => setPinCode(e.target.value)}
+                  //={fetchLocationDetails}
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="pinCode">District:</label>
+                <input
+                  type="text"
+                  id="pinCode"
+                  value={locationDetails.district}
+                  // onChange={(e) => setPinCode(e.target.value)}
+                  //={fetchLocationDetails}
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="pinCode">State:</label>
+                <input
+                  type="text"
+                  id="pinCode"
+                  value={locationDetails.state}
+                  // onChange={(e) => setPinCode(e.target.value)}
+                  //={fetchLocationDetails}
+                  required
+                />
+              </div>
+            </div>
+            <div>
+              <label htmlFor="status" style={{ color: "#23316b" }}>
+                Status
+              </label>
+              <select
+                id="status"
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+                required
+                style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
+              >
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+            </div>
 
-          <label htmlFor="address" style={{ color: "#23316b" }}>
-            Department/Ministry Address Details
-          </label>
-          <textarea
-            id="address"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            required
-            rows="3"
-            style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
-          ></textarea>
-
-<div style={{ marginBottom: "15px" }}>
-          <label htmlFor="pinCode">PIN Code:</label>
-          <input
-            type="text"
-            id="pinCode"
-            value={pinCode}
-            onChange={(e) => setPinCode(e.target.value)}
-            onBlur={fetchLocationDetails}
-            required
-          />
-          {error && <p style={{ color: "red" }}>{error}</p>}
+            <button
+              type="submit"
+              className="submit-button"
+              style={{
+                backgroundColor: "#23316b",
+                color: "white",
+                padding: "10px",
+                width: "300px",
+                borderRadius: "5px",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              Save
+            </button>
+          </form>
         </div>
-
-  <div>
-      <div>
-                      <label htmlFor="pinCode">Sub-District:</label>
-          <input
-            type="text"
-            id="pinCode"
-            value={locationDetails.subDistrict}
-           // onChange={(e) => setPinCode(e.target.value)}
-            //={fetchLocationDetails}
-            required
-          />
       </div>
-      <div>
-                      <label htmlFor="pinCode">District:</label>
-          <input
-            type="text"
-            id="pinCode"
-            value={locationDetails.district}
-           // onChange={(e) => setPinCode(e.target.value)}
-            //={fetchLocationDetails}
-            required
-          />
-      </div>
-      <div>
-                      <label htmlFor="pinCode">State:</label>
-          <input
-            type="text"
-            id="pinCode"
-            value={locationDetails.state}
-           // onChange={(e) => setPinCode(e.target.value)}
-            //={fetchLocationDetails}
-            required
-          />
-      </div>
-  </div>
-
-          <label htmlFor="status" style={{ color: "#23316b" }}>
-            Status
-          </label>
-          <select
-            id="status"
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-            required
-            style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
-          >
-            <option value="Active">Active</option>
-            <option value="Inactive">Inactive</option>
-          </select>
-
-          <button
-            type="submit"
-            className="submit-button"
-            style={{
-              backgroundColor: "#23316b",
-              color: "white",
-              padding: "10px",
-              width: "100%",
-              borderRadius: "5px",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            Save
-          </button>
-        </form>
-      </div>
-    </div>
     </div>
   );
 };
