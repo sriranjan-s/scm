@@ -22,7 +22,7 @@ export const Complaint = {
       service: {
         tenantId: cityCode,
         serviceCode: complaintType,
-        priority : priorityLevel.code,
+        priority : priorityLevel,
         description: description,
         additionalDetail: {},
         source: Digit.Utils.browser.isWebview() ? "mobile" : "web",
@@ -33,10 +33,6 @@ export const Complaint = {
           region: region,
           state: state,
           pincode: pincode,
-          locality: {
-            code: localityCode,
-            name: localityName,
-          },
           geoLocation: {},
         },
       },

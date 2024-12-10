@@ -6,9 +6,52 @@ import SelectLandmark from "./Steps/SelectLandmark";
 import SelectPincode from "./Steps/SelectPincode";
 import SelectSubType from "./Steps/SelectSubType";
 import SelectGeolocation from "./Steps/SelectGeolocation";
-
+import GrievanceInfo from "./Steps/GrievanceInfo";
+import MinistrySelector from "./Steps/MinistrySelector";
+import NewGriveance from "./Steps/NewGriveance";
+import PersonalDetailsForm from "./Steps/GrievanceDetails";
 export const config = {
   routes: {
+    "grievance-info": {
+      component: GrievanceInfo,
+      texts: {
+        headerCaption: "",
+        // header: "CS_ADDCOMPLAINT_COMPLAINT_TYPE_PLACEHOLDER",
+        // cardText: "CS_COMPLAINT_TYPE_TEXT",
+        // submitBarLabel: "CS_COMMON_NEXT",
+      },
+      nextStep: "ministry-selector",
+    },
+    "ministry-selector": {
+      component: MinistrySelector,
+      texts: {
+        headerCaption: "",
+        // header: "CS_ADDCOMPLAINT_COMPLAINT_TYPE_PLACEHOLDER",
+        // cardText: "CS_COMPLAINT_TYPE_TEXT",
+        // submitBarLabel: "CS_COMMON_NEXT",
+      },
+      nextStep: "newGriveance",
+    },
+    "newGriveance": {
+      component: NewGriveance,
+      texts: {
+        headerCaption: "",
+        // header: "CS_ADDCOMPLAINT_COMPLAINT_TYPE_PLACEHOLDER",
+        // cardText: "CS_COMPLAINT_TYPE_TEXT",
+        // submitBarLabel: "CS_COMMON_NEXT",
+      },
+      nextStep: "griveanceDetails",
+    },
+    "griveanceDetails": {
+      component: PersonalDetailsForm,
+      texts: {
+        headerCaption: "",
+        // header: "CS_ADDCOMPLAINT_COMPLAINT_TYPE_PLACEHOLDER",
+        // cardText: "CS_COMPLAINT_TYPE_TEXT",
+        // submitBarLabel: "CS_COMMON_NEXT",
+      },
+      nextStep: "complaint-type",
+    },
     "complaint-type": {
       component: SelectComplaintType,
       texts: {
@@ -110,5 +153,5 @@ export const config = {
       nextStep: null,
     },
   },
-  indexRoute: "complaint-type",
+  indexRoute: "grievance-info",
 };

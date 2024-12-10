@@ -56,7 +56,7 @@ const CreateDepartment = () => {
         employeeType: "PERMANENT",
         jurisdictions: [
           {
-              "hierarchy": "REVENUE",
+              "hierarchy": "ADMIN",
               "boundaryType": "City",
               "boundary": department,
               "tenantId": department,
@@ -87,9 +87,15 @@ const CreateDepartment = () => {
             "code": "EMPLOYEE",
             "name": "Employee",
             "labelKey": role,
-            "tenantId": "pg.citya"
-        }],
-          tenantId: tenantId,
+            "tenantId": department
+        },
+        {
+          "code": role,
+          "name": role,
+          "labelKey": role,
+          "tenantId": department
+      }],
+          tenantId: department,
         },
         serviceHistory: [],
         education: [],

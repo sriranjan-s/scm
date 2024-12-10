@@ -14,6 +14,7 @@ const CreateEmployee = () => {
   const [departmentDropdown, setDepartmentDropdown] = useState(window.Digit.SessionStorage.get("initData").departments || []);
   const [email, setEmail] = useState("");
   const [department, setDepartment] = useState("")
+  const [hod, setHod] = useState("")
   const [telephone, setTelephone] = useState("");
   const [headName, setHeadName] = useState("");
   const [address, setAddress] = useState("");
@@ -165,61 +166,6 @@ useEffect(() =>{
     }
   };
 
-  const onSubmit = (data) => {
-    if (data.Jurisdictions.filter(juris => juris.tenantId == tenantId).length == 0) {
-      setShowToast({ key: true, label: "ERR_BASE_TENANT_MANDATORY" });
-      return;
-    }
-    if (!Object.values(data.Jurisdictions.reduce((acc, sum) => {
-      if (sum && sum?.tenantId) {
-        acc[sum.tenantId] = acc[sum.tenantId] ? acc[sum.tenantId] + 1 : 1;
-      }
-      return acc;
-    }, {})).every(s => s == 1)) {
-      setShowToast({ key: true, label: "ERR_INVALID_JURISDICTION" });
-      return;
-    }
-    let roles = data?.Jurisdictions?.map((ele) => {
-      return ele.roles?.map((item) => {
-        item["tenantId"] = ele.boundary;
-        return item;
-      });
-    });
-
-    const mappedroles = [].concat.apply([], roles);
-    let Employees = [
-      {
-            "tenantId": "pg",
-            "code": "pg.health",
-            "name": headName,
-            "description": "fgsg gdsg ",
-            "hod": null,
-            "emailId": email,
-            "telephoneNumber": telephone,
-            "address": address,
-            "district": locationDetails?.district,
-            "subDistrict": locationDetails?.subDistrict,
-            "state": locationDetails?.state,
-            "pin": pinCode,
-            "status": "ACTIVE"
-      },
-    ];
-      /* use customiseCreateFormData hook to make some chnages to the Employee object */
-      Employees=Digit?.Customizations?.HRMS?.customiseCreateFormData?Digit.Customizations.HRMS.customiseCreateFormData(data,Employees):Employees;
-
-    if (data?.SelectEmployeeId?.code && data?.SelectEmployeeId?.code?.trim().length > 0) {
-      Digit.HRMSService.search(tenantId, null, { codes: data?.SelectEmployeeId?.code }).then((result, err) => {
-        if (result.Employees.length > 0) {
-          setShowToast({ key: true, label: "ERR_HRMS_USER_EXIST_ID" });
-          return;
-        } else {
-          navigateToAcknowledgement(Employees);
-        }
-      });
-    } else {
-      navigateToAcknowledgement(Employees);
-    }
-  };
   if (isLoading) {
     return <Loader />;
   }
@@ -241,8 +187,8 @@ useEffect(() =>{
             "tenantId": "pg",
             "code": department,
             "name": headName,
-            "description": "fgsg gdsg ",
-            "hod": null,
+            "description": "",
+            "hod": hod,
             "emailId": email,
             "telephoneNumber": telephone,
             "address": address,
@@ -341,7 +287,7 @@ useEffect(() =>{
                 }
                 #department {
                   border: 1px solid #ccc;
-    border-radius: 5px;
+                  border-radius: 5px;
                 }
                 #address{
                   border: 1px solid #ccc;
@@ -365,13 +311,16 @@ useEffect(() =>{
           <select
   id="department"
   value={department}
-  onChange={(e) => setDepartment(e.target.value)}
+  onChange={(e) => {
+    setDepartment(e.target.value.code)
+    setHeadName(e.target.value.name)
+  }}
   required
   style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
 >
   <option value="">Select Department/Ministry</option>
   {dept?.map((dep) => (
-    <option key={dep?.code} value={dep?.code}>
+    <option key={dep?.code} value={dep}>
       {dep?.name}
     </option>
   ))}
@@ -408,8 +357,8 @@ useEffect(() =>{
           <input
             type="text"
             id="headName"
-            value={headName}
-            onChange={(e) => setHeadName(e.target.value)}
+            value={hod}
+            onChange={(e) => setHod(e.target.value)}
             required
             style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
           />

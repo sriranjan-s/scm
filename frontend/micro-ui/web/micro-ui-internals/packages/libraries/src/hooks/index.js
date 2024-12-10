@@ -45,6 +45,7 @@ import useEmployeeFilter from "./pgr/useEmployeeFilter";
 import useInboxData from "./pgr/useInboxData";
 import useLocalities from "./pgr/useLocalities";
 import useServiceDefs from "./pgr/useServiceDefs";
+import useInputDefs from "./pgr/useInputDef";
 import usePGRTenants from "./pgr/useTenants";
 import usePGRMDMS from "./pgr/useMDMS";
 import useComplaintSubType from "./pgr/useComplaintSubType";
@@ -288,6 +289,7 @@ const pgr = {
   useInboxData,
   useLocalities,
   useServiceDefs,
+  useInputDefs,
   useTenants: usePGRTenants,
   useComplaintSubType,
   usePropertyMDMS,

@@ -6,6 +6,7 @@ import CreateDepartment from "./createDeparment";
 import AddHeadOfDepartment from "./createHOD"
 import AddOffice from "./AddOffice";
 import AddGro from "./AddGro"
+import ViewOrg from "./ViewOrg";
 const EmployeeApp = ({ path, url, userType }) => {
   const { t } = useTranslation();
   const location = useLocation();
@@ -43,7 +44,7 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute path={`${path}/createDepartment`} component={() => <CreateDepartment />} />
           <PrivateRoute path={`${path}/createOffice`} component={() => <AddOffice />} />
           <PrivateRoute path={`${path}/createGro`} component={() => <AddGro />} />
-          
+          <PrivateRoute path={`${path}/viewOrg`} component={() => <ViewOrg />} />
           <PrivateRoute path={`${path}/response`} component={(props) => <HRMSResponse {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/details/:tenantId/:id`} component={() => <HRMSDetails />} />
           <PrivateRoute path={`${path}/edit/:tenantId/:id`} component={() => <EditEmpolyee />} />
