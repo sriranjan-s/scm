@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 
 const { useState, useEffect } = require("react");
 
-const useServiceDefs = (tenantId, moduleCode) => {
+const useServiceDefs = (tenantId, moduleCode,modules) => {
   const [localMenu, setLocalMenu] = useState([]);
   const SessionStorage = Digit.SessionStorage;
   let { t } = useTranslation();

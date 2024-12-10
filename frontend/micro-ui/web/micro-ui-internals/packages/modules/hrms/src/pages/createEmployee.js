@@ -14,6 +14,7 @@ const CreateEmployee = () => {
   const [departmentDropdown, setDepartmentDropdown] = useState(window.Digit.SessionStorage.get("initData").departments || []);
   const [email, setEmail] = useState("");
   const [department, setDepartment] = useState("")
+  const [hod, setHod] = useState("")
   const [telephone, setTelephone] = useState("");
   const [headName, setHeadName] = useState("");
   const [address, setAddress] = useState("");
@@ -238,19 +239,20 @@ const CreateEmployee = () => {
     });
     let organizations = [
       {
-        "tenantId": "pg",
-        "code": department,
-        "name": headName,
-        "description": "fgsg gdsg ",
-        "hod": null,
-        "emailId": email,
-        "telephoneNumber": telephone,
-        "address": address,
-        "district": locationDetails?.district,
-        "subDistrict": locationDetails?.subDistrict,
-        "state": locationDetails?.state,
-        "pin": pinCode,
-        "status": "ACTIVE"
+            "tenantId": "pg",
+            "code": department,
+            "name": headName,
+            "description": "",
+            "hod": hod,
+            "emailId": email,
+            "telephoneNumber": telephone,
+            "address": address,
+            "district": locationDetails?.district,
+            "subDistrict": locationDetails?.subDistrict,
+            "state": locationDetails?.state,
+            "pin": pinCode,
+            "status": "ACTIVE"
+
       },
     ];
     console.log("employee", organizations)
@@ -367,7 +369,7 @@ const CreateEmployee = () => {
                 }
                 #department {
                   border: 1px solid #ccc;
-    border-radius: 5px;
+                  border-radius: 5px;
                 }
                 #address{
                   border: 1px solid #ccc;
@@ -378,13 +380,45 @@ const CreateEmployee = () => {
                   border-radius: 5px;
                 }
                 `}
-      </style>
-      <div className="login-container" style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
-        <div className="login-form" style={{ width: "100%", padding: "0 5%" }}>
-          <h3 style={{ fontSize: "x-large", color: "#23316b", fontWeight: "bolder", marginBottom: "25px" }}>
-            Add Organization
-          </h3>
-          <form onSubmit={handleSubmit} className="grid-container">
+        </style>
+<div className="login-container" style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+      <div className="login-form" style={{ width: "100%", padding: "0 5%" }}>
+        <h3 style={{ fontSize: "x-large", color: "#23316b", fontWeight: "bolder" }}>
+          Add Organization
+        </h3>
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="department" style={{ color: "#23316b" }}>
+            Department/Ministry
+          </label>
+          <select
+  id="department"
+  value={department}
+  onChange={(e) => {
+    setDepartment(e.target.value.code)
+    setHeadName(e.target.value.name)
+  }}
+  required
+  style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
+>
+  <option value="">Select Department/Ministry</option>
+  {dept?.map((dep) => (
+    <option key={dep?.code} value={dep}>
+      {dep?.name}
+    </option>
+  ))}
+</select>
+          <label htmlFor="email" style={{ color: "#23316b" }}>
+            Department/Ministry Email ID
+          </label>
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
+          />
+
 
             <div>
               <label htmlFor="department" style={{ color: "#23316b", display: "block" }}>
@@ -433,7 +467,6 @@ const CreateEmployee = () => {
                 />
               </div>
             </div>
-
             <div>
               <label htmlFor="headName" style={{ color: "#23316b" }}>
                 Department/Ministry Head Name

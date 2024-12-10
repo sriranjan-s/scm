@@ -22,7 +22,7 @@ const HRMSCard = () => {
             },
             {
                 label: t("View Organization"),
-                link: `/digit-ui/employee/hrms/inbox`
+                link: `/digit-ui/employee/hrms/viewOrg`
             },
             {
                 label: t("Add Ministry/Department"),

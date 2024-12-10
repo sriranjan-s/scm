@@ -56,24 +56,24 @@ const CreateDepartment = () => {
         employeeType: "PERMANENT",
         jurisdictions: [
           {
-            "hierarchy": "REVENUE",
-            "boundaryType": "City",
-            "boundary": department,
-            "tenantId": department,
-            "roles": [
-              {
-                "code": role,
-                "name": role,
-                "labelKey": role,
-                "tenantId": department
-              },
-              {
-                "code": "EMPLOYEE",
-                "name": "Employee",
-                "labelKey": "ACCESSCONTROL_ROLES_ROLES_EMPLOYEE",
-                "tenantId": department
-              }
-            ]
+              "hierarchy": "ADMIN",
+              "boundaryType": "City",
+              "boundary": department,
+              "tenantId": department,
+              "roles": [
+                  {
+                      "code": role,
+                      "name": role,
+                      "labelKey": role,
+                      "tenantId": department
+                  },
+                  {
+                    "code": "EMPLOYEE",
+                    "name": "Employee",
+                    "labelKey": "ACCESSCONTROL_ROLES_ROLES_EMPLOYEE",
+                    "tenantId": department
+                }
+              ]
           }
         ],
         user: {
@@ -87,9 +87,15 @@ const CreateDepartment = () => {
             "code": "EMPLOYEE",
             "name": "Employee",
             "labelKey": role,
-            "tenantId": "pg.citya"
-          }],
-          tenantId: tenantId,
+            "tenantId": department
+        },
+        {
+          "code": role,
+          "name": role,
+          "labelKey": role,
+          "tenantId": department
+      }],
+          tenantId: department,
         },
         serviceHistory: [],
         education: [],
