@@ -44,7 +44,19 @@ const SelectName = ({ config, onSelect, t, isDisabled }) => {
     setCitizenStatus(event.target.value);
     setVerification(true)
   };
-  
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    checkIfMobile(); // Check on initial render
+    window.addEventListener("resize", checkIfMobile); // Check on window resize
+
+    return () => {
+      window.removeEventListener("resize", checkIfMobile); // Cleanup
+    };
+  }, []);
   function generateCaptcha() {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     let result = "";
@@ -265,19 +277,22 @@ const SelectName = ({ config, onSelect, t, isDisabled }) => {
                 }
                 `}
       </style>
-      <div className="login-container" style={{ display: "flex", height: "calc(100vh - 188px)" }}>
-        <div style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          width: "50%"
-        }}>
-          <img
-            src="https://i.postimg.cc/430X0ZWk/india-republic-day-posterflyerbannerfree-photos-background-539191-41962-removebg.png"
-            style={{ width: "70%", height: "70%", backgroundColor: "#23316b", borderRadius: "20px" }}
-          />
-        </div>
-        {citizenStatus == "" && <div className="login-form" style={{ width: "50%", paddingLeft: "5%", paddingRight: "5%" }}>
+      <div className="login-container" style={{ display: "flex", height: "calc(100vh - 188px)",alignItems:"center",gap:'20px' }}>
+        {!isMobile &&(
+          <div style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "50%"
+          }}>
+            <img
+              src="https://i.postimg.cc/430X0ZWk/india-republic-day-posterflyerbannerfree-photos-background-539191-41962-removebg.png"
+              style={{ width: "60%", height: "60%", backgroundColor: "#23316b", borderRadius: "20px" }}
+            />
+          </div>
+        )}       
+        
+        {citizenStatus == "" && <div className="login-form" style={{ marginTop:"20px", marginLeft:"20px", paddingLeft: "5%", paddingRight: "5%" }}>
           <h3 style={{ fontSize: "x-Large", color: "#23316b", fontWeight: "bolder" }}>Sign Up</h3>
           <form>
             <div className="radio-container">
@@ -349,10 +364,9 @@ const SelectName = ({ config, onSelect, t, isDisabled }) => {
 
 
         {citizenStatus === "NRI" && (
-          <div className="login-section" style={{ width: "45%" }}>
+          <div className="login-section" style={{  }}>
             <style>
-              {`
-                   
+              {`    
 
                   
 
@@ -403,10 +417,10 @@ const SelectName = ({ config, onSelect, t, isDisabled }) => {
                     }
                 `}
             </style>
-            <h3 style={{ fontSize: "x-large", color: "#23316b", fontWeight: "bolder" }}>
+            <h3 style={{ fontSize: "x-large", color: "#23316b", fontWeight: "bolder" , marginTop:'30px'}}>
               Registration Form
             </h3>
-            <form onSubmit={handleSubmitNri}>
+            <form onSubmit={handleSubmitNri} style={{width:'80%', marginLeft:'30px'}}>
               <div className="input-group">
                 <label htmlFor="name">Enter Name:</label>
                 <input
@@ -464,12 +478,9 @@ const SelectName = ({ config, onSelect, t, isDisabled }) => {
           </div>
         )}
         {citizenStatus === "Indian" && Verification && (
-          <div className="login-section" style={{ width: "45%" }}>
+          <div className="login-section" style={{  }}>
             <style>
-              {`
-                   
-
-                  
+              {`                  
 
                     h3 {
                         text-align: center;
@@ -518,10 +529,10 @@ const SelectName = ({ config, onSelect, t, isDisabled }) => {
                     }
                 `}
             </style>
-            <h3 style={{ fontSize: "x-large", color: "#23316b", fontWeight: "bolder" }}>
+            <h3 style={{ fontSize: "x-large", color: "#23316b", fontWeight: "bolder", marginTop:'30px' }}>
               Verification
             </h3>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} style={{width:'80%', marginLeft:'30px'}}> 
               <div className="input-group">
                 <label htmlFor="name">Enter Mobile Number:</label>
                 <input
@@ -568,12 +579,9 @@ const SelectName = ({ config, onSelect, t, isDisabled }) => {
           </div>
         )}
         {citizenStatus === "Indian" && !Verification && (
-          <div className="login-section" style={{ width: "45%" }}>
+          <div className="login-section" style={{ }}>
             <style>
-              {`
-                   
-
-                  
+              {`         
 
                     h3 {
                         text-align: center;
@@ -622,10 +630,10 @@ const SelectName = ({ config, onSelect, t, isDisabled }) => {
                     }
                 `}
             </style>
-            <h3 style={{ fontSize: "x-large", color: "#23316b", fontWeight: "bolder" }}>
+            <h3 style={{ fontSize: "large", color: "#23316b", fontWeight: "bolder" , marginTop:'110px'}}>
               Registration Form
             </h3>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} style={{width:'80%', marginLeft:'30px'}}>
               <div className="input-group">
                 <label htmlFor="name">Enter Name</label>
                 <input
