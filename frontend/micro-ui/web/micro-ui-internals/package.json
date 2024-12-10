@@ -2,7 +2,7 @@
   "name": "egovernments",
   "version": "1.5.4",
   "main": "index.js",
-  "workspaces":  [
+  "workspaces": [
     "packages/libraries",
     "packages/css",
     "example",
@@ -82,6 +82,7 @@
     "*.{js,css,md}": "prettier --write"
   },
   "dependencies": {
+    "@jridgewell/gen-mapping": "^0.3.7",
     "lodash": "4.17.21",
     "microbundle-crl": "^0.13.11"
   },
@@ -90,6 +91,7 @@
     "**/@babel/core": "7.14.0",
     "**/@babel/preset-env": "7.14.0",
     "**/@babel/plugin-transform-modules-commonjs": "7.14.0",
-    "**/styled-components": "5.0.0"
+    "**/styled-components": "5.0.0",
+    "**/@jridgewell/gen-mapping": "0.3.5"
   }
 }
