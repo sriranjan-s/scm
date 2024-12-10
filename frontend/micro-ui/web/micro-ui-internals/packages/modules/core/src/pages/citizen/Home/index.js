@@ -194,7 +194,7 @@ const Home = () => {
           }}
         >
           <p1 style={{fontSize:'20px'}}>Grievance</p1>
-          <button style={buttonStyle}>Lodge Grievance</button>
+          <button style={buttonStyle} onClick={(e) => { history.replace("/digit-ui/citizen/pgr/create-complaint/grievance-info")}}>Lodge Grievance</button>
           <button style={buttonStyle}>Grievance Details</button>
           <button style={buttonStyle}>Grievance Status</button>
           <button style={buttonStyle}>Provide Feedback</button>
@@ -277,7 +277,7 @@ const Home = () => {
 
       {/* Action Buttons Section */}
       <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginBottom: '20px' }}>
-        <button style={actionButtonStyle}>Lodge Grievance</button>
+        <button style={actionButtonStyle} onClick={(e) => { history.replace("/digit-ui/citizen/pgr/create-complaint/grievance-info")}}>Lodge Grievance</button>
         <button style={actionButtonStyle}>Track Grievance</button>
         <button style={actionButtonStyle}>Provide Feedback</button>
       </div>
