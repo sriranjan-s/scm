@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { CardText, FormStep, CitizenConsentForm, Loader, CheckBox } from "@upyog/digit-ui-react-components";
+import { CardText, FormStep, CitizenConsentForm, Loader, CheckBox,BackButton } from "@upyog/digit-ui-react-components";
 import { Link } from "react-router-dom";
 import { Route, Switch, useHistory, useRouteMatch, useLocation } from "react-router-dom";
 const setCitizenDetail = (userObject, token, tenantId) => {
@@ -194,6 +194,7 @@ const SelectMobileNumber = ({ t, onSelect, showRegisterLink, mobileNumber, onMob
   return (
     <div>
 <       div>
+        <BackButton />
         <style>
           {`
                 body {

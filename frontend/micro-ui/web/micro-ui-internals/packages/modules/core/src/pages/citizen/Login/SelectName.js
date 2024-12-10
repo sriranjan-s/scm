@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from "react";
-import { FormStep } from "@upyog/digit-ui-react-components";
+import { FormStep,BackButton } from "@upyog/digit-ui-react-components";
 
 const setCitizenDetail = (userObject, token, tenantId) => {
   let locale = JSON.parse(sessionStorage.getItem("Digit.initData"))?.value?.selectedLanguage;
@@ -190,6 +190,7 @@ const SelectName = ({ config, onSelect, t, isDisabled }) => {
 
   return (
     <div>
+      <BackButton />
       <style>
         {`
                 body {
