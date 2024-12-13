@@ -42,6 +42,16 @@ const HrmsService = {
       userService: true,
       params: { tenantId },
     }),
+    updateOff: (data, tenantId) =>
+    Request({
+      data: data,
+      url: Urls.hrms.updateOff,
+      useCache: false,
+      method: "POST",
+      auth: true,
+      userService: true,
+      params: { tenantId },
+    }),
     
     createOff: (data, tenantId) =>
     Request({

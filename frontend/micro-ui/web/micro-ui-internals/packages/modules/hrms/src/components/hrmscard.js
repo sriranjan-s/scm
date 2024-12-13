@@ -53,7 +53,7 @@ const HRMSCard = () => {
             }  ,
             {
                 label: t("View office"),
-                link: `/digit-ui/employee/hrms/inbox`
+                link: `/digit-ui/employee/hrms/viewOffice`
             },
             {
                 label: t("Add Gro"),

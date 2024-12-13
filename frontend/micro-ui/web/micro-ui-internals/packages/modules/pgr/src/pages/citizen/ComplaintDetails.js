@@ -35,9 +35,21 @@ const WorkflowComponent = ({ complaintDetails, id, getWorkFlow, zoomImage }) => 
   }, []);
 
   return (
-    !workFlowDetails.isLoading && (
-    <div></div>
-    )
+  
+      !workFlowDetails.isLoading && (
+        <div></div>
+        // <TimeLine
+        //   // isLoading={workFlowDetails.isLoading}
+        //   data={workFlowDetails.data}
+        //   serviceRequestId={id}
+        //   complaintWorkflow={complaintDetails.workflow}
+        //   rating={complaintDetails.audit.rating}
+        //   zoomImage={zoomImage}
+        //   complaintDetails={complaintDetails}
+        //   ComplainMaxIdleTime={ComplainMaxIdleTime}
+        // />
+      )
+    
   );
 };
 
@@ -46,6 +58,7 @@ const ComplaintDetailsPage = (props) => {
   let { id } = useParams();
 
   let tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code || Digit.ULBService.getCurrentTenantId(); // ToDo: fetch from state
+  console.log("tenantId",tenantId)
   const { isLoading, error, isError, complaintDetails, revalidate } = Digit.Hooks.pgr.useComplaintDetails({ tenantId, id });
 
   const [imageShownBelowComplaintDetails, setImageToShowBelowComplaintDetails] = useState({});

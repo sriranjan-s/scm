@@ -37,7 +37,7 @@ const Response = (props) => {
   const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("EMPLOYEE_HRMS_MUTATION_HAPPENED", false);
   const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("EMPLOYEE_HRMS_MUTATION_SUCCESS_DATA", false);
   const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage("EMPLOYEE_HRMS_ERROR_DATA", false);
-  const mutation = state.key === "UPDATE" ? Digit.Hooks.hrms.useHRMSUpdate(tenantId) : state.key === "CREATE"?Digit.Hooks.hrms.useHRMSCreate(tenantId) : state.key === "office" ? Digit.Hooks.hrms.useHRMSCreateOffice(tenantId): state.key == "Org_UPDATE" ?Digit.Hooks.hrms.useHRMSUpdateOrg(tenantId) :Digit.Hooks.hrms.useHRMSCreateOrg(tenantId);
+  const mutation = state.key === "UPDATE" ? Digit.Hooks.hrms.useHRMSUpdate(tenantId) : state.key === "CREATE"?Digit.Hooks.hrms.useHRMSCreate(tenantId) : state.key === "office" ? Digit.Hooks.hrms.useHRMSCreateOffice(tenantId): state.key == "Org_UPDATE" ?Digit.Hooks.hrms.useHRMSUpdateOrg(tenantId) : state.key === "officeUpdate" ? Digit.Hooks.hrms.useHRMSUpdateOffice(tenantId)  :Digit.Hooks.hrms.useHRMSCreateOrg(tenantId);
   console.log("statestate",state)
   const onError = (error, variables) => {
     setErrorInfo(error?.response?.data?.Errors[0]?.code || 'ERROR');

@@ -63,7 +63,7 @@ const initRequestBody = (tenantId) => ({
       },
       {
         moduleName: "tenant",
-        masterDetails: [{ name: "tenants" }, { name: "citymodule" }],
+        masterDetails: [{ name: "tenants" }, { name: "citymodule" },{ name: "offices" }],
       },
       {
         moduleName: "DIGIT-UI",
@@ -148,7 +148,7 @@ const getBillsGenieKey = (tenantId, moduleCode) => ({
       },
       {
         moduleName: "tenant",
-        masterDetails: [{ name: "tenants" }, { name: "citymodule" }],
+        masterDetails: [{ name: "tenants" }, { name: "citymodule" },{ name: "offices" }],
       },
       {
       moduleName: "common-masters",

@@ -149,6 +149,7 @@ import useHRMSCreate from "./hrms/useHRMScreate";
 import useHRMSCreateOrg from "./hrms/useHRMScreateOrg";
 import useHRMSUpdateOrg from "./hrms/useHRMSupdateOrg";
 import useHRMSCreateOffice from "./hrms/useHRMScreateOffice";
+import useHRMSUpdateOffice from "./hrms/useUpdateOffice";
 import useHRMSUpdate from "./hrms/useHRMSUpdate";
 import useHRMSCount from "./hrms/useHRMSCount";
 import useHRMSGenderMDMS from "./hrms/useHRMSGender";
@@ -406,6 +407,7 @@ const hrms = {
   useHRMSCreate,
   useHRMSCreateOrg,
   useHRMSUpdateOrg,
+  useHRMSUpdateOffice,
   useHRMSCreateOffice,
   useHRMSUpdate,
   useHRMSCount,
