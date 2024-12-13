@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { CardText, FormStep, CitizenConsentForm, Loader, CheckBox } from "@upyog/digit-ui-react-components";
+import { CardText, FormStep, CitizenConsentForm, Loader, CheckBox,BackButton } from "@upyog/digit-ui-react-components";
 import { Link } from "react-router-dom";
 import { Route, Switch, useHistory, useRouteMatch, useLocation } from "react-router-dom";
 const setCitizenDetail = (userObject, token, tenantId) => {
@@ -33,6 +33,21 @@ const SelectMobileNumber = ({ t, onSelect, showRegisterLink, mobileNumber, onMob
   const TYPE_LOGIN = { type: "login" };
   const DEFAULT_USER = "digit-user";
   const DEFAULT_REDIRECT_URL = "/digit-ui/citizen/home";
+  //let isMobile = window.Digit.Utils.browser.isMobile();
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    checkIfMobile(); // Check on initial render
+    window.addEventListener("resize", checkIfMobile); // Check on window resize
+
+    return () => {
+      window.removeEventListener("resize", checkIfMobile); // Cleanup
+    };
+  }, []);
+  
   function setTermsAndPolicyDetails(e) {
     setIsCheckBox(e.target.checked)
   }
@@ -179,6 +194,7 @@ const SelectMobileNumber = ({ t, onSelect, showRegisterLink, mobileNumber, onMob
   return (
     <div>
 <       div>
+        <BackButton />
         <style>
           {`
                 body {
@@ -262,13 +278,14 @@ const SelectMobileNumber = ({ t, onSelect, showRegisterLink, mobileNumber, onMob
                 `}
         </style>
 
-        <div className="login-container" style={{ display: "flex" }}>
+        <div className="login-container" style={{ display: "flex" , alignItems: "center",gap:'20px'}}>
+          {!isMobile && (
             <div
                 style={{
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    width: "50%",
+                    //width: "50%",
                 }}
             >
                 <img
@@ -282,8 +299,9 @@ const SelectMobileNumber = ({ t, onSelect, showRegisterLink, mobileNumber, onMob
                     alt="Sign In Poster"
                 />
             </div>
+            )}
 
-            <div className="login-form" style={{ width: "50%", padding: "0 5%" }}>
+            <div className="login-form" style={{  padding: "0 5%", marginTop:"20px", marginLeft:"20px"}}>
                 <h3 style={{ fontSize: "x-large", color: "#23316b", fontWeight: "bolder" }}>
                     Sign In
                 </h3>
@@ -352,7 +370,7 @@ const SelectMobileNumber = ({ t, onSelect, showRegisterLink, mobileNumber, onMob
                   >
                     {captcha}
                   </div>
-                  <div style={{ marginTop: "10px", width: "25%" }}>
+                  <div style={{ marginTop: "10px", width: "25%", marginLeft:"50px" }}>
                     <button onClick={handleVerifyCaptcha} style={{ padding: "10px 20px", fontSize: "16px", width:"100%"}}>
                       Verify
                     </button>

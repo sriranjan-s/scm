@@ -21,7 +21,19 @@ const TopBar = ({
   changeLanguage,
 }) => {
   const { pathname } = useLocation();
+  const [isMobileOrTablet, setIsMobileOrTablet] = useState(false);
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobileOrTablet(window.innerWidth <= 768);
+    };
 
+    checkIfMobile(); // Check on initial render
+    window.addEventListener("resize", checkIfMobile); // Check on window resize
+
+    return () => {
+      window.removeEventListener("resize", checkIfMobile); // Cleanup
+    };
+  }, []);
   // const showHaburgerorBackButton = () => {
   //   if (pathname === "/digit-ui/citizen" || pathname === "/digit-ui/citizen/" || pathname === "/digit-ui/citizen/select-language") {
   //     return <Hamburger handleClick={toggleSidebar} />;
@@ -29,6 +41,16 @@ const TopBar = ({
   //     return <BackButton className="top-back-btn" />;
   //   }
   // };
+  const lowerHeaderStyle={flexDirection:'row',
+  backgroundColor: 'rgb(35, 49, 107)',
+  color: 'white',
+  justifyContent: 'space-around',
+    display: 'flex',
+  justifyItems: 'space-around',
+  alignItems: 'center',
+  fontSize: '15px'
+};
+
   return (
     <div className="">
       {/* <div className="center-container back-wrapper">
@@ -67,19 +89,35 @@ const TopBar = ({
 
             </div>
             <div className="middleHeader"style={{height:"70px",backgroundColor:"white",display:"flex"}}>
-<div style={{height:"70px",paddingLeft:"15px"}}>
+              {isMobileOrTablet&&(<div style={{height:"70px",paddingLeft:"15px"}}>
+  <img src="https://pgportal.gov.in/Images/iconHome/logo.png" style={{width:"130px", verticalAlign:"middle",height:"inherit",height:"60px"}}></img>
+</div>)}
+{!isMobileOrTablet&&(<div style={{height:"70px",paddingLeft:"15px"}}>
   <img src="https://pgportal.gov.in/Images/iconHome/logo.png" style={{width:"190px", verticalAlign:"middle",height:"inherit"}}></img>
-</div>
-<div style={{width:"100%",marginLeft:"-190px", fontSize:"xx-large",textAlign:"center",fontWeight:"bolder",color:"#23316b",display:"flex",justifyContent:"center",alignItems:"center"}}>
+</div>)}
+{isMobileOrTablet&& (<div style={{width:"100%",marginLeft:"-190px",textAlign:"center",fontWeight:"bolder",color:"#23316b",display:"flex",justifyContent:"flex-end",alignItems:"center"}}>
+<h1>NextGen CPGRAMS</h1>
+</div>)}
+
+{!isMobileOrTablet&& (
+  <div style={{width:"100%", fontSize:'x-large' , marginLeft:"-190px",textAlign:"center",fontWeight:"bolder",color:"#23316b",display:"flex",justifyContent:"center",alignItems:"center"}}>
 <h1>NextGen CPGRAMS</h1>
 </div>
+)}
+
             </div>
-            <div className="lowerHeader"style={{height:"30px",backgroundColor:"#23316b",color:"white",display:"flex",   justifyContent: "space-evenly",
+            {isMobile&&(
+              <div className="lowerHeader"style={lowerHeaderStyle}>
+          <span> Home </span> <span> About Us </span> <span>Redressal Process</span> <span>Officer List</span> <span> FAQs/Help </span>
+                      </div>
+            )}
+            {!isMobile &&(<div className="lowerHeader"style={{height:"30px",backgroundColor:"#23316b",color:"white",display:"flex",   justifyContent: "space-around",
     alignItems: "center",
     paddingLeft: "25%",
     paddingRight: "25%"}}>
 <span> Home </span> <span> About Us </span> <span>Redressal Process</span> <span>Officer List</span> <span> FAQs/Help </span>
-            </div>
+            </div>)}
+            
     </div>
   );
 };
