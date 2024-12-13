@@ -1,8 +1,8 @@
 import { Toast, Loader } from "@upyog/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory,useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-const CreateDepartment = () => {
+const EditDepartment = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const history = useHistory();
   const [departments, setDepartments] = useState(window.Digit.SessionStorage.get("initData").tenants);
@@ -19,6 +19,8 @@ const CreateDepartment = () => {
   const [error, setError] = useState("");
   const { t } = useTranslation();
   const [showToast, setShowToast] = useState(null);
+  const location = useLocation();
+  const [formData, setFormData] =useState(location?.state?.data)
   const handleSubmit = (e) => {
     e.preventDefault();
     if (email !== confirmEmail) {
@@ -30,7 +32,7 @@ const CreateDepartment = () => {
       setError("Invalid mobile number!");
       return;
     }
-
+console.log("departmentdepartment",department)
     const payload = {
       department,
       mobileNumber,
@@ -59,13 +61,8 @@ const CreateDepartment = () => {
           "boundaryType": "City",
           "boundary": department,
           "tenantId": department,
-        "roles":[
-          {
-              "hierarchy": "ADMIN",
-              "boundaryType": "City",
-              "boundary": department,
-              "tenantId": department,
-              "roles": [
+        "roles":
+           [
                   {
                     "label": "NODAL_ADMIN",
                       "value": "NODAL_ADMIN",
@@ -81,9 +78,10 @@ const CreateDepartment = () => {
                   "value": "HRMS_ADMIN",  
               }
               ]
-          }
-    ]}],
+          
+    }],
         user: {
+        ...formData?.Employees[0]?.user,
           mobileNumber: mobileNumber,
           name: name,
           correspondenceAddress: stateUser,
@@ -113,16 +111,51 @@ const CreateDepartment = () => {
         serviceHistory: [],
         education: [],
         tests: [],
+        uuid:formData?.Employees[0]?.uuid,
+        code:formData?.Employees[0]?.code,
+        isActive:"true",
+        id:formData?.Employees[0]?.id
       },
     ];
     /* use customiseCreateFormData hook to make some chnages to the Employee object */
-    Employees = Digit?.Customizations?.HRMS?.customiseCreateFormData ? Digit.Customizations.HRMS.customiseCreateFormData(data, Employees) : Employees;
-    navigateToAcknowledgement(Employees)
+    Employees=Digit?.Customizations?.HRMS?.customiseUpdateFormData?Digit.Customizations.HRMS.customiseUpdateFormData(data,Employees):Employees;
+
+
+    history.replace("/digit-ui/employee/hrms/response", { Employees, key: "UPDATE", action: "UPDATE" });
   }
   const navigateToAcknowledgement = (Employees) => {
-    history.replace("/digit-ui/employee/hrms/response", { Employees, key: "CREATE", action: "CREATE" });
+    history.replace("/digit-ui/employee/hrms/response", { Employees, key: "UPDATE", action: "UPDATE" });
   }
-
+  useEffect(() => {
+    if (formData) {
+        console.log("formData",formData)
+        let data =formData?.Employees[0]
+        setName(data?.user?.name)
+        setEmail(data?.user?.emailId)
+        setConfirmEmail(data?.user?.emailId)
+        setStateuser(data?.user?.correspondenceAddress)
+        setMobileNumber(data?.user?.mobileNumber)
+        setDepartment(data?.jurisdictions[0].boundary)
+        // setEmail(formData?.emailId)
+        // setAddress(formData?.address)
+        // setHeadName(formData?.name)
+        // setHod(formData?.hod)
+        // setStatus(formData?.status)
+        // setPinCode(formData?.pin)
+        // setTelephone(formData?.telephoneNumber)
+        // let locationDet = {
+        //     subDistrict: formData?.subDistrict,
+        //     district: formData?.district,
+        //     state: formData?.state,
+        //   }
+        //   setLocationDetails(locationDet)
+        //   const matchedDept = departmentDropdown.find(
+        //     (dept) => dept.code === formData.code
+        //   );
+        //   console.log("matchedDept",matchedDept,formData.i18nKey,departmentDropdown)
+        //   setDepartment(matchedDept.name)
+    }
+  }, [formData]);
   //if (isLoading) return <Loader />;
 
   return (
@@ -261,34 +294,14 @@ const CreateDepartment = () => {
           <form onSubmit={handleSubmit} className="grid-container">
             <div className="grid-container">
               <label className="blueColor">Department/Ministry</label>
-              <select
-                id="department"
-                value={department}
-                onChange={(e) => {
-                  const selectedCode = e.target.value; // Get the selected code
-                  setDepartment(selectedCode);
-
-                  // Find the selected department object
-                  const selectedDept = departments.find((dept) => dept.code === selectedCode);
-                  if (selectedDept) {
-                    setStateuser(selectedDept.state); // Update stateUser
-                  }
-
-                  // Set default role and user type
-                  setRole("NODAL_ADMIN");
-                  setUserType("Nodal User");
-                  setDesignation("Nodal Officer")
-                }}
-                required
-                style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
-              >
-                <option value="">Select Department/Ministry</option>
-                {departments.map((dept) => (
-                  <option key={dept.code} value={dept.code}>
-                    {dept.i18nKey}
-                  </option>
-                ))}
-              </select>
+              <input
+                  type="text"
+                  id="department"
+                  value={department}
+                 disabled
+                  required
+                  style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
+                />
             </div>
             <div className="grid-container half-width">
               <div>
@@ -381,4 +394,4 @@ const CreateDepartment = () => {
   );
 };
 
-export default CreateDepartment;
+export default EditDepartment;

@@ -124,6 +124,7 @@ const Urls = {
     create: "/egov-hrms/employees/_create",
     update: "/egov-hrms/employees/_update",
     createOrg: "/egov-mdms-service/v1/org/_create",
+    updateOrg: "/egov-mdms-service/v1/org/_update",
     createOff : "/egov-mdms-service/v1/ofc/_create"
   },
   tl: {

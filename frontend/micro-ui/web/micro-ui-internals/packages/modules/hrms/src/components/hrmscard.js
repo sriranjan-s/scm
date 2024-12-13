@@ -30,7 +30,7 @@ const HRMSCard = () => {
             },
             {
                 label: t("View Ministry/Department"),
-                link: `/digit-ui/employee/hrms/inbox`
+                link: `/digit-ui/employee/hrms/inbox/nodal`
             } ,
             {
                 label: t("Add Head of Department"),
@@ -38,7 +38,7 @@ const HRMSCard = () => {
             },
             {
                 label: t("View Head of Department"),
-                link: `/digit-ui/employee/hrms/inbox`
+                link: `/digit-ui/employee/hrms/inbox/department`
             }            
         ]
     }
@@ -61,7 +61,7 @@ const HRMSCard = () => {
             }  ,
             {
                 label: t("View Gro"),
-                link: `/digit-ui/employee/hrms/inbox`
+                link: `/digit-ui/employee/hrms/inbox/gro`
             }
                      
         ]

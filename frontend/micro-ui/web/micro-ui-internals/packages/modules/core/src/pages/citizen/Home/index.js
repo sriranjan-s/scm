@@ -278,7 +278,7 @@ const Home = () => {
       {/* Action Buttons Section */}
       <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginBottom: '20px' }}>
         <button style={actionButtonStyle} onClick={(e) => { history.replace("/digit-ui/citizen/pgr/create-complaint/grievance-info")}}>Lodge Grievance</button>
-        <button style={actionButtonStyle}>Track Grievance</button>
+        <button style={actionButtonStyle} onClick={(e) => { history.replace("/digit-ui/citizen/pgr/complaints")}}>Track Grievance</button>
         <button style={actionButtonStyle}>Provide Feedback</button>
       </div>
 

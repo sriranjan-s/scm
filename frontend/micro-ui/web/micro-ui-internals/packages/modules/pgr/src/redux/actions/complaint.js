@@ -17,7 +17,7 @@ const createComplaint = ({
   mobileNumber,
   name,
   emailId,
-  additionalDetails
+  additionalDetail
 }) => async (dispatch, getState) => {
   const response = await Digit.Complaint.create({
     cityCode,
@@ -36,7 +36,7 @@ const createComplaint = ({
     mobileNumber,
     name,
     emailId,
-    additionalDetails
+    additionalDetail
   });
   dispatch({
     type: CREATE_COMPLAINT,

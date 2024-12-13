@@ -11,7 +11,7 @@ const AccessControlService = {
       userService: true,
       data: {
         roleCodes: roles,
-        tenantId: Digit.ULBService.getStateId(),
+        tenantId: Digit.ULBService.getCurrentTenantId(),
         actionMaster: "actions-test",
         enabled: true,
       },

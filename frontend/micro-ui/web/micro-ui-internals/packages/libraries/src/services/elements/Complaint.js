@@ -16,6 +16,7 @@ export const Complaint = {
     mobileNumber,
     emailId,
     name,
+    additionalDetail
   }) => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const defaultData = {
@@ -24,7 +25,7 @@ export const Complaint = {
         serviceCode: complaintType,
         priority : priorityLevel,
         description: description,
-        additionalDetail: {},
+        additionalDetail: additionalDetail,
         source: Digit.Utils.browser.isWebview() ? "mobile" : "web",
         address: {
           landmark: landmark,

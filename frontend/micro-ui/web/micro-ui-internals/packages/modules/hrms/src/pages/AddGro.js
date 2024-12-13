@@ -75,7 +75,7 @@ const AddOffice = () => {
         assignments: [{
           "fromDate": new Date().getTime(),
           "isCurrentAssignment": true,
-          "department": department,
+          "department": "DEPT_10",
           "designation": "DESIG_01"
         }],
         code: undefined,

@@ -36,16 +36,7 @@ const WorkflowComponent = ({ complaintDetails, id, getWorkFlow, zoomImage }) => 
 
   return (
     !workFlowDetails.isLoading && (
-      <TimeLine
-        // isLoading={workFlowDetails.isLoading}
-        data={workFlowDetails.data}
-        serviceRequestId={id}
-        complaintWorkflow={complaintDetails.workflow}
-        rating={complaintDetails.audit.rating}
-        zoomImage={zoomImage}
-        complaintDetails={complaintDetails}
-        ComplainMaxIdleTime={ComplainMaxIdleTime}
-      />
+    <div></div>
     )
   );
 };
@@ -137,7 +128,7 @@ const ComplaintDetailsPage = (props) => {
   if (isError) {
     return <h2>Error</h2>;
   }
-
+console.log("complaintDetails",complaintDetails)
   return (
     <React.Fragment>
       <div className="complaint-summary">
