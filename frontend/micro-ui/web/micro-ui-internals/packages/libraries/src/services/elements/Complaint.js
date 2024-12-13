@@ -30,6 +30,7 @@ export const Complaint = {
         address: {
           landmark: landmark,
           city: city,
+          locality:{code :"JLC476"},
           district: district,
           region: region,
           state: state,
@@ -65,6 +66,7 @@ export const Complaint = {
   },
 
   assign: async (complaintDetails, action, employeeData, comments, uploadedDocument, tenantId) => {
+    
     complaintDetails.workflow.action = action;
     complaintDetails.workflow.assignes = employeeData ? [employeeData.uuid] : null;
     complaintDetails.workflow.comments = comments;
@@ -78,9 +80,9 @@ export const Complaint = {
             },
           ])
       : null;
-
+      complaintDetails.service.address.locality.code = "JLC476"
     if (!uploadedDocument) complaintDetails.workflow.verificationDocuments = [];
-    
+    console.log("complaintDetails",complaintDetails)
     //TODO: get tenant id
     const response = await Digit.PGRService.update(complaintDetails, tenantId);
     return response;
