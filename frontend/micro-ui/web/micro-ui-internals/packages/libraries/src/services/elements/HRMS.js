@@ -32,6 +32,17 @@ const HrmsService = {
       userService: true,
       params: { tenantId },
     }),
+    updateOrg: (data, tenantId) =>
+    Request({
+      data: data,
+      url: Urls.hrms.updateOrg,
+      useCache: false,
+      method: "POST",
+      auth: true,
+      userService: true,
+      params: { tenantId },
+    }),
+    
     createOff: (data, tenantId) =>
     Request({
       data: data,

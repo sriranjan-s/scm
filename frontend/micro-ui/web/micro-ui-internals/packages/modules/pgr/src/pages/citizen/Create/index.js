@@ -90,7 +90,7 @@ export const CreateComplaint = () => {
         localityName,
         state: stateInfo.name,
         uploadedImages: _uploadImages,
-        additionalDetails: {
+        additionalDetail: {
           propertyid: storedpropertyid,
         },
       };

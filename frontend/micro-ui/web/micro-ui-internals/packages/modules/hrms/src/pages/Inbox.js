@@ -14,7 +14,7 @@ const Inbox = ({ parentRoute, businessService = "HRMS", initialStates = {}, filt
   const [sortParams, setSortParams] = useState(initialStates.sortParams || [{ id: "createdTime", desc: false }]);
   const [totalRecords, setTotalReacords] = useState(undefined);
   const [searchParams, setSearchParams] = useState(() => {
-    return initialStates.searchParams || {};
+    return {roles : sessionStorage.getItem("searchParams")} || {};
   });
 
   let isMobile = window.Digit.Utils.browser.isMobile();
@@ -23,18 +23,32 @@ const Inbox = ({ parentRoute, businessService = "HRMS", initialStates = {}, filt
     : { limit: pageSize, offset: pageOffset, sortOrder: sortParams?.[0]?.desc ? "DESC" : "ASC" };
   const isupdate = Digit.SessionStorage.get("isupdate");
   const { isLoading: hookLoading, isError, error, data, ...rest } = Digit.Hooks.hrms.useHRMSSearch(
-    searchParams,
-    tenantId,
+  searchParams,
+    tenantId ? sessionStorage.getItem("searchParamsTenant") :tenantId,
     paginationParams,
     isupdate
   );
-
+  console.log("searchParams",paginationParams,searchParams)
+//const data =[]
   useEffect(() => {
     // setTotalReacords(res?.EmployeCount?.totalEmployee);
   }, [res]);
 
-  useEffect(() => {}, [hookLoading, rest]);
-
+  // useEffect(() => {}, [hookLoading, rest]);
+  const handleSearchEmployee =(filterParam)=>{
+    console.log("handleSearchEmployee",filterParam)
+    const filterParamNew = {roles:[{code:filterParam.roles}]}
+    let keys_to_delete = filterParam.delete;
+    let _new = { ...searchParams, ...filterParam };
+    if (keys_to_delete) keys_to_delete.forEach((key) => delete _new[key]);
+    filterParam.delete;
+    delete _new.delete;
+    console.log("filterParam",filterParamNew)
+    //setSearchParams({ ..._new });
+    sessionStorage.setItem("searchParams",filterParam.code)
+    sessionStorage.setItem("searchParamsTenant",filterParam.tenantId)
+    console.log("filterParam77",filterParam)
+  }
   useEffect(() => {
     setPageOffset(0);
   }, [searchParams]);
@@ -53,7 +67,8 @@ const Inbox = ({ parentRoute, businessService = "HRMS", initialStates = {}, filt
     if (keys_to_delete) keys_to_delete.forEach((key) => delete _new[key]);
     filterParam.delete;
     delete _new.delete;
-    setSearchParams({ ..._new });
+    console.log("filterParameeff4444",filterParam)
+    //setSearchParams({ ..._new });
   };
 
   const handleSort = useCallback((args) => {
@@ -132,6 +147,7 @@ const Inbox = ({ parentRoute, businessService = "HRMS", initialStates = {}, filt
             onFilterChange={handleFilterChange}
             searchFields={getSearchFields()}
             onSearch={handleFilterChange}
+            seacrhEmployee={handleSearchEmployee}
             onSort={handleSort}
             onNextPage={fetchNextPage}
             onPrevPage={fetchPrevPage}

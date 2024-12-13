@@ -309,6 +309,7 @@ export const ComplaintDetails = (props) => {
       window.location.href=redirectingUrl;
     }
   function onActionSelect(action) {
+    console.log("action",action)
     setSelectedAction(action);
     switch (action) {
       case "ASSIGN":
@@ -319,7 +320,7 @@ export const ComplaintDetails = (props) => {
         setPopup(true);
         setDisplayMenu(false);
         break;
-      case "RESOLVE":
+      case "DISPOSE":
         setPopup(true);
         setDisplayMenu(false);
         break;

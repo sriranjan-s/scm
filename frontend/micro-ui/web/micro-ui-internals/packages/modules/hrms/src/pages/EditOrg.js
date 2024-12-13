@@ -1,7 +1,7 @@
 import { FormComposer, Toast, Loader, Header } from "@upyog/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useHistory } from "react-router-dom";
+import { useHistory,useLocation } from "react-router-dom";
 import { newConfig } from "../components/config/config";
 
 const CreateEmployee = () => {
@@ -21,6 +21,8 @@ const CreateEmployee = () => {
   const [pinCode, setPinCode] = useState("");
   const [status, setStatus] = useState("Active");
   const [dept, setDept] = useState([]);
+  const location = useLocation();
+const [formData, setFormData] =useState(location?.state?.department)
   const [locationDetails, setLocationDetails] = useState({
     subDistrict: "",
     district: "",
@@ -43,7 +45,7 @@ const CreateEmployee = () => {
   const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("EMPLOYEE_HRMS_MUTATION_HAPPENED", false);
   const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage("EMPLOYEE_HRMS_ERROR_DATA", false);
   const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("EMPLOYEE_HRMS_MUTATION_SUCCESS_DATA", false);
-
+console.log("locationlocation",location)
   useEffect(() => {
     setMutationHappened(false);
     clearSuccessData();
@@ -91,7 +93,28 @@ const CreateEmployee = () => {
         roles: [],
       }]
   }
-
+  useEffect(() => {
+    if (formData) {
+        setEmail(formData?.emailId)
+        setAddress(formData?.address)
+        setHeadName(formData?.name)
+        setHod(formData?.hod)
+        setStatus(formData?.status)
+        setPinCode(formData?.pin)
+        setTelephone(formData?.telephoneNumber)
+        let locationDet = {
+            subDistrict: formData?.subDistrict,
+            district: formData?.district,
+            state: formData?.state,
+          }
+          setLocationDetails(locationDet)
+          const matchedDept = departmentDropdown.find(
+            (dept) => dept.code === formData.code
+          );
+          console.log("matchedDept",matchedDept,formData.i18nKey,departmentDropdown)
+          setDepartment(matchedDept.name)
+    }
+  }, [formData]);
 
   const onFormValueChange = (setValue = true, formData) => {
     if (formData?.SelectEmployeePhoneNumber?.mobileNumber) {
@@ -143,7 +166,7 @@ const CreateEmployee = () => {
   };
 
   const navigateToAcknowledgement = (organizations) => {
-    history.replace("/digit-ui/employee/hrms/response", { organizations });
+    history.replace("/digit-ui/employee/hrms/response", { organizations,key: "Org_UPDATE", action: "UPDATE" });
   }
   const fetchLocationDetails = async () => {
     setError("");
@@ -182,13 +205,13 @@ const CreateEmployee = () => {
       status,
     });
     const matchedDept = departmentDropdown.find(
-      (dept) => dept.code === department
-    );
-
+        (dept) => dept.code === formData?.code
+      );
+      console.log("matchedDept",matchedDept,department)
     let organizations = [
       {
             "tenantId": "pg",
-            "code": department,
+            "code": formData?.code,
             "name": headName,
             "description": matchedDept?.description,
             "hod": hod,
@@ -199,11 +222,12 @@ const CreateEmployee = () => {
             "subDistrict": locationDetails?.subDistrict,
             "state": locationDetails?.state,
             "pin": pinCode,
-            "status": "ACTIVE"
+            "status": "ACTIVE",
+            "id":formData?.id
 
       },
     ];
-
+    console.log("employee", organizations)
     navigateToAcknowledgement(organizations)
   }
   console.log("deptdept", dept)
@@ -332,34 +356,22 @@ const CreateEmployee = () => {
 <div className="login-container" style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
       <div className="login-form" style={{ width: "100%", padding: "0 5%" }}>
         <h3 style={{ fontSize: "x-large", color: "#23316b", fontWeight: "bolder" }}>
-          Add Organization
+          Edit Organization
         </h3>
         <form onSubmit={handleSubmit}>
           <label htmlFor="department" style={{ color: "#23316b" }}>
             Department/Ministry
           </label>
-          <select
-  id="department"
-  value={department}
-  onChange={(e) => {
-    console.log("e.target.value",e.target.value)
-    setDepartment(e.target.value)
-    const matchedDept = departmentDropdown.find(
-      (dept) => dept.code === e.target.value
-    );
-    console.log("matchedDept",matchedDept)
-    setHeadName(matchedDept.name)
-  }}
-  required
-  style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
->
-  <option value="">Select Department/Ministry</option>
-  {dept?.map((dep) => (
-    <option key={dep?.code} value={dep?.code}>
-      {dep?.name}
-    </option>
-  ))}
-</select>
+
+<input
+                  type="text"
+                  id="department"
+                  value={department}
+                 disabled
+                  required
+                  style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
+                />
+
             <div className="grid-container half-width">
               <div>
                 <label htmlFor="email" style={{ color: "#23316b" }}>
@@ -398,6 +410,7 @@ const CreateEmployee = () => {
                 value={headName}
                 onChange={(e) => setHeadName(e.target.value)}
                 required
+                disabled
                 style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
               />
             </div>

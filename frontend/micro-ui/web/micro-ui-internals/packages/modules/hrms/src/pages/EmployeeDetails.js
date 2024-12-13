@@ -52,7 +52,10 @@ const Details = () => {
       case "ACTIVATE_EMPLOYEE_HEAD":
         return setShowModal(true);
       case "COMMON_EDIT_EMPLOYEE_HEADER":
-        return history.push(`/digit-ui/employee/hrms/edit/${tenantId}/${employeeId}`);
+        return  history.push({
+          pathname: '/digit-ui/employee/hrms/editDepartment',
+          state: { data }, // Passing selected department data
+      });
       default:
         break;
     }
@@ -207,7 +210,7 @@ const Details = () => {
       {showModal ? (
         <ActionModal t={t} action={selectedAction} tenantId={tenantId} applicationData={data} closeModal={closeModal} submitAction={submitAction} />
       ) : null}
-      <ActionBar>
+      {/* <ActionBar>
         {displayMenu && data ? (
           <Menu
             localeKeyPrefix="HR"
@@ -217,7 +220,7 @@ const Details = () => {
           />
         ) : null}
         <SubmitBar label={t("HR_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
-      </ActionBar>
+      </ActionBar> */}
     </React.Fragment>
   );
 };

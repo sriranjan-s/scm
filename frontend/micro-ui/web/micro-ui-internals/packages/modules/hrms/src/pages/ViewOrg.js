@@ -1,81 +1,138 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 const ViewOrg = () => {
-    const data = [
-        { id: 'DPOST/E/2024/0017273', date: '27.08.24', department: 'Department of Posts', category: 'Speed Post', status: 'Pending' },
-        { id: 'DPFPD/E/2024/0017263', date: '03.08.24', department: 'Department of Food and Public Distribution', category: 'International Courier', status: 'Pending' },
-        { id: 'DOPOST/E/2024/0017263', date: '06.07.24', department: 'Department of Posts', category: 'Ration Card', status: 'Disposed' },
-        { id: 'DMOLE/E/2024/0017263', date: '16.07.24', department: 'Department of Labour', category: 'Wage', status: 'Disposed' },
-        { id: 'DOFIN/E/2024/0017263', date: '03.02.24', department: 'Department of Finance', category: 'Banks', status: 'Closed' },
-    ];
+    const [departments] = useState(window.Digit.SessionStorage.get("initData").tenants);
+    const history = useHistory();
+
+    const handleModify = (department) => {
+        history.push({
+            pathname: '/digit-ui/employee/hrms/editOrg',
+            state: { department }, // Passing selected department data
+        });
+    };
 
     return (
         <div>
             <style>
-                {
-                    `
+                {`
                     .table-container {
-                        margin: 20px;
-                        border: 1px solid #ccc;
-                        border-radius: 5px;
+                        margin: 20px auto;
+                        max-width: 90%;
+                        border: 1px solid #ddd;
+                        border-radius: 8px;
+                        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
                         overflow: hidden;
+                        background-color: #fff;
                     }
-                    
+
                     table {
                         width: 100%;
                         border-collapse: collapse;
+                        font-family: Arial, sans-serif;
+                        color: #333;
                     }
-                    
+
                     th, td {
-                        padding: 10px;
+                        padding: 12px 15px;
                         text-align: left;
                     }
-                    
+
                     th {
-                        background-color: #f2f2f2;
-                        border-bottom: 2px solid #ccc;
+                        background-color: #23316b;
+                        color: #fff;
+                        font-weight: bold;
+                        text-transform: uppercase;
                     }
-                    
+
                     tr:nth-child(even) {
                         background-color: #f9f9f9;
                     }
-                    
+
                     tr:hover {
                         background-color: #f1f1f1;
+                        transition: background-color 0.2s ease-in-out;
                     }
-                    
-                    .pending {
-                        color: red;
+
+                    td {
+                        border-bottom: 1px solid #ddd;
                     }
-                    
-                    .disposed {
+
+                    .status {
+                        font-weight: bold;
+                        text-transform: capitalize;
+                    }
+
+                    .status.ACTIVE {
                         color: green;
                     }
-                    
-                    .closed {
-                        color: blue;
+
+                    .status.INACTIVE {
+                        color: red;
                     }
-                    `
-                }
+
+                    .header-title {
+                        text-align: center;
+                        margin: 20px 0;
+                        font-size: 1.5rem;
+                        color: #0073e6;
+                    }
+
+                    .action-btn {
+                        padding: 6px 12px;
+                        background-color: #23316b;
+                        color: #fff;
+                        border: none;
+                        border-radius: 4px;
+                        cursor: pointer;
+                        transition: background-color 0.2s ease-in-out;
+                    }
+
+                    .action-btn:hover {
+                        background-color: #005bb5;
+                    }
+                `}
             </style>
-        <div className="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>S.No</th>
-                        <th>Grievance ID</th>
-                        <th>Lodging Date</th>
-                        <th>Department Name</th>
-                        <th>Category</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                
-                </tbody>
-            </table>
-        </div>
+         
+            <h3 style={{ fontSize: "x-large", color: "#23316b", fontWeight: "bolder", marginBottom: "25px",textAlign:"center" }}>Organization Details</h3>
+            <div className="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>S.No</th>
+                            <th>Name</th>
+                            <th>Telephone Number</th>
+                            <th>Email Id</th>
+                            <th>Address</th>
+                            <th>District</th>
+                            <th>State</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {departments.map((dept, index) => (
+                            <tr key={dept.id}>
+                                <td>{index + 1}</td>
+                                <td>{dept.name}</td>
+                                <td>{dept.telephoneNumber}</td>
+                                <td>{dept.emailId}</td>
+                                <td>{dept.address}</td>
+                                <td>{dept.district}</td>
+                                <td>{dept.state}</td>
+                                <td className={`status ${dept.status}`}>{dept.status}</td>
+                                <td>
+                                    <button 
+                                        className="action-btn" 
+                                        onClick={() => handleModify(dept)}>
+                                        Modify
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 };

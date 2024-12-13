@@ -131,7 +131,6 @@ const DesktopInbox = ({ tableConfig, filterComponent, ...props }) => {
         pageSizeLimit={props.pageSizeLimit}
         onSort={props.onSort}
         disableSort={props.disableSort}
-        onPageSizeChange={props.onPageSizeChange}
         sortParams={props.sortParams}
         totalRecords={props.totalRecords}
       />
@@ -168,10 +167,11 @@ const DesktopInbox = ({ tableConfig, filterComponent, ...props }) => {
           </div>
         </div>
       )}
-      <div style={{ flex: 1 }}>
+      <div style={{ width:"80%"}}>
         <SearchApplication
           defaultSearchParams={props.defaultSearchParams}
           onSearch={props.onSearch}
+          seacrhEmployee={props.seacrhEmployee}
           type="desktop"
           tenantIds={tenantIds}
           searchFields={props.searchFields}

@@ -64,7 +64,7 @@ const PersonalDetailsForm = () => {
             state: formData.state,
             uploadedImages: null,
             cityCode:"pg.telecom",
-            additionalDetails: {
+            additionalDetail: {
                 ...formData, // Spread all fields from formData
                 ...value,    // Spread all fields from value
             },

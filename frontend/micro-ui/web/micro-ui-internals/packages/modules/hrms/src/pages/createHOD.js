@@ -50,39 +50,37 @@ const AddHeadOfDepartment = () => {
     };
     let Employees = [
       {
-        tenantId: tenantId,
+        tenantId: "pg",
         employeeStatus: "EMPLOYED",
         assignments: [{
           "fromDate": new Date().getTime(),
           "isCurrentAssignment": true,
-          "department": department,
+          "department": "DEPT_10",
           "designation": userType
         }],
-        code: undefined,
+        code: null,
         dateOfAppointment: new Date(new Date().setDate(new Date().getDate() - 1)).getTime(),
         employeeType: "PERMANENT",
         jurisdictions: [
           {
-            "hierarchy": "REVENUE",
-            "boundaryType": "City",
-            "boundary": department,
-            "tenantId": department,
-            "roles": [
-              {
-                "code": role,
-                "name": role,
-                "labelKey": role,
-                "tenantId": department
-              },
-              {
-                "code": "EMPLOYEE",
-                "name": "Employee",
-                "labelKey": "ACCESSCONTROL_ROLES_ROLES_EMPLOYEE",
-                "tenantId": department
-              }
-            ]
-          }
+          "roles": [{
+            "label": "Employee",
+            "value": "EMPLOYEE"
+        },
+        {
+            "label": "HOD_DEPT",
+            "value": "HOD_DEPT"
+        },
+        {
+            "label": "HRMS ADMIN",
+            "value": "HRMS_ADMIN"
+        }
         ],
+        "hierarchy": "ADMIN",
+        "boundaryType": "City",
+        "boundary": department,
+        "tenantId": department,
+      }],
         user: {
           mobileNumber: mobileNumber,
           name: name,
@@ -91,17 +89,29 @@ const AddHeadOfDepartment = () => {
           gender: "MALE",
           dob: 507254400000,
           roles: [{
+            "code": "HOD_DEPT",
+            "labelKey": "HOD_DEPT",
+            "name": "HOD_DEPT",
+            "tenantId": department
+        },
+        {
             "code": "EMPLOYEE",
+            "labelKey": "ACCESSCONTROL_ROLES_ROLES_EMPLOYEE",
             "name": "Employee",
-            "labelKey": role,
-            "tenantId": "pg.citya"
-          }],
-          tenantId: tenantId,
+            "tenantId": department
+        },
+        {
+            "code": "HRMS_ADMIN",
+            "labelKey": "ACCESSCONTROL_ROLES_ROLES_HRMS_ADMIN",
+            "name": "HRMS_ADMIN",
+            "tenantId": department
+        }],
+          tenantId: department,
         },
         serviceHistory: [],
         education: [],
         tests: [],
-      },
+      }
     ];
     /* use customiseCreateFormData hook to make some chnages to the Employee object */
     Employees = Digit?.Customizations?.HRMS?.customiseCreateFormData ? Digit.Customizations.HRMS.customiseCreateFormData(data, Employees) : Employees;
