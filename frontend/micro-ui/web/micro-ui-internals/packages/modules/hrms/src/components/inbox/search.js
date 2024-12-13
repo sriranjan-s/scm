@@ -36,7 +36,12 @@ const SearchApplication = ({ onSearch,seacrhEmployee,type, onClose, searchFields
       seacrhEmployee({code:"NODAL_ADMIN",tenantId:department})
      
     }
-   
+    else if (window.location.href.includes("department"))
+    {
+      seacrhEmployee({code:"HOD_DEPT",tenantId:department})
+     
+    }
+    
   }
 
   function clearSearch() {

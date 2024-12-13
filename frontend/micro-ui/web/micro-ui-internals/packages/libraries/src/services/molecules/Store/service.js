@@ -74,7 +74,8 @@ export const StoreService = {
       localizationModules: stateInfo.localizationModules,
       modules: MdmsRes?.tenant?.citymodule.filter((module) => module?.active).filter((module) => enabledModules?.includes(module?.code))?.sort((x,y)=>x?.order-y?.order),
       uiHomePage: uiHomePage,
-      departments:MdmsRes?.tenant?.departments
+      departments:MdmsRes?.tenant?.departments,
+      offices:MdmsRes?.tenant?.offices
     };
 
   
