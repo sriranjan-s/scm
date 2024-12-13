@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { AppContainer, BackButton, Toast } from "@egovernments/digit-ui-react-components";
+import { AppContainer, BackButton, Toast } from "@upyog/digit-ui-react-components";
 import { Route, Switch, useHistory, useRouteMatch, useLocation } from "react-router-dom";
 import { loginSteps } from "./config";
 import SelectMobileNumber from "./SelectMobileNumber";
@@ -230,15 +230,15 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
   };
 
   return (
-    <div className="citizen-form-wrapper">
+    <div className="citizen-form-wrapper" style={{width:"100%",padding:"0px",height:"calc(100vh - 210px)",margin:"0px"}}>
       <Switch>
         <AppContainer>
-          <BackButton />
+          {/* <BackButton /> */}
           <Route path={`${path}`} exact>
             <SelectMobileNumber
               onSelect={selectMobileNumber}
               config={stepItems[0]}
-              mobileNumber={params.mobileNumber || ""}
+              mobileNumber={params?.mobileNumber || "9810594085"}
               onMobileChange={handleMobileChange}
               canSubmit={canSubmitNo}
               showRegisterLink={isUserRegistered && !location.state?.role}
@@ -247,11 +247,11 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
           </Route>
           <Route path={`${path}/otp`}>
             <SelectOtp
-              config={{ ...stepItems[1], texts: { ...stepItems[1].texts, cardText: `${stepItems[1].texts.cardText} ${params.mobileNumber || ""}` } }}
+              config={{ ...stepItems[1], texts: { ...stepItems[1].texts, cardText: `${stepItems[1].texts.cardText} ${params?.mobileNumber || "9810594085"}` } }}
               onOtpChange={handleOtpChange}
               onResend={resendOtp}
               onSelect={selectOtp}
-              otp={params.otp}
+              otp={params?.otp}
               error={isOtpValid}
               canSubmit={canSubmitOtp}
               t={t}

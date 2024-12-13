@@ -1,6 +1,6 @@
 import {
   Loader, NavBar
-} from "@egovernments/digit-ui-react-components";
+} from "@upyog/digit-ui-react-components";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
@@ -160,7 +160,7 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
   }
 
   let configEmployeeSideBar = {};
-console.log("linkdata",linkData)
+
   if (!isEmployee) {
     Object.keys(linkData)
       ?.sort((x, y) => y.localeCompare(x))
@@ -199,7 +199,6 @@ console.log("linkdata",linkData)
     const keys = Object.keys(configEmployeeSideBar);
     for (let i = 0; i < keys.length; i++) {
       const getSingleDisplayName = configEmployeeSideBar[keys[i]][0]?.displayName?.toUpperCase()?.replace(/[ -]/g, "_");
-      console.log("getsingle", getSingleDisplayName)
       const getParentDisplayName = keys[i]?.toUpperCase()?.replace(/[ -]/g, "_");
 
       if (configEmployeeSideBar[keys[i]][0].path.indexOf(".") === -1) {

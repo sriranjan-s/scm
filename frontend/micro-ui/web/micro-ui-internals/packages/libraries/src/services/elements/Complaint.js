@@ -1,6 +1,8 @@
 export const Complaint = {
   create: async ({
     cityCode,
+    complaintType,
+    priorityLevel,
     description,
     landmark,
     city,
@@ -11,37 +13,19 @@ export const Complaint = {
     localityCode,
     localityName,
     uploadedImages,
-    impact,
-    urgency,
-    reporterName,
-    priorityLevel,
-    dueDate,
-    summary,
-    affectedServices,
-    linkedIssues,
-    envType,
-    requestType,
-    issueType,
+    mobileNumber,
+    emailId,
+    name,
+    additionalDetail
   }) => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
-    let mobileNumber = JSON.parse(sessionStorage.getItem("Digit.User"))?.value?.info?.mobileNumber;
-    console.log("citycode, ", cityCode)
-    console.log("mbl",mobileNumber)
     const defaultData = {
-      incident: {
+      service: {
         tenantId: cityCode,
-        environment:envType.code,
-        requestType:requestType.code,
+        serviceCode: complaintType,
+        priority : priorityLevel,
         description: description,
-        impact:impact.code,
-        urgency:urgency.code,
-        incidentType:issueType.code,
-        priority:priorityLevel.code,
-        summary:summary,
-        linkedIssues:linkedIssues,
-        affectedServices:affectedServices,
-        dueDate:dueDate,
-        additionalDetail: {},
+        additionalDetail: additionalDetail,
         source: Digit.Utils.browser.isWebview() ? "mobile" : "web",
         address: {
           landmark: landmark,
@@ -50,10 +34,6 @@ export const Complaint = {
           region: region,
           state: state,
           pincode: pincode,
-          locality: {
-            code: localityCode,
-            name: localityName,
-          },
           geoLocation: {},
         },
       },
@@ -64,26 +44,11 @@ export const Complaint = {
     };
 
     if (Digit.SessionStorage.get("user_type") === "employee") {
-      defaultData.incident.reporter = {
-      //   "reporter": {
-      //     "name": "MANVN",
-      //     "type": "CITIZEN",
-      //     "mobileNumber": "9897490123",
-      //     "roles": [
-      //         {
-      //             "id": null,
-      //             "name": "Citizen",
-      //             "code": "CITIZEN",
-      //             "tenantId": "pg.citya"
-      //         }
-      //     ],
-      //     "tenantId": "pg"
-      // }
-  //},
-
-        name:reporterName,
-        type: "EMPLOYEE",
+      defaultData.service.citizen = {
+        name: name,
+        type: "CITIZEN",
         mobileNumber: mobileNumber,
+        emailId:emailId,
         roles: [
           {
             id: null,
@@ -95,9 +60,7 @@ export const Complaint = {
         tenantId: tenantId,
       };
     }
-    console.log("def", defaultData)
     const response = await Digit.PGRService.create(defaultData, cityCode);
-    console.log("res", response)
     return response;
   },
 

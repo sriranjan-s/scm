@@ -11,7 +11,7 @@ import {
   PTIcon,
   TLIcon,
   WSICon,
-} from "@egovernments/digit-ui-react-components";
+} from "@upyog/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
@@ -19,7 +19,6 @@ import { useTranslation } from "react-i18next";
 Feature :: Citizen All service screen cards
 */
 export const processLinkData = (newData, code, t) => {
-  console.log("codeee", code)
   const obj = newData?.[`${code}`];
   if (obj) {
     obj.map((link) => {
@@ -49,7 +48,7 @@ export const processLinkData = (newData, code, t) => {
         });
       else
         newObj?.links?.push({
-          link: "/digit-ui/citizen/login",
+          link: `/digit-ui/citizen/login`,
           state: { role: "FSM_DSO", from },
           i18nKey: t(loginLink),
         });
@@ -128,7 +127,7 @@ const CitizenHome = ({ modules, getCitizenMenu, fetchedCitizen, isLoading }) => 
 };
 
 const EmployeeHome = ({ modules }) => {
-  if (window.Digit.SessionStorage.get("PT_CREATE_EMP_TRADE_NEW_FORM")) window.Digit.SessionStorage.set("PT_CREATE_EMP_TRADE_NEW_FORM", {});
+  if(window.Digit.SessionStorage.get("PT_CREATE_EMP_TRADE_NEW_FORM")) window.Digit.SessionStorage.set("PT_CREATE_EMP_TRADE_NEW_FORM",{})
   return (
     <div className="employee-app-container">
       <div className="ground-container moduleCardWrapper gridModuleWrapper">

@@ -11,7 +11,7 @@ import {
   ReceiptIcon,
   CaseIcon,
   ComplaintIcon,
-} from "@egovernments/digit-ui-react-components";
+} from "@upyog/digit-ui-react-components";
 
 const EmployeeSideBarMenu = (t, HRMS, FSM, PT, mCollect, DSS, RECEIPTS, TL, NOC, FSTPOperator, PGR, ...links) => [
   HRMS && {
@@ -159,7 +159,7 @@ const EmployeeSideBarMenu = (t, HRMS, FSM, PT, mCollect, DSS, RECEIPTS, TL, NOC,
   },
   PGR && {
     Icon: <ComplaintIcon />,
-    moduleName: t("ES_PGR_HEADER_COMPLAINT1"),
+    moduleName: t("ES_PGR_HEADER_COMPLAINT"),
   },
 ];
 export default EmployeeSideBarMenu;

@@ -16,12 +16,11 @@ import {
   CollectionsBookmarIcons,
   FinanceChartIcon,
   CollectionIcon,
-} from "@egovernments/digit-ui-react-components";
+} from "@upyog/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import ReactTooltip from "react-tooltip";
 
 const SubMenu = ({ item }) => {
-  console.log("itemss", item)
   const [subnav, setSubnav] = useState(false);
   const location = useLocation();
   const { pathname } = location;
@@ -30,14 +29,22 @@ const SubMenu = ({ item }) => {
   const IconsObject = {
     home: <HomeIcon />,
     announcement: <ComplaintIcon />,
-    
+    business: <BPAHomeIcon />,
+    store: <PropertyHouse />,
+    assignment: <CaseIcon />,
+    receipt: <ReceiptIcon />,
     "business-center": <PersonIcon />,
-    
+    description: <DocumentIconSolid />,
+    "water-tap": <DropIcon />,
+    "collections-bookmark": <CollectionsBookmarIcons />,
+    "insert-chart": <FinanceChartIcon />,
+    edcr: <CollectionIcon />,
+    collections: <CollectionIcon />,
   };
   const leftIconArray = item?.icon?.leftIcon?.split?.(":")?.[1] || item?.leftIcon?.split?.(":")[1];
   const leftIcon = IconsObject[leftIconArray] || IconsObject.collections;
   const getModuleName = item?.moduleName?.replace(/[ -]/g, "_");
-  const appendTranslate = t(`ACTION_TEST14_${getModuleName}`);
+  const appendTranslate = t(`ACTION_TEST_${getModuleName}`);
   const trimModuleName = t(appendTranslate?.length > 20 ? appendTranslate.substring(0, 20) + "..." : appendTranslate);
 
   if (item.type === "single") {
@@ -57,7 +64,7 @@ const SubMenu = ({ item }) => {
                 <span> {trimModuleName} </span>
 
                {trimModuleName?.includes("...") &&<ReactTooltip textColor="white" backgroundColor="grey" place="right" type="info" effect="solid" id={`jk-side-${getModuleName}`}>
-                  {t(`ACTION_TEST15_${getModuleName}`)}
+                  {t(`ACTION_TEST_${getModuleName}`)}
                 </ReactTooltip>}
               </a>
             ) : (
@@ -72,7 +79,7 @@ const SubMenu = ({ item }) => {
                   <span> {trimModuleName} </span>
 
                  {trimModuleName?.includes("...") && <ReactTooltip textColor="white" backgroundColor="grey" place="right" type="info" effect="solid" id={`jk-side-${getModuleName}`}>
-                    {t(`ACTION_TEST16_${getModuleName}`)}
+                    {t(`ACTION_TEST_${getModuleName}`)}
                   </ReactTooltip>}
                 </div>
                 {/* <div className="tooltip">
@@ -96,7 +103,7 @@ const SubMenu = ({ item }) => {
                 <span> {trimModuleName} </span>
 
                 {trimModuleName?.includes("...") && <ReactTooltip textColor="white" backgroundColor="grey" place="right" type="info" effect="solid" id={`jk-side-${getModuleName}`}>
-                  {t(`ACTION_TEST17_${getModuleName}`)}
+                  {t(`ACTION_TEST_${getModuleName}`)}
                 </ReactTooltip>}
               </div>
               {/* <div className="tooltip">
@@ -114,7 +121,7 @@ const SubMenu = ({ item }) => {
             .filter((item) => item.url === "url" || item.url !== "")
             .map((item, index) => {
               const getChildName = item?.displayName?.toUpperCase()?.replace(/[ -]/g, "_");
-              const appendTranslate = t(`ACTION_TEST18_${getChildName}`);
+              const appendTranslate = t(`ACTION_TEST_${getChildName}`);
               const trimModuleName = t(appendTranslate?.length > 20 ? appendTranslate.substring(0, 20) + "..." : appendTranslate);
 
               if (item.navigationURL.indexOf("/digit-ui") === -1) {
@@ -128,7 +135,7 @@ const SubMenu = ({ item }) => {
                     <div className="actions" data-tip="React-tooltip" data-for={`jk-side-${index}`}>
                       <span> {trimModuleName} </span>
                     {trimModuleName?.includes("...") && <ReactTooltip textColor="white" backgroundColor="grey" place="right" type="info" effect="solid" id={`jk-side-${index}`}>
-                        {t(`ACTION_TEST19_${getChildName}`)}
+                        {t(`ACTION_TEST_${getChildName}`)}
                       </ReactTooltip>}
                     </div>
                     {/* <div className="actions">
@@ -149,7 +156,7 @@ const SubMenu = ({ item }) => {
                   <div className="actions" data-tip="React-tooltip" data-for={`jk-side-${index}`}>
                     <span> {trimModuleName} </span>
                    {trimModuleName?.includes("...") &&<ReactTooltip textColor="white" backgroundColor="grey" place="right" type="info" effect="solid" id={`jk-side-${index}`}>
-                      {t(`ACTION_TEST20_${getChildName}`)}
+                      {t(`ACTION_TEST_${getChildName}`)}
                     </ReactTooltip>}
                     {/* <div className="tooltip">
                       <p className="p1">{trimModuleName}</p>

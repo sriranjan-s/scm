@@ -1,4 +1,4 @@
-import { Header, DownloadIcon, Table, Loader, Toast, DetailsCard } from "@egovernments/digit-ui-react-components";
+import { Header, DownloadIcon, Table, Loader, Toast, DetailsCard } from "@upyog/digit-ui-react-components";
 import React, { useCallback, useEffect, useMemo, useState, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import DesktopInbox from "../../../components/inbox/BillsDesktopInbox";
@@ -40,11 +40,10 @@ const DownloadBillInbox = () => {
   const fetchPrevPage = () => {
     setPageOffset((prevState) => prevState - pageSize);
   };
-
-
   
 
   const TableComponent = useCallback(() => {
+    
     if (isLoading) {
       return <Loader />;
     } else {
@@ -69,9 +68,10 @@ const DownloadBillInbox = () => {
     />) :
       (
         <>
-          <Table
+          {data && data.groupBillrecords ? 
+            <Table
             t={t}
-            data={data?.groupBillrecords}
+            data={data?data.groupBillrecords:[]}
             columns={columns}
             getCellProps={(cellInfo) => {
               return {
@@ -91,6 +91,10 @@ const DownloadBillInbox = () => {
             manualPagination={false}
             pageSizeLimit={10}
           />
+          : <div className="no-data">
+          <p>{t("DSS_NO_DATA")}</p>
+        </div>}
+          
         </>
       );
     }

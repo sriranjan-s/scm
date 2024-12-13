@@ -1,4 +1,4 @@
-import { BackButton, Dropdown, FormComposer, Loader, Toast } from "@egovernments/digit-ui-react-components";
+import { BackButton, Dropdown, FormComposer, Loader, Toast } from "@upyog/digit-ui-react-components";
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
@@ -7,9 +7,6 @@ import Header from "../../../components/Header";
 
 /* set employee details to enable backward compatiable */
 const setEmployeeDetail = (userObject, token) => {
-  
-
-  console.log("userObject1", userObject)
   let locale = JSON.parse(sessionStorage.getItem("Digit.locale"))?.value || "en_IN";
   localStorage.setItem("Employee.tenant-id", userObject?.tenantId);
   localStorage.setItem("tenant-id", userObject?.tenantId);
@@ -25,7 +22,6 @@ const setEmployeeDetail = (userObject, token) => {
 const Login = ({ config: propsConfig, t, isDisabled }) => {
   const { data: cities, isLoading } = Digit.Hooks.useTenants();
   const { data: storeData, isLoading: isStoreLoading } = Digit.Hooks.useStore.getInitData();
-  console.log("storeData", storeData)
   const { stateInfo } = storeData || {};
   const [user, setUser] = useState(null);
   const [showToast, setShowToast] = useState(null);

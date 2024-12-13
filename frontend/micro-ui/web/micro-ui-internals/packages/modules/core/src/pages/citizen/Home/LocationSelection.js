@@ -1,4 +1,4 @@
-import { BackButton, CardHeader, CardLabelError, PageBasedInput, SearchOnRadioButtons } from "@egovernments/digit-ui-react-components";
+import { BackButton, CardHeader, CardLabelError, PageBasedInput, SearchOnRadioButtons } from "@upyog/digit-ui-react-components";
 import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory, useLocation } from "react-router-dom";
@@ -26,12 +26,8 @@ const LocationSelection = () => {
   }
 
   const RadioButtonProps = useMemo(() => {
-    //adding this condition for not showing state option in case of central instance
-    let updatedCities = cities;
-    if(window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE"))
-    updatedCities = cities?.filter((ob) => ob?.code !== Digit.ULBService.getStateId())
     return {
-      options: updatedCities,
+      options: cities,
       optionsKey: "i18nKey",
       additionalWrapperClass: "reverse-radio-selection-wrapper",
       onSelect: selectCity,

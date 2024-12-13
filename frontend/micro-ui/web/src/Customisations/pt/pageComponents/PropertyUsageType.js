@@ -1,6 +1,6 @@
 import {
   CardLabel, CardLabelError, CitizenInfoLabel, Dropdown, FormStep, LabelFieldPair, RadioButtons
-} from "@egovernments/digit-ui-react-components";
+} from "@upyog/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
@@ -14,7 +14,7 @@ const PropertyUsageType = ({ t, config, onSelect, userType, formData, formState,
   );
   
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = Digit.ULBService.getStateId();
+  const stateId = tenantId.split(".")[0];
   const { data: Menu = { }, isLoading: menuLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "UsageCategory") || { };
   let usagecat = [];
   usagecat = Menu?.PropertyTax?.UsageCategory || [];

@@ -1,5 +1,5 @@
 import React, { Fragment,useState } from 'react'
-import { Card, CardSectionHeader, Header, Loader, RadioButtons, Row, StatusTable, TextInput,ActionBar,SubmitBar } from "@egovernments/digit-ui-react-components";
+import { Card, CardSectionHeader, Header, Loader, RadioButtons, Row, StatusTable, TextInput,ActionBar,SubmitBar } from "@upyog/digit-ui-react-components";
 import { Link, useLocation } from "react-router-dom"
 import { useTranslation } from "react-i18next";
 import { BillDetailsConfig } from './BillDetailsConfig';
@@ -170,7 +170,7 @@ const BillDetailsv1 = (props) => {
                                                         window.location.href.includes("tl") || window.location.href.includes("ws") || window.location.href.includes("bills") ? (
                                                             <div style={{ width: "200%" }}>
                                                                 <Link to={value?.to}>
-                                                                    <span className="link" style={{ color: "#F47738" }}>
+                                                                    <span className="link" style={{ color: "#a82227" }}>
                                                                         {t(value?.title)}
                                                                     </span>
                                                                 </Link>
@@ -184,7 +184,7 @@ const BillDetailsv1 = (props) => {
                                                     text={
                                                         <div>
                                                             <Link to={value?.to}>
-                                                                <span className="link" style={{ color: "#F47738" }}>
+                                                                <span className="link" style={{ color: "#a82227" }}>
                                                                     {value?.value}
                                                                 </span>
                                                             </Link>

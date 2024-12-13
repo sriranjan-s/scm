@@ -10,7 +10,7 @@ import {
   BreadCrumb,
   BackButton,
   Loader,
-} from "@egovernments/digit-ui-react-components";
+} from "@upyog/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
@@ -115,19 +115,11 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
   }
 
   const setUserEmailAddress = (value) => {
-    if (userInfo?.userName !== value) {
-      setEmail(value);
-  
-      if (value.length && !(value.includes("@") && value.includes("."))) {
-        setErrors({
-          ...errors,
-          emailAddress: { type: "pattern", message: "CORE_COMMON_PROFILE_EMAIL_INVALID" },
-        });
-      } else {
-        setErrors({ ...errors, emailAddress: null });
-      }
-    } else {
-      setErrors({ ...errors, emailAddress: null });
+    setEmail(value);
+    if(value.length && /*!(value.includes("@") && value.includes("."))*/ !(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value))){
+      setErrors({...errors, emailAddress: {type: "pattern", message: t("CORE_COMMON_PROFILE_EMAIL_INVALID")}})
+    }else{
+      setErrors({...errors, emailAddress : null})
     }
   }
 
@@ -206,7 +198,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
         throw JSON.stringify({ type: "error", message: t("CORE_COMMON_PROFILE_EMAIL_INVALID") });
       }
 
-      if (changepassword && (currentPassword.length || newPassword.length || confirmPassword.length)) {
+      if (currentPassword.length || newPassword.length || confirmPassword.length) {
         if (newPassword !== confirmPassword) {
           throw JSON.stringify({ type: "error", message: t("CORE_COMMON_PROFILE_PASSWORD_MISMATCH") });
         }

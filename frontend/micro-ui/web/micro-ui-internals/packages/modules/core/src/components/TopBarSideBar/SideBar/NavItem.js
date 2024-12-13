@@ -14,12 +14,12 @@ import {
   CollectionsBookmarIcons,
   FinanceChartIcon,
   CollectionIcon,
-} from "@egovernments/digit-ui-react-components";
+} from "@upyog/digit-ui-react-components";
 import ReactTooltip from 'react-tooltip';
 import { useTranslation } from 'react-i18next';
 
 const NavItem = props => {
-  let { label, icon, to, children } = props?.item;
+  let { label, icon, to, children } = props.item;
   const { t } = useTranslation();
   const IconsObject = {
     home: <HomeIcon />,
@@ -40,7 +40,7 @@ const NavItem = props => {
   const leftIcon = IconsObject[leftIconArray] || IconsObject.collections;
   const iconArr=icon?.leftIcon?.split?.(":")|| leftIcon?.split?.(":");
   if(iconArr?.[0]=='dynamic'){
-    var IconComp = require("@egovernments/digit-ui-react-components")?.[iconArr?.[1]];
+    var IconComp = require("@upyog/digit-ui-react-components")?.[iconArr?.[1]];
     leftIcon=IconComp?<IconComp/>:leftIcon;
   }
   const getModuleName = label?.replace(/[ -]/g, "_").toUpperCase();
@@ -48,7 +48,7 @@ const NavItem = props => {
   const trimModuleName = t(appendTranslate?.length > 20 ? appendTranslate.substring(0, 20) + "..." : appendTranslate);
 
   if (children) {
-    return <NavItemHeader item={props?.item} />;
+    return <NavItemHeader item={props.item} />;
   }
 
   return (

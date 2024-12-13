@@ -1,5 +1,4 @@
 //HAVE TO CHANGE THI
-
 import { ApiCacheService } from "../atoms/ApiCacheService";
 import Urls from "../atoms/urls";
 import { Request, ServiceRequest } from "../atoms/Utils/Request";
@@ -13,6 +12,13 @@ import { PersistantStorage } from "../atoms/Utils/Storage";
 //   return str;
 // };
 
+const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
+  if (searcher == "") return str;
+  while (str.includes(searcher)) {
+    str = str.replace(searcher, replaceWith);
+  }
+  return str;
+};
 const SortByName = (na, nb) => {
   if (na < nb) {
     return -1;
@@ -55,7 +61,7 @@ const initRequestBody = (tenantId) => ({
       },
       {
         moduleName: "tenant",
-        masterDetails: [{ name: "tenants" }, { name: "citymodule" }],
+        masterDetails: [{ name: "tenants" }, { name: "citymodule" },{ name: "departments" },{ name: "offices" }],
       },
       {
         moduleName: "DIGIT-UI",
@@ -140,7 +146,7 @@ const getBillsGenieKey = (tenantId, moduleCode) => ({
       },
       {
         moduleName: "tenant",
-        masterDetails: [{ name: "tenants" }, { name: "citymodule" }],
+        masterDetails: [{ name: "tenants" }, { name: "citymodule" },{ name: "departments" },{ name: "offices" }],
       },
       {
       moduleName: "common-masters",
@@ -160,6 +166,23 @@ const getModuleServiceDefsCriteria = (tenantId, moduleCode) => ({
         masterDetails: [
           {
             name: "ServiceDefs",
+          },
+        ],
+      },
+    ],
+  },
+});
+
+const getModuleServiceDefsInputCriteria = (tenantId, moduleCode) => ({
+  type: "serviceInputDefs",
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: `RAINMAKER_${moduleCode}`,
+        masterDetails: [
+          {
+            name: "InputFields",
           },
         ],
       },
@@ -213,6 +236,24 @@ const getApplicationChannelCriteria = (tenantId, moduleCode) => ({
         masterDetails: [
           {
             name: "ApplicationChannel",
+            filter: null,
+          },
+        ],
+      },
+    ],
+  },
+});
+
+const getUrcConfigCriteria = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "UrcConfig",
             filter: null,
           },
         ],
@@ -445,6 +486,66 @@ const getDocumentRequiredScreenCategory = (tenantId, moduleCode) => ({
     ],
   },
 });
+const getPetDocumentsRequiredScreenCategory = (tenantId, moduleCode) => ({
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "Documents",
+          },
+        ],
+      },
+    ],
+  },
+});
+
+const getPetTypeList = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "PetType",
+          },
+        ],
+      },
+    ],
+  },
+});
+
+const getBreedTypeList = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "BreedType",
+          },
+        ],
+      },
+    ],
+  },
+});
+
+//##############################################
+const getPetDocumentsRequiredScreen = (MdmsRes) => {
+  MdmsRes["PetService"].Documents.filter((Documents) => Documents.active).map((dropdownData) => {
+    return {
+      ...Documents,
+      i18nKey: `${dropdownData.code}`,
+    };
+  });
+};
+//######################
 
 const getDefaultMapConfig = (tenantId, moduleCode) => ({
   details: {
@@ -683,6 +784,18 @@ const getDssDashboardCriteria = (tenantId, moduleCode) => ({
   },
 });
 
+const getMCollectBillingServiceCriteria = (tenantId, moduleCode, type, filter) => ({
+  type,
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [{ name: "BusinessService", filter: filter }],
+      },
+    ],
+  },
+});
 
 const getTradeUnitsDataList = (tenantId, moduleCode, type, filter) => ({
   type,
@@ -697,7 +810,18 @@ const getTradeUnitsDataList = (tenantId, moduleCode, type, filter) => ({
   },
 });
 
-
+const getMCollectApplicationStatusCriteria = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [{ name: "applicationStatus" }],
+      },
+    ],
+  },
+});
 
 const getHrmsEmployeeRolesandDesignations = () => ({
   moduleDetails: [
@@ -710,7 +834,7 @@ const getHrmsEmployeeRolesandDesignations = () => ({
     },
     {
       moduleName: "tenant",
-      masterDetails: [{ name: "tenants" }],
+      masterDetails: [{ name: "tenants" },{ name: "departments" },{ name: "offices" }],
     },
     {
       moduleName: "ACCESSCONTROL-ROLES",
@@ -820,11 +944,59 @@ const getFSTPORejectionReasonCriteria = (tenantId, moduleCode, type) => ({
   },
 });
 
+const getFSMPaymentTypeCriteria = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "PaymentType",
+            filter: null,
+          },
+        ],
+      },
+    ],
+  },
+});
 
+const getFSMTripNumberCriteria = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "TripNumber",
+            filter: null,
+          },
+        ],
+      },
+    ],
+  },
+});
 
-
-
-
+const getFSMReceivedPaymentTypeCriteria = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "ReceivedPaymentType",
+            filter: null,
+          },
+        ],
+      },
+    ],
+  },
+});
 
 const getWSTaxHeadMasterCritera = (tenantId, moduleCode, type) => ({
   type,
@@ -916,6 +1088,8 @@ const GetEgovLocations = (MdmsRes) => {
 
 const GetServiceDefs = (MdmsRes, moduleCode) => MdmsRes[`RAINMAKER-${moduleCode}`].ServiceDefs.filter((def) => def.active);
 
+const GetServiceInputDefs = (MdmsRes, moduleCode) => MdmsRes[`RAINMAKER_${moduleCode}`]
+
 const GetSanitationType = (MdmsRes) => MdmsRes["FSM"].SanitationType.filter((type) => type.active);
 
 const GetPitType = (MdmsRes) =>
@@ -926,6 +1100,8 @@ const GetApplicationChannel = (MdmsRes) =>
     ...channel,
     i18nKey: `ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${channel.code}`,
   }));
+
+const getUrcConfig = (MdmsRes) => MdmsRes["FSM"].UrcConfig;
 
 const GetPropertyType = (MdmsRes) =>
   MdmsRes["FSM"].PropertyType.filter((property) => property.active && !property.propertyType).map((item) => ({
@@ -991,6 +1167,56 @@ const GetPropertyOwnerShipCategory = (MdmsRes) =>
       i18nKey: `COMMON_MASTER_OWNER_TYPE_${ownerShipDetails.code}`,
     };
   });
+
+  const getPetType = (MdmsRes) => {
+    return MdmsRes["PetService"].PetType.filter((PetType) => PetType.active).map((petDetails) => {
+      return {
+        ...petDetails,
+        i18nKey: `PTR_PET_TYPE_${petDetails.code}`,
+      };
+    });
+    //return MdmsRes;
+  };
+  
+  const getBreedType = (MdmsRes) => {
+    return MdmsRes["PetService"].BreedType.filter((BreedType) => BreedType.active).map((breedDetails) => {
+      return {
+        ...breedDetails,
+        i18nKey: `PTR_BREED_TYPE_${breedDetails.code}`,
+      };
+    });
+    //return MdmsRes;
+  };
+  
+  const PTRGenderType = (MdmsRes) => {
+    MdmsRes["common-masters"].GenderType.filter((GenderType) => GenderType.active).map((ptrgenders) => {
+      return {
+        ...ptrgenders,
+        i18nKey: `PTR_GENDER_${ptrgenders.code}`,
+      };
+    });
+  };
+  /////////////////
+  
+  ///////////
+  const PTRPetType = (MdmsRes) => {
+    MdmsRes["PetService"].PetType.filter((PetType) => PetType.active).map((petone) => {
+      return {
+        ...petone,
+        i18nKey: `PTR_PET_${petone.code}`,
+      };
+    });
+  };
+  
+  const PTRBreedType = (MdmsRes) => {
+    MdmsRes["PetService"].BreedType.filter((BreedType) => BreedType.active).map((breedone) => {
+      return {
+        ...breedone,
+        i18nKey:  `PTR_PET_TYPE_${breedone.code}`,
+      };
+    });
+  };
+  ///////////
 
 const GetTradeOwnerShipCategory = (MdmsRes) =>
   MdmsRes["common-masters"].OwnerShipCategory.filter((ownerShip) => ownerShip.active).map((ownerShipDetails) => {
@@ -1159,7 +1385,21 @@ const HRGenderType = (MdmsRes) => {
   });
 };
 
+const GetMCollectBusinessService = (MdmsRes) =>
+  MdmsRes["BillingService"].BusinessService.map((businesServiceDetails) => {
+    return {
+      ...businesServiceDetails,
+      i18nKey: `BILLINGSERVICE_BUSINESSSERVICE_${businesServiceDetails.code}`,
+    };
+  });
 
+const GetMCollectApplicationStatus = (MdmsRes) =>
+  MdmsRes["mCollect"].applcationStatus.map((appStatusDetails) => {
+    return {
+      ...appStatusDetails,
+      i18nKey: `BILLINGSERVICE_BUSINESSSERVICE_${appStatusDetails.code}`,
+    };
+  });
 
 const getFSMGenderType = (MdmsRes) => {
   return MdmsRes["common-masters"].GenderType.map((genderDetails) => {
@@ -1230,6 +1470,8 @@ const transformResponse = (type, MdmsRes, moduleCode, tenantId) => {
       return GetEgovLocations(MdmsRes);
     case "serviceDefs":
       return GetServiceDefs(MdmsRes, moduleCode);
+    case "serviceInputDefs":
+      return GetServiceInputDefs(MdmsRes, moduleCode);
     case "ApplicationChannel":
       return GetApplicationChannel(MdmsRes);
     case "SanitationType":
@@ -1288,7 +1530,10 @@ const transformResponse = (type, MdmsRes, moduleCode, tenantId) => {
       return getChargeSlabsCategory(MdmsRes);
     case "DssDashboard":
       return getDssDashboard(MdmsRes);
-    
+    case "BusinessService":
+      return GetMCollectBusinessService(MdmsRes);
+    case "applcatonStatus":
+      return GetMCollectApplicationStatus(MdmsRes);
     case "FSTPPlantInfo":
       return GetFSTPPlantInfo(MdmsRes);
     case "GenderType":
@@ -1313,6 +1558,23 @@ const transformResponse = (type, MdmsRes, moduleCode, tenantId) => {
       return GetTripNumber(MdmsRes);
     case "ReceivedPaymentType":
       return GetReceivedPaymentType(MdmsRes);
+    case "UrcConfig":
+      return getUrcConfig(MdmsRes);
+    case "Documents":
+      return getPetDocumentsRequiredScreen(MdmsRes);
+    case "PetType":
+      return getPetType(MdmsRes); 
+    case "BreedType":
+      return getBreedType(MdmsRes); 
+    case "PTRGendertype":
+      return PTRGenderType(MdmsRes);
+
+    case "PTRPetType":
+      return PTRPetType(MdmsRes);
+
+    case "PTRBreedType":
+      return PTRBreedType(MdmsRes);
+     
     default:
       return MdmsRes;
   }
@@ -1422,11 +1684,18 @@ export const MdmsService = {
   getServiceDefs: (tenantId, moduleCode) => {
     return MdmsService.getDataByCriteria(tenantId, getModuleServiceDefsCriteria(tenantId, moduleCode), moduleCode);
   },
+  getServiceInputDefs: (tenantId, moduleCode) => {
+    return MdmsService.getDataByCriteria(tenantId, getModuleServiceDefsInputCriteria(tenantId, moduleCode), moduleCode);
+  },
+  
   getSanitationType: (tenantId, moduleCode) => {
     return MdmsService.getDataByCriteria(tenantId, getSanitationTypeCriteria(tenantId, moduleCode), moduleCode);
   },
   getApplicationChannel: (tenantId, moduleCode) => {
     return MdmsService.getDataByCriteria(tenantId, getApplicationChannelCriteria(tenantId, moduleCode), moduleCode);
+  },
+  getUrcConfig: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getUrcConfigCriteria(tenantId, moduleCode, type), moduleCode);
   },
   getPropertyType: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getPropertyTypeCriteria(tenantId, moduleCode, type), moduleCode);
@@ -1448,6 +1717,27 @@ export const MdmsService = {
   },
   getPaymentRules: (tenantId, filter) => {
     return MdmsService.call(tenantId, getBillingServiceForBusinessServiceCriteria(filter));
+  },
+  getPetDocumentsRequiredScreen: (tenantId, moduleCode) => {
+    return MdmsService.getDataByCriteria(tenantId, getPetDocumentsRequiredScreenCategory(tenantId, moduleCode), moduleCode);
+  },
+
+  getPetType: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getPetTypeList(tenantId, moduleCode, type), moduleCode);
+  },
+
+  getBreedType: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getBreedTypeList(tenantId, moduleCode, type), moduleCode);
+  },
+  PTRGenderType: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getGenderTypeList(tenantId, moduleCode, type), moduleCode);
+  },
+  PTRPetType: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getPetTypeList(tenantId, moduleCode, type), moduleCode);
+  },
+
+  PTRBreedType: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getBreedTypeList(tenantId, moduleCode, type), moduleCode);
   },
 
   getCustomizationConfig: (tenantId, moduleCode) => {
@@ -1533,7 +1823,12 @@ export const MdmsService = {
   getHelpText: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getGeneralCriteria(tenantId, moduleCode, type), moduleCode);
   },
-  
+  getMCollectBillingService: (tenantId, moduleCode, type, filter) => {
+    return MdmsService.getDataByCriteria(tenantId, getMCollectBillingServiceCriteria(tenantId, moduleCode, type, filter), moduleCode);
+  },
+  getMCollectApplcationStatus: (tenantId, moduleCode, type, filter) => {
+    return MdmsService.getDataByCriteria(tenantId, getMCollectApplicationStatusCriteria(tenantId, moduleCode, type, filter), moduleCode);
+  },
   getHrmsEmployeeRolesandDesignation: (tenantId) => {
     return MdmsService.call(tenantId, getHrmsEmployeeRolesandDesignations());
   },

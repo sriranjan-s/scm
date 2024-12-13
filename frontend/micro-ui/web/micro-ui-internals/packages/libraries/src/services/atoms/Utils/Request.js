@@ -69,7 +69,6 @@ export const Request = async ({
   reqTimestamp = false,
   plainAccessRequest = null
 }) => {
-  console.log("ur1", url)
   if (method.toUpperCase() === "POST") {
     const ts = new Date().getTime();
     data.RequestInfo = {
@@ -90,7 +89,7 @@ export const Request = async ({
     if (reqTimestamp) {
       data.RequestInfo = { ...data.RequestInfo, ts: Number(ts) };
     }
-console.log("url23", url)
+
     /* 
     Feature :: Privacy
     
@@ -98,7 +97,7 @@ console.log("url23", url)
     */
     const privacy = Digit.Utils.getPrivacyObject();
     if (privacy && !url.includes("/edcr/rest/dcr/") && !noRequestInfo) {
-    data.RequestInfo = { ...data.RequestInfo, plainAccessRequest: { ...privacy } };
+      data.RequestInfo = { ...data.RequestInfo, plainAccessRequest: { ...privacy } };
     }
 
     if(plainAccessRequest){
@@ -106,11 +105,6 @@ console.log("url23", url)
     }
 
   }
-
-  //for the central instance if any api doesnot need tenantId then url can be added in below confirguration
-  const urlwithoutTenantId = [
-    "/user/oauth/token"
-  ];
 
   const headers1 = {
     "Content-Type": "application/json",
@@ -159,7 +153,7 @@ console.log("url23", url)
     Digit.SessionStorage.get("userType") === "citizen"
       ? Digit.ULBService.getStateId()
       : Digit.ULBService.getCurrentTenantId() || Digit.ULBService.getStateId();
-  if (!params["tenantId"] && window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE")  && !(urlwithoutTenantId?.filter((ob) => url?.includes(ob))?.length > 0)) {
+  if (!params["tenantId"] && window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE")) {
     params["tenantId"] = tenantInfo;
   }
 

@@ -1,11 +1,11 @@
-import { EmployeeModuleCard, CollectionIcon } from "@egovernments/digit-ui-react-components";
+import { EmployeeModuleCard, CollectionIcon } from "@upyog/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
 const BillsCard = () => {
   const { t } = useTranslation();
   const userRoles = Digit.SessionStorage.get("User")?.info?.roles;
-  const isEmployee = userRoles.find((role) => role.code === "1USER");
+  const isEmployee = userRoles.find((role) => role.code === "SUPERUSER");
   if (!isEmployee) return null;
   const propsForModuleCard = {
     Icon: <CollectionIcon />,
