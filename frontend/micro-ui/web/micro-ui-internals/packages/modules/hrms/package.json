@@ -1,6 +1,7 @@
 {
   "name": "@upyog/digit-ui-module-hrms",
   "version": "1.8.0",
+  "proxy": "https://cpgram-demo.ddns.net",
   "description": "Digit HRMS Module",
   "license": "MIT",
   "main": "dist/index.js",

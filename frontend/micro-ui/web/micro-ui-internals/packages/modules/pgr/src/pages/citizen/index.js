@@ -18,6 +18,8 @@ const App = () => {
 
   const CreateComplaint = Digit?.ComponentRegistryService?.getComponent("PGRCreateComplaintCitizen");
   const ComplaintsList = Digit?.ComponentRegistryService?.getComponent("PGRComplaintsList");
+  const AppealForm = Digit?.ComponentRegistryService?.getComponent("PGRAppealForm");
+  const SearchPage = Digit?.ComponentRegistryService?.getComponent("PGRSearchPage");
   const ComplaintDetailsPage = Digit?.ComponentRegistryService?.getComponent("PGRComplaintDetailsPage");
   const SelectRating = Digit?.ComponentRegistryService?.getComponent("PGRSelectRating");
   const Response = Digit?.ComponentRegistryService?.getComponent("PGRResponseCitzen");
@@ -30,6 +32,8 @@ const App = () => {
           {/* <AppContainer> */}
           <PrivateRoute path={`${path}/create-complaint`} component={CreateComplaint} />
           <PrivateRoute path={`${path}/complaints`} exact component={ComplaintsList} />
+          <PrivateRoute path={`${path}/create-appeal`} exact component={AppealForm} />
+          <PrivateRoute path={`${path}/search-appeal`} exact component={SearchPage} />
           <PrivateRoute path={`${path}/complaints/:id*`} component={ComplaintDetailsPage} />
           <PrivateRoute
             path={`${path}/reopen`}

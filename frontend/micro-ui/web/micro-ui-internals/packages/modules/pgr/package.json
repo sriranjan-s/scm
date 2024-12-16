@@ -1,6 +1,7 @@
 {
   "name": "@upyog/digit-ui-module-pgr",
   "version": "1.8.4",
+  "proxy": "https://cpgram-demo.ddns.net",
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",

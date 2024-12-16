@@ -66,8 +66,19 @@ const HRMSCard = () => {
                      
         ]
     }
+    const propsForAppealCard = {
+        Icon : <PersonIcon/>,
+        moduleName: t("Appellate Officer Dashboard"),
+       
+        links: [
+            {
+                label: t("Dashboard"),
+                link: `/digit-ui/employee/hrms/appeal-dashboard`
+            }        
+        ]
+    }
 
-    return <div><EmployeeModuleCard {...propsForModuleCardUserManagement} /><EmployeeModuleCard {...propsForModuleCardDepartmengt} /></div>
+    return <div><EmployeeModuleCard {...propsForModuleCardUserManagement} /><EmployeeModuleCard {...propsForModuleCardDepartmengt} /><EmployeeModuleCard {...propsForAppealCard} /></div>
 };
 
 export default HRMSCard;

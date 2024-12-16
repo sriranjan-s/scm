@@ -21,6 +21,8 @@ import EditEmployee from "./pages/EditEmployee/index";
 import Details from "./pages/EmployeeDetails";
 import Inbox from "./pages/Inbox";
 import Response from "./pages/Response";
+import AppealDashboard from "./pages/AppealDashboard";
+import GrievanceDetailsPage from "./pages/GrievanceDetailsPage";
 
 export const HRMSModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "HR";
@@ -58,6 +60,8 @@ const componentsToRegister = {
   HREditEmpolyee: EditEmployee,
   HRCreateEmployee: CreateEmployee,
   HRInbox: Inbox,
+  PGRAppealDashboard: AppealDashboard,
+  PGRGrievanceDetailsPage: GrievanceDetailsPage,
   HRMS_INBOX_FILTER: (props) => <InboxFilter {...props} />,
 };
 
