@@ -10,6 +10,9 @@ const AppealForm = () => {
   const [applicationNumber, setApplicationNumber] = useState("");
   const [grievanceIdFromResponse, setGrievanceIdFromResponse] = useState("");
   const [showCard, setShowCard] = useState(false);
+  const [grievanceData, setGrievanceData] = useState(null);
+  const [loadingGrievance, setLoadingGrievance] = useState(false);
+  const tenantId = Digit.ULBService.getCurrentTenantId()
   const MAX_COMMENT_LENGTH = 5000;
   const history = useHistory();
 
@@ -83,60 +86,80 @@ const AppealForm = () => {
     setError(null);
     setSuccess(null);
 
-    const data = {
-      RequestInfo: {
-        apiId: "Rainmaker",
-        ver: ".01",
-        action: "",
-        did: "1",
-        key: "",
-        msgId: "20170310130900|en_IN",
-        requesterId: "",
-        authToken: "9add4a46-ce8a-476b-892b-9e6d5dbeed29",
-      },
-      Appeal: {
-        tenantId: "pg.telecom",
-        grievanceId: grievanceId, 
-        comments: comments,
-        accountId: "137715d3-2b59-488d-a7a2-766f2818e033",
-        businessService: "APPEAL", 
-        additionalDetails: {},
-        workflow: {
-          action: "INITIATE",
-          assignes: null,
-          comments: null,
-          verificationDocuments: null,
-        },
-        documents: null,
-      },
-    };
-
     try {
-      const response = await fetch('/pgr-services/appeal/_create', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json, text/plain, */*',
-          'Content-Type': 'application/json;charset=UTF-8'
-        },
-        body: JSON.stringify(data),
-      });
-
-      const result = await response.json();
-      if (response.ok) {
-        const appeal = result.Appeals[0];
-        setSuccess("Appeal submitted successfully!");
-        setApplicationNumber(appeal.applicationNumber);
-        setGrievanceIdFromResponse(appeal.grievanceId);
-        setShowCard(true);
-      } else {
-        setError(result.message || "Failed to submit appeal.");
-      }
+      setLoadingGrievance(true);
+      const grievanceResponse = await Digit.PGRService.search(tenantId, { grievanceId });
+      setGrievanceData(grievanceResponse.data); 
     } catch (err) {
-      setError("An error occurred. Please try again.");
-    } finally {
+      setError("An error occurred while fetching grievance data");
       setLoading(false);
+      return;  
     }
-  };
+
+    if (grievanceData) {
+      const additionalDetails = {
+        applicantName: grievanceData.applicantName,
+        location: grievanceData.location,
+        category: grievanceData.category,
+      };
+
+      const authToken = window.localStorage.getItem("token")
+
+      const data = {
+        RequestInfo: {
+          apiId: "Rainmaker",
+          ver: ".01",
+          action: "",
+          did: "1",
+          key: "",
+          msgId: "20170310130900|en_IN",
+          requesterId: "",
+          authToken: authToken,
+        },
+        Appeal: {
+          tenantId: "pg.telecom",
+          grievanceId: grievanceId,
+          comments: comments,
+          accountId: authToken,
+          businessService: "APPEAL",
+          additionalDetails: {},
+          workflow: {
+            action: "INITIATE",
+            assignes: null,
+            comments: null,
+            verificationDocuments: null,
+          },
+          documents: null,
+        },
+      };
+
+      try {
+        const response = await fetch('/pgr-services/appeal/_create', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json;charset=UTF-8'
+          },
+          body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+          const appeal = result.Appeals[0];
+          setSuccess("Appeal submitted successfully!");
+          setApplicationNumber(appeal.applicationNumber);
+          setGrievanceIdFromResponse(appeal.grievanceId);
+          setShowCard(true);
+        } else {
+          setError(result.message || "Failed to submit appeal.");
+        }
+      } catch (err) {
+        setError("An error occurred. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+  }
 
   const handleCommentChange = (e) => {
     const newComment = e.target.value;
@@ -151,13 +174,13 @@ const AppealForm = () => {
 
   return (
     <div>{showCard ? (
-        <div style={styles.card}>
-          <h2 style={styles.heading}>Appeal Created Successfully !</h2>
-          <p><strong>Appeal ID:</strong> {applicationNumber}</p>
-          <p>The appeal has been created for Grievance ID: {grievanceIdFromResponse}</p>
-          <button onClick={goHome} style={styles.button}>Go to Home</button>
-        </div>
-      ) : (<div>
+      <div style={styles.card}>
+        <h2 style={styles.heading}>Appeal Created Successfully !</h2>
+        <p><strong>Appeal ID:</strong> {applicationNumber}</p>
+        <p>The appeal has been created for Grievance ID: {grievanceIdFromResponse}</p>
+        <button onClick={goHome} style={styles.button}>Go to Home</button>
+      </div>
+    ) : (<div>
       <h2 style={styles.heading}>Create Appeal</h2>
       <form onSubmit={handleSubmit}>
         <div>

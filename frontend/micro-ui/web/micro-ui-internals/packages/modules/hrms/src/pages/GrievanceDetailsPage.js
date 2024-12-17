@@ -33,6 +33,7 @@ const GrievanceDetailsPage = () => {
 // Function to fetch appeal details
 const fetchAppealDetails = async () => {
   const url = `/pgr-services/appeal/_search?applicationNumber=${appealId}&tenantId=${tenantId}`;
+  const authToken = window.localStorage.getItem("token");
 
     const data = {
       "RequestInfo": {
@@ -43,7 +44,7 @@ const fetchAppealDetails = async () => {
           "key": "",
           "msgId": "20170310130900|en_IN",
           "requesterId": "",
-          "authToken": "9add4a46-ce8a-476b-892b-9e6d5dbeed29"
+          "authToken": authToken
       }
   }
   try {

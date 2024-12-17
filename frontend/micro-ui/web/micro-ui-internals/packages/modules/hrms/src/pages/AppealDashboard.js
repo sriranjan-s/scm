@@ -24,6 +24,7 @@ const AppealDashboard = () => {
         const fetchAppeals = async () => {
             try {
                 const tenantId = Digit.ULBService.getCurrentTenantId();
+                const authToken = window.localStorage.getItem("token");
                 const response = await fetch(
                     `/pgr-services/appeal/_search?tenantId=${tenantId}`,
                     {
@@ -41,7 +42,7 @@ const AppealDashboard = () => {
                                 "key": "",
                                 "msgId": "20170310130900|en_IN",
                                 "requesterId": "",
-                                "authToken": "9add4a46-ce8a-476b-892b-9e6d5dbeed29",
+                                "authToken": authToken,
                             }
                         })
                     }
