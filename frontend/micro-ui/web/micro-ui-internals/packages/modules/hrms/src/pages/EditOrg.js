@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useHistory,useLocation } from "react-router-dom";
 import { newConfig } from "../components/config/config";
 
-const CreateEmployee = () => {
+const EditOrg = ({data}) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [canSubmit, setSubmitValve] = useState(false);
   const [mobileNumber, setMobileNumber] = useState(null);
@@ -22,7 +22,7 @@ const CreateEmployee = () => {
   const [status, setStatus] = useState("Active");
   const [dept, setDept] = useState([]);
   const location = useLocation();
-const [formData, setFormData] =useState(location?.state?.department)
+const [formData, setFormData] =useState(data)
   const [locationDetails, setLocationDetails] = useState({
     subDistrict: "",
     district: "",
@@ -112,7 +112,7 @@ console.log("locationlocation",location)
             (dept) => dept.code === formData.code
           );
           console.log("matchedDept",matchedDept,formData.i18nKey,departmentDropdown)
-          setDepartment(matchedDept.name)
+          setDepartment(matchedDept?.name)
     }
   }, [formData]);
 
@@ -233,203 +233,148 @@ console.log("locationlocation",location)
   console.log("deptdept", dept)
   return (
     <div>
-      <style>
-        {`
-                body {
-                    font-family: Arial, sans-serif;
-                    background-color: #f0f4f7;
-                    margin: 0;
-                    padding: 0;
-                }
-                .grid-container {
-                  display: grid;
-                  grid-template-columns: 1fr;
-                  gap: 16px;
-                }
-
-                @media (min-width: 520px) {
-                  .grid-container .half-width {
-                    grid-template-columns: repeat(2, 1fr); 
-                  }
-                }
-
-                @media (min-width: 768px) {
-                  .grid-container {
-                    grid-template-columns: 1fr 
-                  }
-                  .grid-container .half-width {
-                    grid-template-columns: repeat(2, 1fr); 
-                  }
-                  .grid-container .full-width {
-                    grid-template-columns: 1fr 
-                  }
-                  .grid-container .one-third-width {
-                    grid-template-columns: repeat(3, 1fr) 
-                  }
-                }
-                
-                .login-container {
-                    max-width: 100%;
-                    margin: auto;
-                    background-color: #ffffff;
-                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                }
-                
-                .login-section {
-                    padding: 20px;
-                }
-                
-                h3 {
-                    text-align: center;
-                }
-                
-                label {
-                    display: block;
-                    margin: 10px 0 5px;
-                }
-                
-                input {
-                    width: calc(100% - 20px);
-                    padding: 10px;
-                    margin-bottom: 15px;
-                    border: 1px solid #ccc;
-                    border-radius: 5px;
-                }
-                
-                .otp-container {
-                    display: flex;
-                    
-                    gap: 10px;
-                }
-                
-                button {
-                    background-color: #f57c00; /* Orange color */
-                    color: white;
-                    padding: 10px;
-                    border: none;
-                    border-radius: 5px;
-                    cursor: pointer;
-                    width: 50%;
-                }
-                
-                button:hover {
-                    background-color: #e65c00;
-                }
-                
-                .submit-button {
-                    display: block;
-                    width: 50%;
-                    margin: 20px auto;
-                }
-                
-                .action-buttons {
-                    display: flex;
-                    justify-content: center;
-                    gap: 20px;
-                    margin: 10px 0;
-                }
-                
-                .social-login {
-                    text-align: center;
-                    margin: 20px 0;
-                }
-                
-                .social-icon {
-                    width: 30px;
-                    margin: 0 10px;
-                    cursor: pointer;
-                }
-                #department {
-                  border: 1px solid #ccc;
-                  border-radius: 5px;
-                }
-                #address{
-                  border: 1px solid #ccc;
-                  border-radius: 5px;
-                }
-                #status{
-                  border: 1px solid #ccc;
-                  border-radius: 5px;
-                }
-                `}
-        </style>
-<div className="login-container" style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+    <style>
+      {`
+        body {
+          font-family: Arial, sans-serif;
+          background-color: #f0f4f7;
+          margin: 0;
+          padding: 0;
+        }
+  
+        h4 {
+          color: #23316b;
+          margin-bottom: 10px;
+          border-bottom: 1px solid #ccc;
+          padding-bottom: 5px;
+          font-weight: bold;
+        }
+  
+        .grid-container {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr); /* Two fields per row */
+          gap: 16px;
+        }
+  
+        .form-group {
+          display: flex;
+          align-items: center;
+          gap: 20px;
+          margin-bottom: 15px;
+        }
+  
+        label {
+          flex: 0.3; /* Label takes up 30% of the width */
+          text-align: right;
+          font-weight: bold;
+          color: #23316b;
+        }
+  
+        input, select, textarea {
+          flex: 1; /* Input takes the remaining space */
+          padding: 10px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+        }
+  
+        .card {
+          background-color: white;
+          border: 1px solid #ccc;
+          border-radius: 8px;
+          padding: 20px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          margin-bottom: 20px;
+          max-width:none;
+        }
+  
+        button {
+          background-color: #23316b;
+          color: white;
+          padding: 10px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          width: 300px;
+          margin: 20px auto;
+          display: block;
+        }
+  
+        button:hover {
+          background-color: #1e2749;
+        }
+      `}
+    </style>
+  
+    <div className="login-container" style={{ display: "flex", justifyContent: "center", alignItems: "center"}}>
       <div className="login-form" style={{ width: "100%", padding: "0 5%" }}>
-        <h3 style={{ fontSize: "x-large", color: "#23316b", fontWeight: "bolder" }}>
-          Edit Organization
-        </h3>
+        <h3 style={{ fontSize: "x-large", color: "#23316b", fontWeight: "bolder" }}>Edit Organization</h3>
         <form onSubmit={handleSubmit}>
-          <label htmlFor="department" style={{ color: "#23316b" }}>
-            Department/Ministry
-          </label>
-
-<input
+          
+          {/* Basic Details Card */}
+          <div className="card">
+            <h4>Basic Details</h4>
+            <div className="grid-container">
+              {/* Department */}
+              <div className="form-group">
+                <label htmlFor="department">Department/Ministry</label>
+                <input
                   type="text"
                   id="department"
                   value={department}
-                 disabled
+                  disabled
                   required
-                  style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
                 />
-
-            <div className="grid-container half-width">
-              <div>
-                <label htmlFor="email" style={{ color: "#23316b" }}>
-                  Department/Ministry Email ID
-                </label>
+              </div>
+              {/* Head Name */}
+              <div className="form-group">
+                <label htmlFor="headName">Head Name</label>
+                <input
+                  type="text"
+                  id="headName"
+                  value={headName}
+                  disabled
+                  required
+                />
+              </div>
+            </div>
+          </div>
+  
+          {/* Contact Details Card */}
+          <div className="card">
+            <h4>Contact Details</h4>
+            <div className="grid-container">
+              <div className="form-group">
+                <label htmlFor="email">Email</label>
                 <input
                   type="email"
                   id="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
                 />
               </div>
-              <div>
-                <label htmlFor="telephone" style={{ color: "#23316b" }}>
-                  Telephone Number
-                </label>
+              <div className="form-group">
+                <label htmlFor="telephone">Telephone</label>
                 <input
                   type="tel"
                   id="telephone"
                   value={telephone}
                   onChange={(e) => setTelephone(e.target.value)}
                   required
-                  style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
                 />
               </div>
-            </div>
-            <div>
-              <label htmlFor="headName" style={{ color: "#23316b" }}>
-                Department/Ministry Head Name
-              </label>
-              <input
-                type="text"
-                id="headName"
-                value={headName}
-                onChange={(e) => setHeadName(e.target.value)}
-                required
-                disabled
-                style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
-              />
-            </div>
-            <div className="grid-container full-width">
-              <label htmlFor="address" style={{ color: "#23316b" }}>
-                Department/Ministry Address Details
-              </label>
-              <textarea
-                id="address"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                required
-                rows="3"
-                style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
-              ></textarea>
-            </div>
-            <div className="grid-container half-width" >
-              <div style={{ marginBottom: "15px" }}>
-                <label htmlFor="pinCode">PIN Code:</label>
+              <div className="form-group">
+                <label htmlFor="address">Address</label>
+                <textarea
+                  id="address"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  rows="3"
+                  required
+                ></textarea>
+              </div>
+              <div className="form-group">
+                <label htmlFor="pinCode">PIN Code</label>
                 <input
                   type="text"
                   id="pinCode"
@@ -438,77 +383,54 @@ console.log("locationlocation",location)
                   onBlur={fetchLocationDetails}
                   required
                 />
-                {error && <p style={{ color: "red" }}>{error}</p>}
               </div>
-              <div>
-                <label htmlFor="pinCode">Sub-District:</label>
+ 
+              <div className="form-group">
+                <label>Sub-District</label>
                 <input
                   type="text"
-                  id="pinCode"
                   value={locationDetails.subDistrict}
-                  // onChange={(e) => setPinCode(e.target.value)}
-                  //={fetchLocationDetails}
-                  required
+                  readOnly
                 />
               </div>
-              <div>
-                <label htmlFor="pinCode">District:</label>
+              <div className="form-group">
+                <label>District</label>
                 <input
                   type="text"
-                  id="pinCode"
                   value={locationDetails.district}
-                  // onChange={(e) => setPinCode(e.target.value)}
-                  //={fetchLocationDetails}
-                  required
+                  readOnly
                 />
               </div>
-              <div>
-                <label htmlFor="pinCode">State:</label>
+              <div className="form-group">
+                <label>State</label>
                 <input
                   type="text"
-                  id="pinCode"
                   value={locationDetails.state}
-                  // onChange={(e) => setPinCode(e.target.value)}
-                  //={fetchLocationDetails}
-                  required
+                  readOnly
                 />
               </div>
+              <div className="form-group">
+                <label htmlFor="status">Status</label>
+                <select
+                  id="status"
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                  required
+                >
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+              </div>
             </div>
-            <div>
-              <label htmlFor="status" style={{ color: "#23316b" }}>
-                Status
-              </label>
-              <select
-                id="status"
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-                required
-                style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
-              >
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-              </select>
-            </div>
-
-            <button
-              type="submit"
-              className="submit-button"
-              style={{
-                backgroundColor: "#23316b",
-                color: "white",
-                padding: "10px",
-                width: "300px",
-                borderRadius: "5px",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
-              Save
-            </button>
-          </form>
-        </div>
+          </div>
+  
+          {/* Submit */}
+          <button type="submit">Save</button>
+        </form>
       </div>
     </div>
+  </div>
+  
   );
 };
-export default CreateEmployee;
+export default EditOrg;

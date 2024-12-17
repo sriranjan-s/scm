@@ -2,7 +2,7 @@ import { Toast, Loader } from "@upyog/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
-const AddOffice = () => {
+const AddSna = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const history = useHistory();
   const [departments, setDepartments] = useState(window.Digit.SessionStorage.get("initData").tenants || []);
@@ -95,9 +95,9 @@ const AddOffice = () => {
                 "tenantId": department
               },
               {
-                "code": "GRO",
-                "name": "Grievance Routing Officer",
-                "labelKey": "ACCESSCONTROL_ROLES_ROLES_GRO",
+                "name": "Sub Nodal Appellant Authority",
+                "code": "SUB_NAA",
+                "description": null,
                 "tenantId": department
               }
             ]
@@ -118,13 +118,13 @@ const AddOffice = () => {
               "tenantId": department
             },
             {
-              "code": "GRO",
-              "name": "Grievance Routing Officer",
-              "labelKey": "ACCESSCONTROL_ROLES_ROLES_GRO",
+            "name": "Sub Nodal Appellant Authority",
+            "code": "SUB_NAA",
+            "description": null,
               "tenantId": department
             }
           ],
-          tenantId: tenantId,
+          tenantId: department,
         },
         serviceHistory: [],
         education: [],
@@ -304,7 +304,7 @@ const AddOffice = () => {
               <label>Role</label>
               <select value={role} onChange={(e) => setRole(e.target.value)} required>
                 <option value="">Select Role</option>
-                <option value="GRO User">GRO User</option>
+                <option value="Nodal Appellant Authority">Nodal Appellant Authority</option>
               </select>
             </div>
 
@@ -398,8 +398,6 @@ const AddOffice = () => {
               />
             </div>
           </div>
-
-
         </div>
         <div className="card">
             <h4>Login Details</h4>
@@ -452,8 +450,7 @@ const AddOffice = () => {
     </div>
   </div>
 </div>
-
   );
 };
 
-export default AddOffice;
+export default AddSna;

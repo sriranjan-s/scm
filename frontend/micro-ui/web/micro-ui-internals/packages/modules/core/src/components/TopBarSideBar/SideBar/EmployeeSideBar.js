@@ -27,7 +27,7 @@ const EmployeeSideBar = () => {
     });
   };
   const collapseNav = () => {
-    sidebarRef.current.style.width = "55px";
+    sidebarRef.current.style.width = "260px";
     sidebarRef.current.style.overflow = "hidden";
 
     sidebarRef.current.querySelectorAll(".dropdown-link").forEach((element) => {
@@ -175,7 +175,7 @@ const EmployeeSideBar = () => {
   };
 
   return (
-    <div className="sidebar" ref={sidebarRef} onMouseOver={expandNav} onMouseLeave={collapseNav}>
+    <div className="sidebar" style={{width:"200px !important"}} ref={sidebarRef} onMouseOver={expandNav} onMouseLeave={collapseNav}>
       {renderSearch()}
       {splitKeyValue()}
     </div>

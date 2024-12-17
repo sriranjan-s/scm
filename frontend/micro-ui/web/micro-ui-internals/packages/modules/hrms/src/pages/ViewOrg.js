@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 const ViewOrg = () => {
     const [departments] = useState(window.Digit.SessionStorage.get("initData").tenants);
     const history = useHistory();
-
+console.log("departments",departments)
     const handleModify = (department) => {
         history.push({
             pathname: '/digit-ui/employee/hrms/editOrg',
