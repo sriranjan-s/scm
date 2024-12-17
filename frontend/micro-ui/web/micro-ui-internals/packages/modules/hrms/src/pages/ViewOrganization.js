@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa'; // Import icons
 import CreateEmployee from "./createEmployee";
+import  EditOrg from './EditOrg';
 const ManageOrganization = () => {
     const [typeFilter, setTypeFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
@@ -9,20 +10,13 @@ const ManageOrganization = () => {
   const [showPopupNew, setShowPopupNew] = useState(false);  // State for popup visibility
   const [departments] = useState(window.Digit.SessionStorage.get("initData").tenants);
   const [selectedOrganization, setSelectedOrganization] = useState(null);
-  const data = [
-    { code: 'M01001', name: 'Financial Services (Banking Division)', type: 'Ministry', head: 'Aarav Nair', status: 'Active' },
-    { code: 'M01002', name: 'Labor and Employment', type: 'Ministry', head: 'Priya Kapoor', status: 'Inactive' },
-    { code: 'M01003', name: 'Central Board of Direct Taxes (Income Tax)', type: 'Ministry', head: 'Rohan Mehta', status: 'Active' },
-    { code: 'M01004', name: 'Posts', type: 'Ministry', head: 'Ananya Sharma', status: 'Active' },
-    { code: 'M01005', name: 'Telecommunications', type: 'Ministry', head: 'Vikram Singh', status: 'Active' },
-    { code: 'M01006', name: 'Home Affairs', type: 'Department', head: 'Kavya Iyer', status: 'Active' },
-    { code: 'M01007', name: 'Housing and Urban Affairs', type: 'Department', head: 'Arjun Patel', status: 'Active' },
-    { code: 'M01008', name: 'Personnel and Training', type: 'Ministry', head: 'Sneha Reddy', status: 'Active' },
-    { code: 'M01009', name: 'Health & Family Welfare', type: 'Ministry', head: 'Devika Joshi', status: 'Active' },
-    { code: 'M01010', name: 'Financial Services (Insurance Division)', type: 'Department', head: 'Manish Verma', status: 'Active' },
-  ];
 
-  const filteredData = departments.filter((org) => {
+  const data = departments.map(org => ({
+    ...org,
+    type: 'Ministry' // Override type as Ministry
+}));
+
+  const filteredData = data.filter((org) => {
     return (
       (typeFilter === 'All' || org.type === typeFilter) &&
       (statusFilter === 'All' || org.status === statusFilter) &&
@@ -117,8 +111,8 @@ const ManageOrganization = () => {
         <label style={{ marginRight: '20px' }}>Status</label>
         <select onChange={(e) => setStatusFilter(e.target.value)} value={statusFilter}>
           <option value="All">All</option>
-          <option value="Active">Active</option>
-          <option value="Inactive">Inactive</option>
+          <option value="ACTIVE">Active</option>
+          <option value="INACTIVE">Inactive</option>
         </select>
 
         <input
@@ -149,7 +143,7 @@ const ManageOrganization = () => {
                 <td>{org.name}</td>
                 <td>{org?.type}</td>
                 <td>{org.head}</td>
-                <td style={{ color: org.status === 'Active' ? 'green' : 'red' }}>{org.status}</td>
+                <td style={{ color: org.status === 'ACTIVE' ? 'green' : 'red' }}>{org.status}</td>
                 <td>
                 <div className="action-icons">
                     <FaEdit style={{ color: 'blue' }} title="Edit" onClick={() => handleEdit(org)} />
@@ -181,7 +175,7 @@ const ManageOrganization = () => {
               X
             </button>
             {/* Pass selectedOrganization as props */}
-            <CreateEmployee data={selectedOrganization} />
+            <EditOrg data={selectedOrganization} />
           </div>
         </div>
       )}
@@ -199,10 +193,10 @@ const ManageOrganization = () => {
         {`
           .popup-overlay {
             position: fixed;
-            top: 70px;
+            top: 100px;
             left: 120px;
             width: 100%;
-            height: 100%;
+            height: calc(100% - 100px);
             background: rgba(0, 0, 0, 0.5);
             display: flex;
             justify-content: center;

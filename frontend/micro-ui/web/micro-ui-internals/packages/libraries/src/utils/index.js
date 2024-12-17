@@ -257,6 +257,13 @@ const hrmsAccess = () => {
   const HRMS_ACCESS = userRoles?.filter((role) => hrmsRoles?.includes(role));
   return HRMS_ACCESS?.length > 0;
 };
+const nodalRoles = ["NODAL_ADMIN"];
+const NodalAccess = () => {
+  const userInfo = Digit.UserService.getUser();
+  const userRoles = userInfo?.info?.roles?.map((roleData) => roleData?.code);
+  const HRMS_ACCESS = userRoles?.filter((role) => nodalRoles?.includes(role));
+  return HRMS_ACCESS?.length > 0;
+};
 
 const wsAccess = () => {
   const userInfo = Digit.UserService.getUser();
@@ -308,6 +315,7 @@ export default {
   receiptsAccess,
   didEmployeeHasRole,
   hrmsAccess,
+  NodalAccess,
   getPattern,
   hrmsRoles,
   getUnique,

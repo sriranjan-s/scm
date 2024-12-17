@@ -13,6 +13,7 @@ import ViewOffice from "./ViewOffice";
 import EditOffice from "./EditOffice";
 import Dashboard from "./Dashboard";
 import ManageOrganization from "./ViewOrganization";
+import ManageNodalUser from "./ViewNodalManagement";
 const EmployeeApp = ({ path, url, userType }) => {
   const { t } = useTranslation();
   const location = useLocation();
@@ -55,6 +56,7 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute path={`${path}/editOrg`} component={() => <EditOrg />} />
           <PrivateRoute path={`${path}/editDepartment`} component={() => <EditDepartment />} />
           <PrivateRoute path={`${path}/viewwOrg`} component={() => <ManageOrganization />} />
+          <PrivateRoute path={`${path}/viewwUser`} component={() => <ManageNodalUser />} />
           <PrivateRoute path={`${path}/EditOffice`} component={() => <EditOffice />} />
           <PrivateRoute path={`${path}/Dashboard`} component={() => <Dashboard />} />
           <PrivateRoute path={`${path}/response`} component={(props) => <HRMSResponse {...props} parentRoute={path} />} />

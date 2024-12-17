@@ -1,11 +1,15 @@
 import { PersonIcon, EmployeeModuleCard } from "@upyog/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import Dashboard from "../pages/Dashboard";
 
 const HRMSCard = () => {
   const ADMIN = Digit.Utils.hrmsAccess();
   if (!ADMIN) {
     return null;
+  }
+  else {
+    return <Dashboard></Dashboard>
   }
     const { t } = useTranslation();
     const tenantId = Digit.ULBService.getCurrentTenantId();

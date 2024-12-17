@@ -1,6 +1,20 @@
 import React from "react";
+import { useHistory,useLocation } from "react-router-dom";
 
 const Dashboard = () => {
+    const history = useHistory();
+    const nodal = Digit.Utils.NodalAccess();
+    const hrms = Digit.Utils.hrmsAccess();
+
+    const onSubmit =(event)=>{
+        event.preventDefault();
+        history.push("/digit-ui/employee/hrms/viewwOrg")
+    }
+    const onSubmitNodal =(event)=>{
+        event.preventDefault();
+        history.push("/digit-ui/employee/hrms/viewwUser")
+    }
+    
   return (
     <div style={{ fontFamily: "Arial, sans-serif", margin: "20px" }}>
       {/* Header */}
@@ -41,14 +55,16 @@ const Dashboard = () => {
             textAlign: "center",
             padding: "15px",
             boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
+            cursor:"pointer"
           }}
+          onClick={onSubmit}
         >
           <div style={{ fontSize: "30px", marginBottom: "10px" }}>⚙️</div>
           <div>
             <strong>Manage Organization</strong>
           </div>
         </div>
-        <div
+       {nodal && <div
           style={{
             backgroundColor: "#e9ecef",
             borderRadius: "12px",
@@ -56,13 +72,15 @@ const Dashboard = () => {
             textAlign: "center",
             padding: "15px",
             boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
+            cursor:"pointer"
           }}
+          onClick={onSubmitNodal}
         >
           <div style={{ fontSize: "30px", marginBottom: "10px" }}>💼</div>
           <div>
             <strong>User Management</strong>
           </div>
-        </div>
+        </div>}
       </div>
 
       {/* Dashboard & Analytics Section */}
