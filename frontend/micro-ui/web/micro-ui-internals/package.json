@@ -84,7 +84,8 @@
   "dependencies": {
     "@jridgewell/gen-mapping": "^0.3.7",
     "lodash": "4.17.21",
-    "microbundle-crl": "^0.13.11"
+    "microbundle-crl": "^0.13.11",
+    "react-icons": "^5.4.0"
   },
   "resolutions": {
     "**/babel-loader": "8.2.2",
