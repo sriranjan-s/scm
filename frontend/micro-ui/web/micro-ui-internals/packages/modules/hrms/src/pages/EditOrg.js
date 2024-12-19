@@ -302,6 +302,55 @@ console.log("locationlocation",location)
         button:hover {
           background-color: #1e2749;
         }
+
+        @media screen and (max-width: 768px) {
+          .grid-container {
+            grid-template-columns: 1fr; /* Single column layout for mobile */
+          }
+    
+          .form-group {
+            flex-direction: column; 
+            align-items: flex-start; 
+          }
+    
+          label {
+            width: 100%; 
+            text-align: left; 
+          }
+    
+          input, select, textarea {
+            width: 100%; 
+          }
+    
+          button {
+            width: 100%; 
+          }
+        }
+    
+        @media screen and (max-width: 480px) {
+          .grid-container {
+            grid-template-columns: 1fr; /* Ensure single column for very small screens */
+          }
+    
+          .form-group {
+            flex-direction: column; 
+          }
+    
+          label {
+            width: 100%; 
+            font-size: 14px;
+          }
+    
+          input, select, textarea {
+            width: 100%; 
+            font-size: 14px; 
+          }
+    
+          button {
+            width: 100%;
+            padding: 12px; 
+          }
+        }
       `}
     </style>
   

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa'; // Import icons
 import CreateEmployee from "./createEmployee";
-import  EditOrg from './EditOrg';
+import EditOrg from './EditOrg';
 const ManageOrganization = () => {
-    const [typeFilter, setTypeFilter] = useState('All');
+  const [typeFilter, setTypeFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
   const [showPopup, setShowPopup] = useState(false);
@@ -14,7 +14,7 @@ const ManageOrganization = () => {
   const data = departments.map(org => ({
     ...org,
     type: 'Ministry' // Override type as Ministry
-}));
+  }));
 
   const filteredData = data.filter((org) => {
     return (
@@ -145,7 +145,7 @@ const ManageOrganization = () => {
                 <td>{org.head}</td>
                 <td style={{ color: org.status === 'ACTIVE' ? 'green' : 'red' }}>{org.status}</td>
                 <td>
-                <div className="action-icons">
+                  <div className="action-icons">
                     <FaEdit style={{ color: 'blue' }} title="Edit" onClick={() => handleEdit(org)} />
                     <FaTrashAlt style={{ color: 'red' }} title="Delete" />
                   </div>
@@ -167,8 +167,8 @@ const ManageOrganization = () => {
       <button className="add-org-button" onClick={() => setShowPopup(true)}>
         Add New Organization
       </button>
-       {/* Popup for Edit */}
-       {showPopupNew && (
+      {/* Popup for Edit */}
+      {showPopupNew && (
         <div className="popup-overlay">
           <div className="popup-content">
             <button className="close-popup" onClick={() => setShowPopupNew(false)}>
@@ -193,7 +193,7 @@ const ManageOrganization = () => {
         {`
           .popup-overlay {
             position: fixed;
-            top: 100px;
+            top: 105px;
             left: 120px;
             width: 100%;
             height: calc(100% - 100px);
@@ -211,6 +211,8 @@ const ManageOrganization = () => {
             max-height: 90%;
             overflow-y: auto;
             position: relative;
+            max-width: 900px; 
+            width: 100%; 
           }
 
           .close-popup {
@@ -235,9 +237,43 @@ const ManageOrganization = () => {
             border-radius: 5px;
             cursor: pointer;
           }
+
+          /* Mobile responsiveness */
+          @media screen and (max-width: 768px) {
+            .popup-overlay {
+               top: 105px; 
+                left: 0px;
+            }
+
+      .popup-content {
+        width: 90%; 
+        padding: 10px; 
+      }
+
+      .close-popup {
+        top: 5px;
+        right: 5px;
+        padding: 3px 6px; 
+      }
+
+      .add-org-button {
+        width: 100%; 
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      .popup-content {
+        width: 95%; 
+        padding: 5px; 
+      }
+
+      .close-popup {
+        padding: 2px 5px; 
+      }
+    }
         `}
       </style>
-    
+
     </div>
   );
 };

@@ -96,15 +96,15 @@ const SearchPage = () => {
               </tr>
               <tr>
                 <td style={styles.tableCell}><strong>Applicant Name</strong></td>
-                <td style={styles.tableCell}>{appealData.accountId}</td>
+                <td style={styles.tableCell}>{appealData.additionalDetails.applicantName}</td>
               </tr>
               <tr>
                 <td style={styles.tableCell}><strong>Location</strong></td>
-                <td style={styles.tableCell}>{appealData.tenantId}</td> 
+                <td style={styles.tableCell}>{appealData.additionalDetails.location}</td> 
               </tr>
               <tr>
                 <td style={styles.tableCell}><strong>Category</strong></td>
-                <td style={styles.tableCell}>{appealData.businessService}</td>
+                <td style={styles.tableCell}>{appealData.additionalDetails.category}</td>
               </tr>
               <tr>
                 <td style={styles.tableCell}><strong>Status</strong></td>

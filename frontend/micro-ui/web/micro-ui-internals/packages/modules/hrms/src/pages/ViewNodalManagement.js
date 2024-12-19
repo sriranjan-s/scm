@@ -1,12 +1,12 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa'; // Import icons
 import CreateEmployee from "./createEmployee";
-import  EditOrg from './EditOrg';
+import EditOrg from './EditOrg';
 import AddHeadOfDepartment from "./createHOD";
 import AddOffice from "./AddGro"
 import AddSna from './AddSna';
 const ManageNodalUser = () => {
-    const [typeFilter, setTypeFilter] = useState('All');
+  const [typeFilter, setTypeFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
   const [orgFilter, setOrgFilter] = useState('pg');
   const typeFilterMap = {
@@ -15,8 +15,8 @@ const ManageNodalUser = () => {
     "Grievance Routing Officer": "GRO",
     "All": "All", // Special case for 'All'
   };
-  
-  const organizationName =Digit.ULBService.getCurrentTenantId();
+
+  const organizationName = Digit.ULBService.getCurrentTenantId();
   const [searchTerm, setSearchTerm] = useState('');
   const [showPopup, setShowPopup] = useState(false);
   const [showPopupNew, setShowPopupNew] = useState(false);  // State for popup visibility
@@ -24,13 +24,13 @@ const ManageNodalUser = () => {
   const [selectedOrganization, setSelectedOrganization] = useState(null);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const userInfo = window.Digit.SessionStorage.get("User");
-  const [data,setData] =useState([])
-  const user = ["NODAL_ADMIN", "GRO", "HOD_DEPT","SUB_NAA"] // Example roles array
+  const [data, setData] = useState([])
+  const user = ["NODAL_ADMIN", "GRO", "HOD_DEPT", "SUB_NAA"] // Example roles array
   const [selectedUserType, setSelectedUserType] = useState('');
-  const userTypes = ["Head of Department", "GRO","Sub Nodal Appellant Authority"];
+  const userTypes = ["Head of Department", "GRO", "Sub Nodal Appellant Authority"];
   const organizations = ["Organization 1", "Organization 2", "Organization 3"];
-console.log("departments",departments)
- useEffect(() => {
+  console.log("departments", departments)
+  useEffect(() => {
     const fetchData = async () => {
       const url = `http://localhost:3002/egov-hrms/employees/_search?tenantId=${tenantId}&roles=NODAL_ADMIN,HOD_DEPT,GRO,SUB_NAA&_=1734310245681`;
 
@@ -60,7 +60,7 @@ console.log("departments",departments)
         const result = await response.json();
         const orgData = result?.Employees || [];
         setData(orgData)
-       // setDepartments(orgData);
+        // setDepartments(orgData);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -78,22 +78,22 @@ console.log("departments",departments)
       (searchTerm === "" || org.code.toLowerCase().includes(searchTerm.toLowerCase()))
     );
   });
-  
-  
+
+
   // Function to handle Edit Button click
   const handleEdit = (org) => {
     setSelectedOrganization(org); // Set row data to state
     setShowPopupNew(true); // Show the popup
   };
-  const displayUserRole =(user,rolesData)=> {
-    console.log("user,rolesData",user,rolesData)
+  const displayUserRole = (user, rolesData) => {
+    console.log("user,rolesData", user, rolesData)
     // Iterate over each role in rolesData and check if it exists in userRoles
     const matchedRole = rolesData.find(role => user.includes(role.code));
-    
+
     // If a match is found, return the name; otherwise, return null
     return matchedRole ? matchedRole.name : null;
-}
-const handleUserTypeChange = (e) => {
+  }
+  const handleUserTypeChange = (e) => {
     setSelectedUserType(e.target.value);
   };
 
@@ -108,12 +108,12 @@ const handleUserTypeChange = (e) => {
       case "GRO":
         return <div><AddOffice /></div>; // Replace with actual component
       case "Sub Nodal Appellant Authority":
-            return <div><AddSna /></div>; // Replace with actual component
+        return <div><AddSna /></div>; // Replace with actual component
       default:
         return null;
     }
   };
-  console.log("orgFilter",filteredData,organizationName)
+  console.log("orgFilter", filteredData, organizationName)
   return (
     <div className="manage-organization">
       <style>
@@ -130,6 +130,21 @@ const handleUserTypeChange = (e) => {
 
           .filters {
             margin-bottom: 20px;
+            display: flex;
+            gap: 20px; /* Adds spacing between the elements */
+            justify-content: space-between
+          }
+
+          .filters label {
+            font-weight: bold;
+            color: #23316b;
+          }
+      
+          .filters select {
+            width: 48%; 
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
           }
 
           .filters select,
@@ -180,6 +195,17 @@ const handleUserTypeChange = (e) => {
             border-radius: 5px;
             cursor: pointer;
           }
+
+          /* Mobile responsiveness */
+          @media screen and (max-width: 768px) {
+            .filters {
+              flex-direction: column; 
+            }
+      
+            .filters select {
+              width: 100%; 
+            }
+          }
         `}
       </style>
 
@@ -189,19 +215,19 @@ const handleUserTypeChange = (e) => {
       <div className="filters">
         <label style={{ marginRight: '20px' }}>Type</label>
         <select onChange={(e) => setTypeFilter(e.target.value)} value={typeFilter}>
-  <option value="All">All</option>
-  <option value="Head of the Departments">Head of Department</option>
-  <option value="Sub Nodal Appellant Authority">SNAA</option>
-  <option value="Grievance Routing Officer">GRO</option>
-</select>
+          <option value="All">All</option>
+          <option value="Head of the Departments">Head of Department</option>
+          <option value="Sub Nodal Appellant Authority">SNAA</option>
+          <option value="Grievance Routing Officer">GRO</option>
+        </select>
 
         <label style={{ marginRight: '20px' }}>Org Name</label>
         <select onChange={(e) => setStatusFilter(e.target.value)} value={orgFilter}>
-        {departments.map((dept) => (
-                    <option key={dept.code} value={dept.code}>
-                      {dept.i18nKey}
-                    </option>
-                  ))}
+          {departments.map((dept) => (
+            <option key={dept.code} value={dept.code}>
+              {dept.i18nKey}
+            </option>
+          ))}
         </select>
         <label style={{ marginRight: '20px' }}>Status</label>
         <select onChange={(e) => setStatusFilter(e.target.value)} value={statusFilter}>
@@ -239,11 +265,11 @@ const handleUserTypeChange = (e) => {
                 <td>{org?.user?.name}</td>
                 <td>Ministry</td>
                 <td>{org.head}</td>
-                <td>{displayUserRole(user,org.user.roles)}</td>
-                <td style={{ color: org.isActive == true ? 'green' : 'red' }}>{org.isActive == true? "Active":"In Active"}</td>
+                <td>{displayUserRole(user, org.user.roles)}</td>
+                <td style={{ color: org.isActive == true ? 'green' : 'red' }}>{org.isActive == true ? "Active" : "In Active"}</td>
                 <td>
-                <div className="action-icons">
-                    <FaEdit style={{ color: 'blue' }} title="Edit"  />
+                  <div className="action-icons">
+                    <FaEdit style={{ color: 'blue' }} title="Edit" />
                     <FaTrashAlt style={{ color: 'red' }} title="Delete" />
                   </div>
                 </td>
@@ -264,8 +290,8 @@ const handleUserTypeChange = (e) => {
       <button className="add-org-button" onClick={() => setShowPopup(true)}>
         Add New User
       </button>
-       {/* Popup for Edit */}
-       {showPopupNew && (
+      {/* Popup for Edit */}
+      {showPopupNew && (
         <div className="popup-overlay">
           <div className="popup-content">
             <button className="close-popup" onClick={() => setShowPopupNew(false)}>
@@ -276,28 +302,28 @@ const handleUserTypeChange = (e) => {
           </div>
         </div>
       )}
-{showPopup && (
+      {showPopup && (
         <div className="popup-overlay">
           <div className="popup-content">
             <button className="close-popup" onClick={() => setShowPopup(false)}>X</button>
-            
+
             {/* User Type Dropdown */}
-            <div className="filters" style={{display:"flex"}}>
-        <label style={{ marginRight: '20px' }}>Select User Type</label>
-        <select id="userType" value={selectedUserType} style={{width:"50%"}}onChange={handleUserTypeChange}>
+            <div className="filters" style={{ display: "flex" }}>
+              <label style={{ marginRight: '20px' }}>Select User Type</label>
+              <select id="userType" value={selectedUserType} style={{ width: "50%" }} onChange={handleUserTypeChange}>
                 <option value="">Select</option>
                 {userTypes.map((type, index) => (
                   <option key={index} value={type}>{type}</option>
                 ))}
               </select>
-            
-        <label style={{ marginRight: '20px' }}>Org Name</label>
-        <select onChange={(e) => setStatusFilter(e.target.value)} style={{width:"50%"}} value={statusFilter}>
-          <option value="All">All</option>
-          <option value="ACTIVE">Active</option>
-          <option value="INACTIVE">Inactive</option>
-        </select>
-        </div>
+
+              <label style={{ marginRight: '20px' }}>Org Name</label>
+              <select onChange={(e) => setStatusFilter(e.target.value)} style={{ width: "50%" }} value={statusFilter}>
+                <option value="All">All</option>
+                <option value="ACTIVE">Active</option>
+                <option value="INACTIVE">Inactive</option>
+              </select>
+            </div>
             {/* Organization Dropdown */}
             {/* <div>
               <label htmlFor="organization">Select Organization</label>
@@ -321,7 +347,7 @@ const handleUserTypeChange = (e) => {
         {`
           .popup-overlay {
             position: fixed;
-            top: 100px;
+            top: 105px;
             left: 120px;
             width: 100%;
             height: calc(100% - 100px);
@@ -339,6 +365,8 @@ const handleUserTypeChange = (e) => {
             max-height: 90%;
             overflow-y: auto;
             position: relative;
+            max-width: 900px; 
+      width: 100%;
           }
 
           .close-popup {
@@ -363,9 +391,43 @@ const handleUserTypeChange = (e) => {
             border-radius: 5px;
             cursor: pointer;
           }
+
+          /* Mobile responsiveness */
+    @media screen and (max-width: 768px) {
+      .popup-overlay {
+        top: 105px; 
+      left: 0px;
+    }
+
+      .popup-content {
+        width: 90%; 
+        padding: 10px; 
+      }
+
+      .close-popup {
+        top: 5px;
+        right: 5px;
+        padding: 3px 6px; 
+      }
+
+      .add-org-button {
+        width: 100%; 
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      .popup-content {
+        width: 95%; 
+        padding: 5px; 
+      }
+
+      .close-popup {
+        padding: 2px 5px; 
+      }
+    }
         `}
       </style>
-    
+
     </div>
   );
 };
