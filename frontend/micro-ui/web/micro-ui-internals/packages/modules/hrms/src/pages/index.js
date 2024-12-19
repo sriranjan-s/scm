@@ -30,6 +30,8 @@ const EmployeeApp = ({ path, url, userType }) => {
   const Inbox = Digit?.ComponentRegistryService?.getComponent("HRInbox");
   const CreateEmployee = Digit?.ComponentRegistryService?.getComponent("HRCreateEmployee");
   const EditEmpolyee = Digit?.ComponentRegistryService?.getComponent("HREditEmpolyee");
+  const AppealDashboard = Digit?.ComponentRegistryService?.getComponent("PGRAppealDashboard");
+  const GrievanceDetailsPage = Digit?.ComponentRegistryService?.getComponent("PGRGrievanceDetailsPage");
   return (
     <Switch>
       <React.Fragment>
@@ -55,9 +57,11 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute path={`${path}/viewOffice`} component={() => <ViewOffice />} />
           <PrivateRoute path={`${path}/editOrg`} component={() => <EditOrg />} />
           <PrivateRoute path={`${path}/editDepartment`} component={() => <EditDepartment />} />
+          <PrivateRoute path={`${path}/EditOffice`} component={() => <EditOffice />} />
+          <PrivateRoute path={`${path}/appeal-dashboard`} component={() => <AppealDashboard />} />
+          <PrivateRoute path={`${path}/grievance-details/:grievanceId/:appealId`} component={() => <GrievanceDetailsPage />} />
           <PrivateRoute path={`${path}/viewwOrg`} component={() => <ManageOrganization />} />
           <PrivateRoute path={`${path}/viewwUser`} component={() => <ManageNodalUser />} />
-          <PrivateRoute path={`${path}/EditOffice`} component={() => <EditOffice />} />
           <PrivateRoute path={`${path}/Dashboard`} component={() => <Dashboard />} />
           <PrivateRoute path={`${path}/response`} component={(props) => <HRMSResponse {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/details/:tenantId/:id`} component={() => <HRMSDetails />} />

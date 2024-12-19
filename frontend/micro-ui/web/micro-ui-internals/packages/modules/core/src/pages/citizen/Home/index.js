@@ -280,6 +280,8 @@ const Home = () => {
         <button style={actionButtonStyle} onClick={(e) => { history.replace("/digit-ui/citizen/pgr/create-complaint/grievance-info")}}>Lodge Grievance</button>
         <button style={actionButtonStyle} onClick={(e) => { history.replace("/digit-ui/citizen/pgr/complaints")}}>Track Grievance</button>
         <button style={actionButtonStyle}>Provide Feedback</button>
+        <button style={actionButtonStyle} onClick={(e) => { history.replace("/digit-ui/citizen/pgr/create-appeal")}}>Create Appeal</button>
+        <button style={actionButtonStyle} onClick={(e) => { history.replace("/digit-ui/citizen/pgr/search-appeal")}}>Search Appeal</button>
       </div>
 
       {/* Grievance Table Section */}
