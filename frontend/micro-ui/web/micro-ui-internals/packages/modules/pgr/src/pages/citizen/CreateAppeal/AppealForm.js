@@ -122,7 +122,7 @@ const AppealForm = () => {
           comments: comments,
           accountId: authToken,
           businessService: "APPEAL",
-          additionalDetails: {},
+          additionalDetails: additionalDetails,
           workflow: {
             action: "INITIATE",
             assignes: null,

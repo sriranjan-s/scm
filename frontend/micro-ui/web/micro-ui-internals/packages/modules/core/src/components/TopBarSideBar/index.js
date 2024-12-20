@@ -40,6 +40,8 @@ const TopBarSideBar = ({
     { name: t("EDIT_PROFILE"), icon: <EditPencilIcon className="icon" />, func: userProfile },
     { name: t("CORE_COMMON_LOGOUT"), icon: <LogoutIcon className="icon" />, func: handleLogout },
   ];
+  const isMobile = window.Digit.Utils.browser.isMobile();
+  isMobile ? showSidebar = false : showSidebar = true
   return (
     <React.Fragment>
       <TopBar
