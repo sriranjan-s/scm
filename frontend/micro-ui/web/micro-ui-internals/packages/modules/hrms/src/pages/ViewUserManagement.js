@@ -1,42 +1,46 @@
-import React, { useState, useEffect,useRef } from 'react';
+import React, { useState,useEffect,useRef } from 'react';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa'; // Import icons
 import CreateEmployee from "./createEmployee";
-import EditOrg from './EditOrg';
+import  EditOrg from './EditOrg';
 import AddHeadOfDepartment from "./createHOD";
 import AddGro from "./AddGro"
 import AddSna from './AddSna';
-import AddOffice from './AddOffice';
-const ManageNodalUser = () => {
-    const [typeFilter, setTypeFilter] = useState('GRO,SUB_NAA');
+import CreateDepartment from "./createDeparment"
+import EditDepartment from './editDepartment';
+import EditHeadOfDepartment from "./editHOD"
+const ManageUserManagement = () => {
+    const [typeFilter, setTypeFilter] = useState('HOD_DEPT,NODAL_ADMIN');
   const [statusFilter, setStatusFilter] = useState('All');
   const [orgFilter, setOrgFilter] = useState('pg');
   const typeFilterMap = {
-    "SUB_NAA": "SUB_NAA",
-    "GRO": "GRO",
-    "GRO,SUB_NAA": "GRO,SUB_NAA", // Special case for 'All'
+    "NODAL_ADMIN": "NODAL_ADMIN",
+    "HOD_DEPT": "HOD_DEPT",
+    "HOD_DEPT,NODAL_ADMIN": "HOD_DEPT,NODAL_ADMIN", // Special case for 'All'
   };
-  const organizationName = Digit.ULBService.getCurrentTenantId();
+  const organizationName =Digit.ULBService.getCurrentTenantId();
   const [searchTerm, setSearchTerm] = useState('');
   const [showPopup, setShowPopup] = useState(false);
-  const [showPopupNew, setShowPopupNew] = useState(false);  // State for popup visibility
+  const [showPopupNew, setShowPopupNew] = useState(false); 
+  const [editNodalPopup, setEditPopupNodal] = useState(false); 
+  const [editHODPopup, setEditPopupHOD] = useState(false);
+  const [HODData, setHODData] = useState(false);
+  const [NodalData, setNodalData] = useState(false);
+  
   const [departments] = useState(window.Digit.SessionStorage.get("initData").tenants);
   const [selectedOrganization, setSelectedOrganization] = useState(null);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const userInfo = window.Digit.SessionStorage.get("User");
   const [data,setData] =useState([])
-  const user = [ "GRO","SUB_NAA"] // Example roles array
+  const user = ["NODAL_ADMIN", "GRO", "HOD_DEPT","SUB_NAA"] // Example roles array
   const [selectedUserType, setSelectedUserType] = useState('');
-  const userTypes = ["Office", "GRO","Sub Nodal Appellant Authority"];
+  const userTypes = ["Nodal","HOD"];
   const organizations = ["Organization 1", "Organization 2", "Organization 3"];
-  const [editNodalPopup, setEditPopupGRO] = useState(false); 
-  const [editHODPopup, setEditPopupSNAA] = useState(false);
-  const [HODData, setGROData] = useState(false);
-  const [NodalData, setSNAAData] = useState(false);
-  const cache = useRef({}); 
+  const cache = useRef({}); // Cache for memoized data
 console.log("departments",departments)
- useEffect(() => {
+console.log("orgFilter",orgFilter,typeFilter)
+useEffect(() => {
     const fetchData = async () => {
-            // Create a unique cache key based on parameters
+      // Create a unique cache key based on parameters
       const cacheKey = `${orgFilter}-${typeFilter}`;
 
       // Check if data exists in cache
@@ -45,13 +49,12 @@ console.log("departments",departments)
         setData(cache.current[cacheKey]);
         return;
       }
-      const url = `https://cpgram-demo.ddns.net/egov-hrms/employees/_search?tenantId=${tenantId}&roles=${typeFilter}&_=1734310245681`;
-
+      // Fetch data if not in cache
+      const url = `https://cpgram-demo.ddns.net/egov-hrms/employees/_search?tenantId=${orgFilter}&roles=${typeFilter}&_=1734310245681`;
       const headers = {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json;charset=UTF-8',
       };
-
       const body = {
         RequestInfo: {
           apiId: 'Rainmaker',
@@ -72,8 +75,10 @@ console.log("departments",departments)
         }
         const result = await response.json();
         const orgData = result?.Employees || [];
-        setData(orgData)
-        // setDepartments(orgData);
+
+        // Cache the fetched data
+        cache.current[cacheKey] = orgData;
+        setData(orgData);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -82,31 +87,32 @@ console.log("departments",departments)
     fetchData();
   }, [orgFilter, typeFilter]);
 
+
   const filteredData = data.filter((org) => {
     const matchedRole = org?.user?.roles.find(role => user.includes(role.code));
     const userType = matchedRole ? matchedRole.code : null;
     return (
-      (typeFilter === "GRO,SUB_NAA" || userType === typeFilterMap[typeFilter]) &&
+      (typeFilter === "HOD_DEPT,NODAL_ADMIN" || userType === typeFilterMap[typeFilter]) &&
       (statusFilter === "All" || (org.isActive && statusFilter === "ACTIVE") || (!org.isActive && statusFilter === "INACTIVE")) &&
       (searchTerm === "" || org.code.toLowerCase().includes(searchTerm.toLowerCase()))
     );
   });
-
-
+  
+  
   // Function to handle Edit Button click
   const handleEdit = (org) => {
     setSelectedOrganization(org); // Set row data to state
     setShowPopupNew(true); // Show the popup
   };
-  const displayUserRole = (user, rolesData) => {
-    console.log("user,rolesData", user, rolesData)
+  const displayUserRole =(user,rolesData)=> {
+    console.log("user,rolesData",user,rolesData)
     // Iterate over each role in rolesData and check if it exists in userRoles
-    const matchedRole = rolesData.find(role => user.includes(role.code));
-
+    const matchedRole = rolesData.find(role => user?.includes(role.code));
+    
     // If a match is found, return the name; otherwise, return null
     return matchedRole ? matchedRole.name : null;
-  }
-  const handleUserTypeChange = (e) => {
+}
+const handleUserTypeChange = (e) => {
     setSelectedUserType(e.target.value);
   };
 
@@ -116,35 +122,31 @@ console.log("departments",departments)
 
   const renderUserTypeComponent = () => {
     switch (selectedUserType) {
-      case "Office":
-        return <div><AddOffice /></div>; // Replace with actual component
-      case "GRO":
-        return <div><AddGro /></div>; // Replace with actual component
-      case "Sub Nodal Appellant Authority":
-            return <div><AddSna /></div>; // Replace with actual component
+      case "Nodal":
+        return <div><CreateDepartment /></div>; // Replace with actual component
+      case "HOD":
+        return <div><AddHeadOfDepartment /></div>; // Replace with actual component
       default:
         return null;
     }
   };
-
   const onEdit = (event,user,org)=>{
     event.preventDefault()
     console.log("statusFilter",statusFilter,user)
-    if(user == "Sub Nodal Appellant Authorityy")
+    if(user == "Nodal User of Department/ministry")
     {
-        setSNAAData(org)
-        setEditPopupSNAA(true)
+        setNodalData(org)
+        setEditPopupNodal(true)
     }
-    else if(user == "Grievance Routing Officers")
+    else if(user == "Head of the Departments")
     {
-        setGROData(org)
-        setEditPopupGRO(true)
+        setHODData(org)
+        setEditPopupHOD(true)
     }
   }
-  console.log("orgFilter", filteredData, organizationName)
   return (
     <div className="manage-organization">
- <style>
+      <style>
         {`
           .manage-organization {
             padding: 20px;
@@ -158,21 +160,6 @@ console.log("departments",departments)
 
           .filters {
             margin-bottom: 20px;
-            display: flex;
-            gap: 20px; /* Adds spacing between the elements */
-            justify-content: space-between
-          }
-
-          .filters label {
-            font-weight: bold;
-            color: #23316b;
-          }
-      
-          .filters select {
-            width: 48%; 
-            padding: 8px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
           }
 
           .filters select,
@@ -223,37 +210,27 @@ console.log("departments",departments)
             border-radius: 5px;
             cursor: pointer;
           }
-
-          /* Mobile responsiveness */
-          @media screen and (max-width: 768px) {
-            .filters {
-              flex-direction: column; 
-            }
-      
-            .filters select {
-              width: 100%; 
-            }
-          }
         `}
       </style>
 
-      <h1>Nodal User Management</h1>
+      <h1>User Management</h1>
 
       {/* Filters */}
       <div className="filters">
         <label style={{ marginRight: '20px' }}>Type</label>
         <select onChange={(e) => setTypeFilter(e.target.value)} value={typeFilter}>
-  <option value="GRO,SUB_NAA">All</option>
-  <option value="GRO">GRO</option>
-  <option value="SUB_NAA">SUB NAA</option>
+  <option value="HOD_DEPT,NODAL_ADMIN">All</option>
+  <option value="NODAL_ADMIN">Nodal User</option>
+  <option value="HOD_DEPT">HOD</option>
 </select>
+
         <label style={{ marginRight: '20px' }}>Org Name</label>
-        <select onChange={(e) => setStatusFilter(e.target.value)} value={orgFilter}>
-          {departments.map((dept) => (
-            <option key={dept.code} value={dept.code}>
-              {dept.i18nKey}
-            </option>
-          ))}
+        <select onChange={(e) => setOrgFilter(e.target.value)} value={orgFilter}>
+        {departments.map((dept) => (
+                    <option key={dept.code} value={dept.code}>
+                      {dept.i18nKey}
+                    </option>
+                  ))}
         </select>
         <label style={{ marginRight: '20px' }}>Status</label>
         <select onChange={(e) => setStatusFilter(e.target.value)} value={statusFilter}>
@@ -291,11 +268,11 @@ console.log("departments",departments)
                 <td>{org?.user?.name}</td>
                 <td>Ministry</td>
                 <td>{org.head}</td>
-                <td>{displayUserRole(user, org.user.roles)}</td>
-                <td style={{ color: org.isActive == true ? 'green' : 'red' }}>{org.isActive == true ? "Active" : "In Active"}</td>
+                <td>{displayUserRole(user,org.user.roles)}</td>
+                <td style={{ color: org.isActive == true ? 'green' : 'red' }}>{org.isActive == true? "Active":"In Active"}</td>
                 <td>
-                  <div className="action-icons">
-                    <FaEdit style={{ color: 'blue' }} onClick={(event) => onEdit(event,displayUserRole(user,org.user.roles),org)}title="Edit" />
+                <div className="action-icons">
+                    <FaEdit style={{ color: 'blue' }} onClick={(event) => onEdit(event,displayUserRole(user,org.user.roles),org)} title="Edit"  />
                     <FaTrashAlt style={{ color: 'red' }} title="Delete" />
                   </div>
                 </td>
@@ -316,8 +293,8 @@ console.log("departments",departments)
       <button className="add-org-button" onClick={() => setShowPopup(true)}>
         Add New User
       </button>
-      {/* Popup for Edit */}
-      {showPopupNew && (
+       {/* Popup for Edit */}
+       {showPopupNew && (
         <div className="popup-overlay">
           <div className="popup-content">
             <button className="close-popup" onClick={() => setShowPopupNew(false)}>
@@ -328,28 +305,28 @@ console.log("departments",departments)
           </div>
         </div>
       )}
-      {showPopup && (
+{showPopup && (
         <div className="popup-overlay">
           <div className="popup-content">
             <button className="close-popup" onClick={() => setShowPopup(false)}>X</button>
-
+            
             {/* User Type Dropdown */}
-            <div className="filters" style={{ display: "flex" }}>
-              <label style={{ marginRight: '20px' }}>Select User Type</label>
-              <select id="userType" value={selectedUserType} style={{ width: "50%" }} onChange={handleUserTypeChange}>
+            <div className="filters" style={{display:"flex"}}>
+        <label style={{ marginRight: '20px' }}>Select User Type</label>
+        <select id="userType" value={selectedUserType} style={{width:"50%"}}onChange={handleUserTypeChange}>
                 <option value="">Select</option>
                 {userTypes.map((type, index) => (
                   <option key={index} value={type}>{type}</option>
                 ))}
               </select>
-
-              <label style={{ marginRight: '20px' }}>Org Name</label>
-              <select onChange={(e) => setStatusFilter(e.target.value)} style={{ width: "50%" }} value={statusFilter}>
-                <option value="All">All</option>
-                <option value="ACTIVE">Active</option>
-                <option value="INACTIVE">Inactive</option>
-              </select>
-            </div>
+            
+        <label style={{ marginRight: '20px' }}>Org Name</label>
+        <select onChange={(e) => setStatusFilter(e.target.value)} style={{width:"50%"}} value={statusFilter}>
+          <option value="All">All</option>
+          <option value="ACTIVE">Active</option>
+          <option value="INACTIVE">Inactive</option>
+        </select>
+        </div>
             {/* Organization Dropdown */}
             {/* <div>
               <label htmlFor="organization">Select Organization</label>
@@ -384,6 +361,7 @@ console.log("departments",departments)
           </div>
         </div>
       )}
+
 <style>
         {`
           .popup-overlay {
@@ -468,9 +446,9 @@ console.log("departments",departments)
     }
         `}
       </style>
-
+    
     </div>
   );
 };
 
-export default ManageNodalUser;
+export default ManageUserManagement;

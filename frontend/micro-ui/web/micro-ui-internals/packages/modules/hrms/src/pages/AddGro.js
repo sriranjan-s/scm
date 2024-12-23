@@ -2,7 +2,7 @@ import { Toast, Loader } from "@upyog/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
-const AddOffice = () => {
+const AddGro = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const history = useHistory();
   const [departments, setDepartments] = useState(window.Digit.SessionStorage.get("initData").tenants || []);
@@ -456,4 +456,4 @@ const AddOffice = () => {
   );
 };
 
-export default AddOffice;
+export default AddGro;
