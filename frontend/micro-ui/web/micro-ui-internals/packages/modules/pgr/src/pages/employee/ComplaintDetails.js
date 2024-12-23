@@ -78,6 +78,25 @@ const ComplaintDetailsModal = ({ workflowDetails, complaintDetails, close, popup
   
   // RAIN-5692 PGR : GRO is assigning complaint, Selecting employee and assign. Its not getting assigned.
   // Fix for next action  assignee dropdown issue
+  const [isResolved, setIsResolved] = useState(null);
+  const [natureOfGrievance, setNatureOfGrievance] = useState('');
+  const [additionalDetail, setFormData] = useState({});
+
+  const handleResolutionChange = (e) => {
+      const value = e.target.value === 'Yes';
+      setIsResolved(value);
+      setFormData({ ...additionalDetail, isResolved: value });
+  };
+
+  const handleInputChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...additionalDetail, [name]: value });
+  };
+
+  const handleFileChange = (e) => {
+      const { name, files } = e.target;
+      setFormData({ ...formData, [name]: files[0] });
+  };
   const stateArray = workflowDetails?.data?.initialActionState?.nextActions?.filter( ele => ele?.action == selectedAction );  
   const useEmployeeData = Digit.Hooks.pgr.useEmployeeFilter(
     tenantId, 
@@ -95,6 +114,8 @@ const ComplaintDetailsModal = ({ workflowDetails, complaintDetails, close, popup
   const [comments, setComments] = useState("");
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
+  const [selectfileNew, setUploadedFileNew] = useState(null);
+  
   const [error, setError] = useState(null);
   const cityDetails = Digit.ULBService.getCurrentUlb();
   const [selectedReopenReason, setSelectedReopenReason] = useState(null);
@@ -143,7 +164,10 @@ const ComplaintDetailsModal = ({ workflowDetails, complaintDetails, close, popup
   function onSelectReopenReason(reason) {
     setSelectedReopenReason(reason);
   }
-
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Form Data:', additionalDetail);
+};
   return (
     <Modal
       headerBarMain={
@@ -177,7 +201,7 @@ const ComplaintDetailsModal = ({ workflowDetails, complaintDetails, close, popup
         // if(selectedAction === "REJECT" && !comments)
         // setError(t("CS_MANDATORY_COMMENTS"));
         else
-        onAssign(selectedEmployee, comments, uploadedFile);
+        onAssign(selectedEmployee, comments, uploadedFile,additionalDetail);
       }}
       error={error}
       setError={setError}
@@ -208,6 +232,289 @@ const ComplaintDetailsModal = ({ workflowDetails, complaintDetails, close, popup
           }}
           message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
         />
+      <style>
+        {`
+          body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f7;
+          }
+          .grid-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+          }
+
+          @media (min-width: 520px) {
+            .grid-container .half-width {
+              grid-template-columns: repeat(2, 1fr); 
+            }
+          }
+
+          @media (min-width: 768px) {
+            .grid-container {
+              grid-template-columns: 1fr 
+            }
+            .grid-container .half-width {
+              grid-template-columns: repeat(2, 1fr); 
+            }
+            .grid-container .full-width {
+              grid-template-columns: 1fr 
+            }
+            .grid-container .one-third-width {
+              grid-template-columns: repeat(3, 1fr) 
+            }
+          }
+          .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+          }
+          h3 {
+            text-align: center;
+            color: #23316b;
+            margin-bottom: 20px;
+          }
+          label {
+            display: block;
+            margin-bottom: 5px;
+            color: #23316b;
+          }
+          input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+          }
+          button {
+            background-color: #f57c00;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+          }
+          button:hover {
+            background-color: #e65c00;
+          }
+          .error {
+            color: red;
+            margin-bottom: 15px;
+          }
+          .submit-button {
+            display: block;
+            width: 50%;
+            margin: 20px auto;
+        }
+        `}
+      </style>
+ <form onSubmit={handleSubmit}>
+            <h1>Grievance Resolution Form</h1>
+
+            {/* Step 1 */}
+            <label>Is the grievance resolved?</label><br />
+            <input 
+                type="radio" 
+                name="isResolved" 
+                value="Yes" 
+                onChange={handleResolutionChange} 
+            /> Yes<br />
+            <input 
+                type="radio" 
+                name="isResolved" 
+                value="No" 
+                onChange={handleResolutionChange} 
+            /> No<br />
+
+            {/* Part 1: If Yes */}
+            {isResolved && (
+                <div>
+                    <h2>Action Taken Report</h2>
+
+                    <label>Name of Grievance Officer *</label><br />
+                    <input 
+                        type="text" 
+                        name="officerName" 
+                        required 
+                        onChange={handleInputChange} 
+                    /><br />
+
+                    <label>Designation of the Officer *</label><br />
+                    <input 
+                        type="text" 
+                        name="officerDesignation" 
+                        required 
+                        onChange={handleInputChange} 
+                    /><br />
+
+                    <label>Name of Organisation *</label><br />
+                    <input 
+                        type="text" 
+                        name="organisationName" 
+                        required 
+                        onChange={handleInputChange} 
+                    /><br />
+
+                    <label>Nature of Grievance *</label><br />
+                    <select
+                        name="natureOfGrievance"
+                        value={natureOfGrievance}
+                        onChange={(e) => {
+                            setNatureOfGrievance(e.target.value);
+                            handleInputChange(e);
+                        }}
+                        required
+                    >
+                        <option value="">Select</option>
+                        <option value="Corruption">Corruption</option>
+                        <option value="Other">Other</option>
+                    </select><br />
+
+                    {/* If NOT Corruption */}
+                    {natureOfGrievance === 'Other' && (
+                        <div>
+                            <label>Cause of Grievance *</label><br />
+                            <textarea 
+                                name="causeOfGrievance" 
+                                required 
+                                onChange={handleInputChange}
+                            ></textarea><br />
+
+                            <label>Resolution Type *</label><br />
+                            <select 
+                                name="resolutionType" 
+                                required 
+                                onChange={handleInputChange}
+                            >
+                                <option value="">Select</option>
+                                <option value="Fully Resolved">Fully Resolved</option>
+                                <option value="Partially Resolved">Partially Resolved</option>
+                                <option value="Not Resolved">Not Resolved</option>
+                            </select><br />
+
+                            <label>Attachment (Optional, Max: 5MB, PDF/Word only)</label><br />
+                            <input 
+                                type="file" 
+                                name="attachment" 
+                                accept=".pdf,.doc,.docx" 
+                                onChange={handleFileChange} 
+                            /><br />
+
+                            <label>Resolution Reply *</label><br />
+                            <textarea 
+                                name="resolutionReply" 
+                                required 
+                                onChange={handleInputChange}
+                            ></textarea><br />
+                        </div>
+                    )}
+
+                    {/* If Corruption */}
+                    {natureOfGrievance === 'Corruption' && (
+                        <div>
+                            <label>Type of Corruption *</label><br />
+                            <input 
+                                type="text" 
+                                name="typeOfCorruption" 
+                                required 
+                                onChange={handleInputChange} 
+                            /><br />
+
+                            <label>Action Initiated *</label><br />
+                            <textarea 
+                                name="actionInitiated" 
+                                required 
+                                onChange={handleInputChange}
+                            ></textarea><br />
+
+                            <label>Attachment (Mandatory, Max: 5MB, PDF/Word only)</label><br />
+                            <UploadFile
+          id={"pgr-doc"}
+          accept=".jpg"
+          onUpload={selectfileNew}
+          onDelete={() => {
+            setUploadedFileNew(null);
+          }}
+          message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
+        />
+                            <br />
+
+                            <label>Resolution Reply *</label><br />
+                            <textarea 
+                                name="resolutionReply" 
+                                required 
+                                onChange={handleInputChange}
+                            ></textarea><br />
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {/* Part 2: If No */}
+            {!isResolved && isResolved !== null && (
+                <div>
+                    <h2>Grievance Closure</h2>
+
+                    <label>Reason for No Action</label><br />
+                    <select 
+                        name="reason" 
+                        required 
+                        onChange={handleInputChange}
+                    >
+                        <option value="">Select</option>
+                        <option value="Duplicate">Duplicate</option>
+                        <option value="Suggestion">Suggestion</option>
+                        <option value="Clutter/Spam">Clutter/Spam</option>
+                        <option value="Invalid: Service Matter">Invalid: Service Matter</option>
+                        <option value="Invalid: Sub Judice Matter">Invalid: Sub Judice Matter</option>
+                        <option value="Invalid: Beyond Entitlement">Invalid: Beyond Entitlement</option>
+                        <option value="Systematic Limitation">Systematic Limitation (Not Feasible)</option>
+                        <option value="Case Taken Up Earlier">Case Taken Up Earlier</option>
+                        <option value="Complaint Details Inadequate">Complaint Details Inadequate</option>
+                        <option value="Others">Others</option>
+                    </select><br />
+
+                    <label>Officer Remarks (Mandatory, Max: 5000 characters)</label><br />
+                    <textarea 
+                        name="officerRemarks" 
+                        maxLength="5000" 
+                        required 
+                        onChange={handleInputChange}
+                    ></textarea><br />
+
+                    <h3>Additional Actions</h3>
+                    <label>Seek Clarification from Citizen</label><br />
+                    <textarea 
+                        name="citizenClarification" 
+                        maxLength="2000" 
+                        placeholder="Enter remarks" 
+                        required 
+                        onChange={handleInputChange}
+                    ></textarea><br />
+
+                    <label>Take Up with Subordinate Organisation</label><br />
+                    <input 
+                        type="text" 
+                        name="subordinateOrganisation" 
+                        placeholder="Subordinate Organisation" 
+                        required 
+                        onChange={handleInputChange} 
+                    /><br />
+                    <textarea 
+                        name="subordinateRemarks" 
+                        maxLength="2000" 
+                        placeholder="Enter remarks" 
+                        onChange={handleInputChange}
+                    ></textarea><br />
+                </div>
+            )}
+
+            {/* <button type="submit">Submit</button> */}
+        </form>
       </Card>
     </Modal>
   );
@@ -342,9 +649,9 @@ export const ComplaintDetails = (props) => {
     }
   }
 
-  async function onAssign(selectedEmployee, comments, uploadedFile) {
+  async function onAssign(selectedEmployee, comments, uploadedFile,additionalDetail) {
     setPopup(false);
-    const response = await Digit.Complaint.assign(complaintDetails, selectedAction, selectedEmployee, comments, uploadedFile, tenantId);
+    const response = await Digit.Complaint.assign(complaintDetails, selectedAction, selectedEmployee, comments, uploadedFile,additionalDetail, tenantId);
     setAssignResponse(response);
     setToast(true);
     setLoader(true);

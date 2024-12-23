@@ -65,11 +65,12 @@ export const Complaint = {
     return response;
   },
 
-  assign: async (complaintDetails, action, employeeData, comments, uploadedDocument, tenantId) => {
+  assign: async (complaintDetails, action, employeeData, comments, uploadedDocument, additionalDetail,tenantId) => {
     
     complaintDetails.workflow.action = action;
     complaintDetails.workflow.assignes = employeeData ? [employeeData.uuid] : null;
     complaintDetails.workflow.comments = comments;
+    complaintDetails.workflow.additionalDetail=additionalDetail
     uploadedDocument
       ? (complaintDetails.workflow.verificationDocuments = [
             {
