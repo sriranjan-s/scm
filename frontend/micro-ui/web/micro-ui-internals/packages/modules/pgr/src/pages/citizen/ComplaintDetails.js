@@ -37,17 +37,17 @@ const WorkflowComponent = ({ complaintDetails, id, getWorkFlow, zoomImage }) => 
   return (
   
       !workFlowDetails.isLoading && (
-        <div></div>
-        // <TimeLine
-        //   // isLoading={workFlowDetails.isLoading}
-        //   data={workFlowDetails.data}
-        //   serviceRequestId={id}
-        //   complaintWorkflow={complaintDetails.workflow}
-        //   rating={complaintDetails.audit.rating}
-        //   zoomImage={zoomImage}
-        //   complaintDetails={complaintDetails}
-        //   ComplainMaxIdleTime={ComplainMaxIdleTime}
-        // />
+        // <div></div>
+        <TimeLine
+          // isLoading={workFlowDetails.isLoading}
+          data={workFlowDetails.data}
+          serviceRequestId={id}
+          complaintWorkflow={complaintDetails.workflow}
+          rating={complaintDetails.audit.rating}
+          zoomImage={zoomImage}
+          complaintDetails={complaintDetails}
+          ComplainMaxIdleTime={ComplainMaxIdleTime}
+        />
       )
     
   );

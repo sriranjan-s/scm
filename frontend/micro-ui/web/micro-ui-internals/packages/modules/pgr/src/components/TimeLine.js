@@ -95,7 +95,7 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
         const assignedTo = `${t(`CS_COMMON_${status}`)}`;
         return <PendingAtLME isCompleted={isCurrent} key={index} name={name} mobile={mobileNumber} text={assignedTo} customChild={getCommentsInCustomChildComponent({comment, thumbnailsToShow, auditDetails, assigner})} />;
 
-      case "RESOLVED":
+      case "DISPOSED":
         return (
           <Resolved
             key={index}
