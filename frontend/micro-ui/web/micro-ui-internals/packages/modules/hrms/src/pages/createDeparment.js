@@ -54,18 +54,12 @@ const CreateDepartment = () => {
         dateOfAppointment: new Date(new Date().setDate(new Date().getDate() - 1)).getTime(),
         employeeType: "PERMANENT",
         jurisdictions: [
-          {
+    {
           "hierarchy": "ADMIN",
           "boundaryType": "City",
           "boundary": department,
           "tenantId": department,
-        "roles":[
-          {
-              "hierarchy": "ADMIN",
-              "boundaryType": "City",
-              "boundary": department,
-              "tenantId": department,
-              "roles": [
+        "roles": [
                   {
                     "label": "NODAL_ADMIN",
                       "value": "NODAL_ADMIN",
@@ -80,9 +74,12 @@ const CreateDepartment = () => {
                   "label": "HRMS_ADMIN",
                   "value": "HRMS_ADMIN",  
               }
-              ]
-          }
-    ]}],
+              ], 
+              "hierarchy": "ADMIN",
+              "boundaryType": "City",
+              "boundary": department,
+              "tenantId": department,
+    }],
         user: {
           mobileNumber: mobileNumber,
           name: name,
@@ -255,7 +252,7 @@ const CreateDepartment = () => {
       <div className="login-container" style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
         <div className="login-form" style={{ width: "100%", padding: "0 5%" }}>
 
-          <h3 style={{ fontSize: "x-large", color: "#23316b", fontWeight: "bolder", marginBottom: "25px" }}>Add Department (Nodal Level)</h3>
+          {/* <h3 style={{ fontSize: "x-large", color: "#23316b", fontWeight: "bolder", marginBottom: "25px" }}>Add Department (Nodal Level)</h3> */}
           {showToast && <Toast label="Department added successfully!" />}
           {error && <p style={{ color: "red" }}>{error}</p>}
           <form onSubmit={handleSubmit} className="grid-container">

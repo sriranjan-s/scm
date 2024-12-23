@@ -14,6 +14,7 @@ import EditOffice from "./EditOffice";
 import Dashboard from "./Dashboard";
 import ManageOrganization from "./ViewOrganization";
 import ManageNodalUser from "./ViewNodalManagement";
+import ManageUserManagement from "./ViewUserManagement";
 const EmployeeApp = ({ path, url, userType }) => {
   const { t } = useTranslation();
   const location = useLocation();
@@ -60,8 +61,9 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute path={`${path}/EditOffice`} component={() => <EditOffice />} />
           <PrivateRoute path={`${path}/appeal-dashboard`} component={() => <AppealDashboard />} />
           <PrivateRoute path={`${path}/grievance-details/:grievanceId/:appealId`} component={() => <GrievanceDetailsPage />} />
-          <PrivateRoute path={`${path}/viewwOrg`} component={() => <ManageOrganization />} />
-          <PrivateRoute path={`${path}/viewwUser`} component={() => <ManageNodalUser />} />
+          <PrivateRoute path={`${path}/manageOrg`} component={() => <ManageOrganization />} />
+          <PrivateRoute path={`${path}/manageUser`} component={() => <ManageUserManagement />} />
+          <PrivateRoute path={`${path}/manageNodal`} component={() => <ManageNodalUser />} />
           <PrivateRoute path={`${path}/Dashboard`} component={() => <Dashboard />} />
           <PrivateRoute path={`${path}/response`} component={(props) => <HRMSResponse {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/details/:tenantId/:id`} component={() => <HRMSDetails />} />

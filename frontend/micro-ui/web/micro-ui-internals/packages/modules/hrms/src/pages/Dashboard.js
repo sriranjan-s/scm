@@ -5,16 +5,24 @@ const Dashboard = () => {
     const history = useHistory();
     const nodal = Digit.Utils.NodalAccess();
     const hrms = Digit.Utils.hrmsAccess();
-
+const userName = JSON.parse(window.localStorage.getItem("Employee.user-info"))?.name
     const onSubmit =(event)=>{
         event.preventDefault();
-        history.push("/digit-ui/employee/hrms/viewwOrg")
+        history.push("/digit-ui/employee/hrms/manageOrg")
     }
     const onSubmitNodal =(event)=>{
         event.preventDefault();
-        history.push("/digit-ui/employee/hrms/viewwUser")
+        if(nodal)
+        {
+            history.push("/digit-ui/employee/hrms/manageNodal")
+        }
+        else {
+            history.push("/digit-ui/employee/hrms/manageUser")
+        }
+       
+       
     }
-    
+    console.log("userName",userName)
   return (
     <div style={{ fontFamily: "Arial, sans-serif", margin: "20px" }}>
       {/* Header */}
@@ -40,7 +48,7 @@ const Dashboard = () => {
           alt="User"
           style={{ borderRadius: "50%", marginRight: "10px" }}
         />
-        <h2 style={{ margin: 0 }}>Welcome Mr. Amit Sharma</h2>
+        <h2 style={{ margin: 0 }}>Welcome <b>{userName}</b></h2>
       </div>
 
       {/* Modules Section */}
@@ -64,7 +72,7 @@ const Dashboard = () => {
             <strong>Manage Organization</strong>
           </div>
         </div>
-       {nodal && <div
+       <div
           style={{
             backgroundColor: "#e9ecef",
             borderRadius: "12px",
@@ -80,7 +88,7 @@ const Dashboard = () => {
           <div>
             <strong>User Management</strong>
           </div>
-        </div>}
+        </div>
       </div>
 
       {/* Dashboard & Analytics Section */}

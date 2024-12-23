@@ -2,7 +2,7 @@ import { Toast, Loader } from "@upyog/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import { useHistory,useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-const EditDepartment = () => {
+const EditDepartment = ({data}) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const history = useHistory();
   const [departments, setDepartments] = useState(window.Digit.SessionStorage.get("initData").tenants);
@@ -20,7 +20,7 @@ const EditDepartment = () => {
   const { t } = useTranslation();
   const [showToast, setShowToast] = useState(null);
   const location = useLocation();
-  const [formData, setFormData] =useState(location?.state?.data)
+  const [formData, setFormData] =useState(data)
   const handleSubmit = (e) => {
     e.preventDefault();
     if (email !== confirmEmail) {
@@ -43,80 +43,133 @@ console.log("departmentdepartment",department)
       designation,
       tenantId,
     };
-    let Employees = [
-      {
-        tenantId: tenantId,
-        employeeStatus: "EMPLOYED",
-        assignments: [{
-          "fromDate": new Date().getTime(),
-          "isCurrentAssignment": true,
-          "department": "DEPT_10",
-          "designation": designation
-        }],
-        dateOfAppointment: new Date(new Date().setDate(new Date().getDate() - 1)).getTime(),
-        employeeType: "PERMANENT",
-        jurisdictions: [
-          {
-          "hierarchy": "ADMIN",
-          "boundaryType": "City",
-          "boundary": department,
-          "tenantId": department,
-        "roles":
-           [
-                  {
-                    "label": "NODAL_ADMIN",
-                      "value": "NODAL_ADMIN",
+    // let Employees = [
+    //   {
+    //     tenantId: tenantId,
+    //     employeeStatus: "EMPLOYED",
+    //     assignments: [{
+    //       "fromDate": new Date().getTime(),
+    //       "isCurrentAssignment": true,
+    //       "department": "DEPT_10",
+    //       "designation": designation
+    //     }],
+    //     dateOfAppointment: new Date(new Date().setDate(new Date().getDate() - 1)).getTime(),
+    //     employeeType: "PERMANENT",
+    //     jurisdictions: [
+    //       {
+    //       "hierarchy": "ADMIN",
+    //       "boundaryType": "City",
+    //       "boundary": department,
+    //       "tenantId": department,
+    //     "roles":
+    //        [
+    //               {
+    //                 "label": "NODAL_ADMIN",
+    //                   "value": "NODAL_ADMIN",
                     
-                  },
-                  {
-                    "value": "EMPLOYEE",
-                    "label": "Employee",
+    //               },
+    //               {
+    //                 "value": "EMPLOYEE",
+    //                 "label": "Employee",
                    
-                },
-                {
-                  "label": "HRMS_ADMIN",
-                  "value": "HRMS_ADMIN",  
-              }
-              ]
+    //             },
+    //             {
+    //               "label": "HRMS_ADMIN",
+    //               "value": "HRMS_ADMIN",  
+    //           }
+    //           ]
           
-    }],
-        user: {
-        ...formData?.Employees[0]?.user,
-          mobileNumber: mobileNumber,
-          name: name,
-          correspondenceAddress: stateUser,
-          emailId: confirmEmail,
-          gender: "MALE",
-          dob: 507254400000,
-          roles: [{
-            "code": "NODAL_ADMIN",
-            "name": "NODAL_ADMIN",
-            "labelKey": "NODAL_ADMIN",
-            "tenantId": department
-        },
+    // }],
+    //     user: {
+    //     ...formData?.Employees[0]?.user,
+    //       mobileNumber: mobileNumber,
+    //       name: name,
+    //       correspondenceAddress: stateUser,
+    //       emailId: confirmEmail,
+    //       gender: "MALE",
+    //       dob: 507254400000,
+    //       roles: [{
+    //         "code": "NODAL_ADMIN",
+    //         "name": "NODAL_ADMIN",
+    //         "labelKey": "NODAL_ADMIN",
+    //         "tenantId": department
+    //     },
+    //     {
+    //       "code": "EMPLOYEE",
+    //       "name": "Employee",
+    //       "labelKey": "ACCESSCONTROL_ROLES_ROLES_EMPLOYEE",
+    //       "tenantId": department
+    //   },
+    //   {
+    //     "code": "HRMS_ADMIN",
+    //     "name": "HRMS_ADMIN",
+    //     "labelKey": "ACCESSCONTROL_ROLES_ROLES_HRMS_ADMIN",
+    //     "tenantId": department
+    // }],
+    //       tenantId: department,
+    //     },
+    //     serviceHistory: [],
+    //     education: [],
+    //     tests: [],
+    //     uuid:formData?.Employees[0]?.uuid,
+    //     code:formData?.Employees[0]?.code,
+    //     isActive:"true",
+    //     id:formData?.Employees[0]?.id
+    //   },
+    // ];
+    let Employees = [
         {
-          "code": "EMPLOYEE",
-          "name": "Employee",
-          "labelKey": "ACCESSCONTROL_ROLES_ROLES_EMPLOYEE",
-          "tenantId": department
-      },
-      {
+...formData,
+jurisdictions: [
+    {
+        ...formData.jurisdictions[0],
+    "roles": [{
+      "label": "Employee",
+      "value": "EMPLOYEE"
+  },
+  {
+      "label": "NODAL_ADMIN",
+      "value": "NODAL_ADMIN"
+  },
+  {
+      "label": "HRMS ADMIN",
+      "value": "HRMS_ADMIN"
+  }
+  ],
+  "hierarchy": "ADMIN",
+  "boundaryType": "City",
+  "boundary": department,
+  "tenantId": department
+}],
+user:{
+ ...formData.user,
+    mobileNumber: mobileNumber,
+    name: name,
+    correspondenceAddress: stateUser,
+    emailId: confirmEmail,
+    gender: "MALE",
+    roles: [{
+        "code": "NODAL_ADMIN",
+        "labelKey": "NODAL_ADMIN",
+        "name": "NODAL_ADMIN",
+        "tenantId": department
+    },
+    {
+        "code": "EMPLOYEE",
+        "labelKey": "ACCESSCONTROL_ROLES_ROLES_EMPLOYEE",
+        "name": "Employee",
+        "tenantId": department
+    },
+    {
         "code": "HRMS_ADMIN",
-        "name": "HRMS_ADMIN",
         "labelKey": "ACCESSCONTROL_ROLES_ROLES_HRMS_ADMIN",
+        "name": "HRMS_ADMIN",
         "tenantId": department
     }],
-          tenantId: department,
-        },
-        serviceHistory: [],
-        education: [],
-        tests: [],
-        uuid:formData?.Employees[0]?.uuid,
-        code:formData?.Employees[0]?.code,
-        isActive:"true",
-        id:formData?.Employees[0]?.id
-      },
-    ];
+      tenantId: department,
+}
+        }
+    ]
     /* use customiseCreateFormData hook to make some chnages to the Employee object */
     Employees=Digit?.Customizations?.HRMS?.customiseUpdateFormData?Digit.Customizations.HRMS.customiseUpdateFormData(data,Employees):Employees;
 
@@ -126,10 +179,11 @@ console.log("departmentdepartment",department)
   const navigateToAcknowledgement = (Employees) => {
     history.replace("/digit-ui/employee/hrms/response", { Employees, key: "UPDATE", action: "UPDATE" });
   }
+
   useEffect(() => {
     if (formData) {
         console.log("formData",formData)
-        let data =formData?.Employees[0]
+        let data =formData
         setName(data?.user?.name)
         setEmail(data?.user?.emailId)
         setConfirmEmail(data?.user?.emailId)
