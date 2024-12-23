@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 
 const AppealForm = () => {
-  const [grievanceId, setGrievanceId] = useState("");
+  const [serviceRequestId, setServiceRequestId] = useState("");
   const [comments, setComments] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -88,77 +88,88 @@ const AppealForm = () => {
 
     try {
       setLoadingGrievance(true);
-      const grievanceResponse = await Digit.PGRService.search(tenantId, { grievanceId });
+      const grievanceResponse = await Digit.PGRService.search(tenantId, { serviceRequestId });
       setGrievanceData(grievanceResponse.data); 
+      let lastModifiedTime = grievanceResponse?.ServiceWrappers[0]?.service?.auditDetails?.lastModifiedTime
+      let timeNow = Date.now()
+      let differenceInDays = (timeNow - lastModifiedTime)/(1000 * 60 * 60 * 24)
+      if (grievanceResponse && grievanceResponse.ServiceWrappers[0].workflow.action === "RATE" && differenceInDays <= 30 ) {
+        const additionalDetails = {
+          applicantName: typeof grievanceResponse.ServiceWrappers[0].service.additionalDetail === 'string'
+          ? grievanceResponse.ServiceWrappers[0].service.citizen.name 
+          : grievanceResponse.ServiceWrappers[0].service.additionalDetail?.name || grievanceResponse.ServiceWrappers[0].service.citizen.name,
+          location: typeof grievanceResponse.ServiceWrappers[0].service.additionalDetail === 'string' 
+          ? grievanceResponse.ServiceWrappers[0].service.tenantId  
+          : grievanceResponse.ServiceWrappers[0].service.additionalDetail?.address || grievanceResponse.ServiceWrappers[0].service.tenantId,
+          category: grievanceResponse.ServiceWrappers[0].service.serviceCode,
+        };
+  
+        const authToken = window.localStorage.getItem("token")
+  
+        const data = {
+          RequestInfo: {
+            apiId: "Rainmaker",
+            ver: ".01",
+            action: "",
+            did: "1",
+            key: "",
+            msgId: "20170310130900|en_IN",
+            requesterId: "",
+            authToken: authToken,
+          },
+          Appeal: {
+            tenantId: grievanceResponse.ServiceWrappers[0].service.tenantId,
+            grievanceId: serviceRequestId,
+            comments: comments,
+            accountId: authToken,
+            businessService: "APPEAL",
+            additionalDetails: additionalDetails,
+            workflow: {
+              action: "INITIATE",
+              assignes: null,
+              comments: null,
+              verificationDocuments: null,
+            },
+            documents: null,
+          },
+        };
+  
+        try {
+          const response = await fetch('/pgr-services/appeal/_create', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json, text/plain, */*',
+              'Content-Type': 'application/json;charset=UTF-8'
+            },
+            body: JSON.stringify(data),
+          });
+  
+          const result = await response.json();
+          if (response.ok) {
+            const appeal = result.Appeals[0];
+            setSuccess("Appeal submitted successfully!");
+            setApplicationNumber(appeal.applicationNumber);
+            setGrievanceIdFromResponse(appeal.grievanceId);
+            setShowCard(true);
+          } else {
+            setError(result.message || "Failed to submit appeal.");
+          }
+        } catch (err) {
+          setError("An error occurred. Please try again.");
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        setError("Appeal cannot be raised for the given Grievance ID as Feedback/Rating is not provided or Rating Date exceeds the 30 days time limit.");
+        setLoading(false);
+      };
     } catch (err) {
-      setError("An error occurred while fetching grievance data");
+      setError("An error occurred while fetching grievance data.");
       setLoading(false);
       return;  
     }
 
-    if (grievanceData) {
-      const additionalDetails = {
-        applicantName: grievanceData.applicantName,
-        location: grievanceData.location,
-        category: grievanceData.category,
-      };
-
-      const authToken = window.localStorage.getItem("token")
-
-      const data = {
-        RequestInfo: {
-          apiId: "Rainmaker",
-          ver: ".01",
-          action: "",
-          did: "1",
-          key: "",
-          msgId: "20170310130900|en_IN",
-          requesterId: "",
-          authToken: authToken,
-        },
-        Appeal: {
-          tenantId: "pg.telecom",
-          grievanceId: grievanceId,
-          comments: comments,
-          accountId: authToken,
-          businessService: "APPEAL",
-          additionalDetails: additionalDetails,
-          workflow: {
-            action: "INITIATE",
-            assignes: null,
-            comments: null,
-            verificationDocuments: null,
-          },
-          documents: null,
-        },
-      };
-
-      try {
-        const response = await fetch('/pgr-services/appeal/_create', {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json, text/plain, */*',
-            'Content-Type': 'application/json;charset=UTF-8'
-          },
-          body: JSON.stringify(data),
-        });
-
-        const result = await response.json();
-        if (response.ok) {
-          const appeal = result.Appeals[0];
-          setSuccess("Appeal submitted successfully!");
-          setApplicationNumber(appeal.applicationNumber);
-          setGrievanceIdFromResponse(appeal.grievanceId);
-          setShowCard(true);
-        } else {
-          setError(result.message || "Failed to submit appeal.");
-        }
-      } catch (err) {
-        setError("An error occurred. Please try again.");
-      } finally {
-        setLoading(false);
-      }
-    };
+    
   }
 
   const handleCommentChange = (e) => {
@@ -184,12 +195,12 @@ const AppealForm = () => {
       <h2 style={styles.heading}>Create Appeal</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="grievanceId" style={styles.label}>Grievance ID</label>
+          <label htmlFor="serviceRequestId" style={styles.label}>Grievance ID</label>
           <input
             type="text"
-            id="grievanceId"
-            value={grievanceId}
-            onChange={(e) => setGrievanceId(e.target.value)}
+            id="serviceRequestId"
+            value={serviceRequestId}
+            onChange={(e) => setServiceRequestId(e.target.value)}
             required
             style={styles.input}
           />
